@@ -22,7 +22,7 @@ const RemoveAssistance = () => {
   const loadAssistances = async () => {
     try {
       dispatch(setLoading(true));
-      const response = await ApiService.assistances.getAll();
+      const response = await ApiService.assistants.getAll();
       dispatch(setAssistances(response.data));
     } catch (err) {
       dispatch(setError(err.message));
@@ -43,7 +43,7 @@ const RemoveAssistance = () => {
       assistant: assistant,
       onConfirm: async () => {
         try {
-          await ApiService.assistances.delete(assistant._id);
+          await ApiService.assistants.delete(assistant._id);
           dispatch(removeAssistance(assistant._id));
           closeModal();
         } catch (err) {

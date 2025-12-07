@@ -170,6 +170,8 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { addUser, clearUser } from "./utils/userSlice";
 import { isTokenValid } from "./utils/auth";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import PrivateRoute from "./components/private/PrivateRoute";
 import LoginPage from "./authPage/LoginPage";
@@ -212,6 +214,19 @@ function App() {
   }, [dispatch]);
 
   return (
+    <>
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     <Routes>
       {/* 🌟 MAIN HOME PAGE */}
       <Route path="/" element={<HandlePage />} />
@@ -440,6 +455,7 @@ function App() {
       {/* 🌟 DEFAULT ROLE REDIRECT */}
       <Route path="*" element={<NavigateToRole />} />
     </Routes>
+    </>
   );
 }
 

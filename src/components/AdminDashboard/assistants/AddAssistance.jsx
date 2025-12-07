@@ -16,7 +16,7 @@ const AddAssistance = () => {
   const handleSuccess = async (message) => {
     // Refresh the list
     try {
-      const response = await ApiService.assistances.getAll();
+      const response = await ApiService.assistants.getAll();
       dispatch(addAssistance(response.data));
     } catch (error) {
       console.error('Error refreshing assistants:', error);
