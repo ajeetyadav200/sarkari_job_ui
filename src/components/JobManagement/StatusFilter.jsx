@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   CheckCircle,
   XCircle,
@@ -7,13 +8,51 @@ import {
   List
 } from 'lucide-react';
 
-const StatusFilter = ({ activeStatus, onStatusChange, stats }) => {
+const StatusFilter = ({ activeStatus, onStatusChange, stats, userRole = 'admin' }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const filters = [
-    { id: '', label: 'All Jobs', icon: List, color: 'text-gray-600', bgColor: 'bg-gray-100' },
-    { id: 'pending', label: 'Pending', icon: AlertCircle, color: 'text-yellow-600', bgColor: 'bg-yellow-100' },
-    { id: 'verified', label: 'Verified', icon: CheckCircle, color: 'text-green-600', bgColor: 'bg-green-100' },
-    { id: 'rejected', label: 'Rejected', icon: XCircle, color: 'text-red-600', bgColor: 'bg-red-100' },
-    { id: 'onHold', label: 'On Hold', icon: PauseCircle, color: 'text-orange-600', bgColor: 'bg-orange-100' }
+    { 
+      id: '', 
+      label: 'All Jobs', 
+      icon: List, 
+      color: 'text-gray-600', 
+      bgColor: 'bg-gray-100',
+      route: 'jobs' 
+    },
+    { 
+      id: 'pending', 
+      label: 'Pending', 
+      icon: AlertCircle, 
+      color: 'text-yellow-600', 
+      bgColor: 'bg-yellow-100',
+      route: 'jobs/pending' 
+    },
+    { 
+      id: 'verified', 
+      label: 'Verified', 
+      icon: CheckCircle, 
+      color: 'text-green-600', 
+      bgColor: 'bg-green-100',
+      route: 'jobs/verified' 
+    },
+    { 
+      id: 'rejected', 
+      label: 'Rejected', 
+      icon: XCircle, 
+      color: 'text-red-600', 
+      bgColor: 'bg-red-100',
+      route: 'jobs/rejected' 
+    },
+    { 
+      id: 'onHold', 
+      label: 'On Hold', 
+      icon: PauseCircle, 
+      color: 'text-orange-600', 
+      bgColor: 'bg-orange-100',
+      route: 'jobs/on-hold' 
+    }
   ];
 
   const getStatusCount = (status) => {
@@ -25,6 +64,37 @@ const StatusFilter = ({ activeStatus, onStatusChange, stats }) => {
     return statusData ? statusData.count : 0;
   };
 
+  const handleStatusClick = (filterId, route) => {
+    // Determine base path based on user role and current location
+    let basePath = '';
+    
+    // Check current path to determine base path
+    if (location.pathname.includes('/admin/')) {
+      basePath = '/admin';
+    } else if (location.pathname.includes('/publisher/')) {
+      basePath = '/publisher';
+    } else if (location.pathname.includes('/assistant/')) {
+      basePath = '/assistant';
+    } else {
+      // Default based on userRole prop
+      if (userRole === 'admin') {
+        basePath = '/admin';
+      } else if (userRole === 'publisher') {
+        basePath = '/publisher';
+      } else if (userRole === 'assistant') {
+        basePath = '/assistant';
+      }
+    }
+    
+    // Navigate to the specific route
+    navigate(`${basePath}/${route}`);
+    
+    // Also call the onStatusChange callback if provided
+    if (onStatusChange) {
+      onStatusChange(filterId);
+    }
+  };
+
   return (
     <div className="flex flex-wrap gap-2">
       {filters.map((filter) => {
@@ -34,7 +104,7 @@ const StatusFilter = ({ activeStatus, onStatusChange, stats }) => {
         return (
           <button
             key={filter.id}
-            onClick={() => onStatusChange(filter.id)}
+            onClick={() => handleStatusClick(filter.id, filter.route)}
             className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
               activeStatus === filter.id 
                 ? `${filter.bgColor} ${filter.color} border ${filter.color.replace('text-', 'border-')}`

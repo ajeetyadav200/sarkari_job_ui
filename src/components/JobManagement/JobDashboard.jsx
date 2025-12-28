@@ -62,27 +62,35 @@ const JobDashboard = ({ mode = 'all', showStats = false, userRole = 'admin' }) =
     if (showStats && userRole === 'admin') {
       dispatch(fetchJobStats());
     }
-  }, [mode, userRole]);
+  }, [mode, userRole, statusFilter]);
 
   const loadJobs = async () => {
-    const params = {
-      page,
-      limit,
-      status: statusFilter || (mode === 'my' ? '' : mode === 'all' ? '' : mode),
-      ...filters,
-      ...(searchTerm && { 
-        departmentName: searchTerm,
-        postName: searchTerm 
-      })
-    };
-
-    if (mode === 'my') {
-      dispatch(fetchMyJobs(params));
-    } else {
-      dispatch(fetchJobs(params));
-    }
+  const params = {
+    page,
+    limit,
+    // When mode is 'all', don't send any status filter
+    // Only send statusFilter when it's explicitly set (not empty)
+    ...(statusFilter && { status: statusFilter }),
+    ...filters,
+    ...(searchTerm && { 
+      departmentName: searchTerm,
+      postName: searchTerm 
+    })
   };
 
+  // Remove status from params if we're in 'all' mode and statusFilter is empty
+  if (mode === 'all' && !statusFilter) {
+    delete params.status;
+  }
+
+  // For 'my' mode, always use specific API
+  if (mode === 'my') {
+    dispatch(fetchMyJobs(params));
+  } else {
+    // For other modes (pending, verified, etc.), use regular fetchJobs
+    dispatch(fetchJobs(params));
+  }
+};
   const handleViewJob = (job) => {
     navigate(`/admin/jobs/${job._id}`);
   };
@@ -142,10 +150,15 @@ const JobDashboard = ({ mode = 'all', showStats = false, userRole = 'admin' }) =
   };
 
   const handleCreateJob = () => {
-    setEditingJob(null);
-    setShowJobForm(true);
+    // Navigate to the create job page based on user role
+    if (userRole === 'admin') {
+      navigate('/admin/jobs/create');
+    } else if (userRole === 'publisher') {
+      navigate('/publisher/jobs/create');
+    } else if (userRole === 'assistant') {
+      navigate('/assistant/jobs/create');
+    }
   };
-
   const handleFormSuccess = (message) => {
     setSuccessMessage(message);
     setShowJobForm(false);
@@ -494,15 +507,15 @@ const JobDashboard = ({ mode = 'all', showStats = false, userRole = 'admin' }) =
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {jobs.map((job) => (
               <JobCard
-                key={job._id}
-                job={job}
-                onView={handleViewJob}
-                onEdit={userRole !== 'admin' && mode === 'my' ? handleEditJob : null}
-                onDelete={userRole !== 'admin' && mode === 'my' ? handleDeleteJob : null}
-                onStatusChange={userRole === 'admin' ? handleStatusChange : null}
-                isAdmin={userRole === 'admin'}
-                showActions={true}
-              />
+  key={job._id}
+  job={job}
+  onView={handleViewJob}
+  onEdit={(userRole === 'admin' || (userRole !== 'admin' && mode === 'my')) ? handleEditJob : null}
+  onDelete={(userRole === 'admin' || (userRole !== 'admin' && mode === 'my')) ? handleDeleteJob : null}
+  onStatusChange={userRole === 'admin' ? handleStatusChange : null}
+  isAdmin={userRole === 'admin'}
+  showActions={true}
+/>
             ))}
           </div>
 

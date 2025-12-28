@@ -1,15 +1,17 @@
+
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { X, Save, Calendar, Briefcase, User, FileText, DollarSign, Award, List, Plus, Trash2, GripVertical } from 'lucide-react';
+import { X, Save, Calendar, Briefcase, User, FileText, DollarSign, Award, FileCode } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { createJob, updateJob } from '../../slice/jobSlice';
+import DynamicContentBuilder from '../common/DynamicContentBuilder';
 
-const JobForm = ({ onClose, onSuccess, editData, user }) => {
+const JobFormEnhanced = ({ onClose, onSuccess, editData, user }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading } = useSelector(state => state.jobs);
-  
+
   const [formData, setFormData] = useState({
     departmentName: editData?.departmentName || '',
     postName: editData?.postName || '',
@@ -56,21 +58,17 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
       maximumAge: '',
       ageRelaxation: ''
     },
+    // NEW: Dynamic Content Fields
     description: editData?.description || '',
+    dynamicContent: editData?.dynamicContent || [],
+    contentSections: editData?.contentSections || [],
     selectionProcess: editData?.selectionProcess || [],
     documentsRequired: editData?.documentsRequired || [],
-    importantInstructions: editData?.importantInstructions || [],
-    dynamicContent: editData?.dynamicContent || []
+    importantInstructions: editData?.importantInstructions || []
   });
 
   const [errors, setErrors] = useState({});
   const [activeSection, setActiveSection] = useState('basic');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // State for adding new items to arrays
-  const [newSelectionStep, setNewSelectionStep] = useState('');
-  const [newDocument, setNewDocument] = useState('');
-  const [newInstruction, setNewInstruction] = useState('');
 
   // Handle cancel/close
   const handleCancel = () => {
@@ -142,31 +140,6 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
     }));
   };
 
-  // Handle adding items to arrays
-  const handleAddArrayItem = (field, value = '') => {
-    if (!value.trim() && field !== 'dynamicContent') return;
-    setFormData(prev => ({
-      ...prev,
-      [field]: [...prev[field], value || '']
-    }));
-  };
-
-  // Handle removing items from arrays
-  const handleRemoveArrayItem = (field, index) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: prev[field].filter((_, i) => i !== index)
-    }));
-  };
-
-  // Handle updating array item
-  const handleUpdateArrayItem = (field, index, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: prev[field].map((item, i) => i === index ? value : item)
-    }));
-  };
-
   const validateForm = () => {
     const newErrors = {};
 
@@ -208,34 +181,28 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (isSubmitting) return;
-    
-    setIsSubmitting(true);
-    
+
     if (!validateForm()) {
       toast.error('Please fix the form errors before submitting.', {
         position: "top-right",
         autoClose: 3000,
       });
-      setIsSubmitting(false);
       return;
     }
 
     try {
       if (editData) {
-        await dispatch(updateJob({ 
-          id: editData._id, 
-          data: formData 
+        await dispatch(updateJob({
+          id: editData._id,
+          data: formData
         })).unwrap();
-        
+
         toast.success('Job updated successfully!', {
           position: "top-right",
           autoClose: 2000,
         });
-        
+
         setTimeout(() => {
-          setIsSubmitting(false);
           if (onSuccess) {
             onSuccess('Job updated successfully');
           } else {
@@ -244,14 +211,13 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
         }, 1000);
       } else {
         await dispatch(createJob(formData)).unwrap();
-        
+
         toast.success('Job created successfully!', {
           position: "top-right",
           autoClose: 2000,
         });
-        
+
         setTimeout(() => {
-          setIsSubmitting(false);
           if (onSuccess) {
             onSuccess('Job created successfully');
           } else {
@@ -261,20 +227,10 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
       }
     } catch (error) {
       console.error('Error saving job:', error);
-      setIsSubmitting(false);
       toast.error(error.message || 'Failed to save job. Please try again.', {
         position: "top-right",
         autoClose: 4000,
       });
-    }
-  };
-
-  // Function to trigger form submission from header button
-  const handleHeaderSaveClick = () => {
-    // Programmatically submit the form
-    const form = document.getElementById('jobForm');
-    if (form) {
-      form.dispatchEvent(new Event('submit', { cancelable: true }));
     }
   };
 
@@ -287,7 +243,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
               <Briefcase className="w-5 h-5" />
               Job Department Details
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -443,7 +399,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
               <User className="w-5 h-5" />
               Category-wise Posts Distribution
             </h3>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               {[
                 { id: 'general', label: 'General' },
@@ -467,7 +423,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
                 </div>
               ))}
             </div>
-            
+
             <div className="bg-blue-50 p-4 rounded-lg">
               <p className="text-sm text-gray-700">
                 Total Posts: <span className="font-bold text-blue-600">
@@ -480,7 +436,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
               <DollarSign className="w-5 h-5" />
               Category-wise Application Fees (₹)
             </h3>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               {[
                 { id: 'general', label: 'General' },
@@ -515,7 +471,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
               <Award className="w-5 h-5" />
               Eligibility Criteria
             </h3>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Primary Educational Qualification *
@@ -552,7 +508,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
               <Calendar className="w-5 h-5" />
               Important Dates
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
                 { id: 'startDate', label: 'Start Date' },
@@ -575,7 +531,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
                   <input
                     type="date"
                     value={formData.importantDates[field.id] ? formData.importantDates[field.id].split('T')[0] : ''}
-                    onChange={(e) => handleChange('importantDates', field.id, e.target.value)}
+                    onChange={(e) => handleChange('importantDates', field.id, e.target.value + 'T00:00:00')}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -629,198 +585,53 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
           </div>
         );
 
-      case 'additional':
+      case 'content':
         return (
-          <div className="space-y-8">
+          <div className="space-y-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <List className="w-5 h-5" />
-              Additional Details
+              <FileCode className="w-5 h-5" />
+              Additional Content & Instructions
             </h3>
 
-            {/* Description */}
+            {/* Simple Description */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Job Description (Optional)
+                Job Description
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => handleDirectChange('description', e.target.value)}
                 rows="4"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter job description or overview..."
+                placeholder="Brief description of the job posting..."
               />
             </div>
 
-            {/* Selection Process */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Selection Process Steps (e.g., Written Exam, Interview, etc.)
-              </label>
+            {/* Dynamic Content Builder */}
+            <DynamicContentBuilder
+              value={formData.dynamicContent}
+              onChange={(value) => handleDirectChange('dynamicContent', value)}
+              label="Advanced Dynamic Content"
+              showQuickArrays={true}
+              quickArrays={{
+                selectionProcess: formData.selectionProcess,
+                documentsRequired: formData.documentsRequired,
+                importantInstructions: formData.importantInstructions
+              }}
+              onQuickArraysChange={(arrays) => {
+                handleDirectChange('selectionProcess', arrays.selectionProcess);
+                handleDirectChange('documentsRequired', arrays.documentsRequired);
+                handleDirectChange('importantInstructions', arrays.importantInstructions);
+              }}
+            />
 
-              <div className="space-y-2 mb-3">
-                {formData.selectionProcess.map((step, index) => (
-                  <div key={index} className="flex items-center gap-2 bg-white p-2 rounded border border-gray-200">
-                    <GripVertical className="w-4 h-4 text-gray-400" />
-                    <span className="flex-1 text-sm">{index + 1}. {step}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveArrayItem('selectionProcess', index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={newSelectionStep}
-                  onChange={(e) => setNewSelectionStep(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      if (newSelectionStep.trim()) {
-                        handleAddArrayItem('selectionProcess', newSelectionStep);
-                        setNewSelectionStep('');
-                      }
-                    }
-                  }}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., Written Examination"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (newSelectionStep.trim()) {
-                      handleAddArrayItem('selectionProcess', newSelectionStep);
-                      setNewSelectionStep('');
-                    }
-                  }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add
-                </button>
-              </div>
-            </div>
-
-            {/* Documents Required */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Documents Required
-              </label>
-
-              <div className="space-y-2 mb-3">
-                {formData.documentsRequired.map((doc, index) => (
-                  <div key={index} className="flex items-center gap-2 bg-white p-2 rounded border border-gray-200">
-                    <FileText className="w-4 h-4 text-gray-400" />
-                    <span className="flex-1 text-sm">{doc}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveArrayItem('documentsRequired', index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={newDocument}
-                  onChange={(e) => setNewDocument(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      if (newDocument.trim()) {
-                        handleAddArrayItem('documentsRequired', newDocument);
-                        setNewDocument('');
-                      }
-                    }
-                  }}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., 10th Certificate & Mark Sheet"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (newDocument.trim()) {
-                      handleAddArrayItem('documentsRequired', newDocument);
-                      setNewDocument('');
-                    }
-                  }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add
-                </button>
-              </div>
-            </div>
-
-            {/* Important Instructions */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                Important Instructions for Candidates
-              </label>
-
-              <div className="space-y-2 mb-3">
-                {formData.importantInstructions.map((instruction, index) => (
-                  <div key={index} className="flex items-center gap-2 bg-white p-2 rounded border border-gray-200">
-                    <span className="flex-1 text-sm">{instruction}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveArrayItem('importantInstructions', index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={newInstruction}
-                  onChange={(e) => setNewInstruction(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      if (newInstruction.trim()) {
-                        handleAddArrayItem('importantInstructions', newInstruction);
-                        setNewInstruction('');
-                      }
-                    }
-                  }}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., Candidates must bring original documents"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (newInstruction.trim()) {
-                      handleAddArrayItem('importantInstructions', newInstruction);
-                      setNewInstruction('');
-                    }
-                  }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add
-                </button>
-              </div>
-            </div>
-
-            {/* Info Box */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-800">
-                <strong>Note:</strong> These details will help candidates understand the complete job requirements and process.
-                Selection Process and Documents Required are especially important for transparency.
-              </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+              <h4 className="text-sm font-medium text-blue-900 mb-2">💡 Content Tips</h4>
+              <ul className="text-xs text-blue-800 space-y-1">
+                <li>• Use "Quick Arrays" for simple lists like Selection Process, Documents Required, etc.</li>
+                <li>• Use "Advanced Content" for complex data like Physical Standards tables, Pay Scales, etc.</li>
+                <li>• Content will be displayed beautifully on the public job listing page</li>
+              </ul>
             </div>
           </div>
         );
@@ -835,7 +646,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
     { id: 'posts', label: 'Posts & Fees', icon: User },
     { id: 'eligibility', label: 'Eligibility', icon: Award },
     { id: 'dates', label: 'Important Dates', icon: Calendar },
-    { id: 'additional', label: 'Additional Details', icon: List }
+    { id: 'content', label: 'Content & Details', icon: FileCode }
   ];
 
   return (
@@ -853,7 +664,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
                   {editData ? 'Update the job details below' : 'Fill in all required details for the new job posting'}
                 </p>
               </div>
-              
+
               <div className="flex items-center gap-3">
                 <button
                   type="button"
@@ -863,24 +674,23 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
                   <X className="w-4 h-4" />
                   Cancel
                 </button>
-                
-                
+
                 <button
-                  type="button"
-                  onClick={handleHeaderSaveClick}
-                  disabled={loading || isSubmitting}
+                  type="submit"
+                  form="jobForm"
+                  disabled={loading}
                   className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   <Save className="w-4 h-4" />
-                  {loading || isSubmitting ? 'Saving...' : editData ? 'Update Job' : 'Create Job'}
+                  {loading ? 'Saving...' : editData ? 'Update Job' : 'Create Job'}
                 </button>
               </div>
             </div>
           </div>
 
           {/* Progress Steps */}
-          <div className="px-6 py-4 border-b border-gray-200 bg-white">
-            <div className="flex flex-wrap gap-2">
+          <div className="px-6 py-4 border-b border-gray-200 bg-white overflow-x-auto">
+            <div className="flex flex-nowrap gap-2 min-w-max">
               {sections.map((section) => {
                 const Icon = section.icon;
                 return (
@@ -888,7 +698,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
                     key={section.id}
                     type="button"
                     onClick={() => setActiveSection(section.id)}
-                    className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                    className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-all whitespace-nowrap ${
                       activeSection === section.id
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -904,7 +714,6 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
 
           {/* Form Content */}
           <div className="p-6">
-          
             <form id="jobForm" onSubmit={handleSubmit}>
               {renderSection()}
 
@@ -942,14 +751,14 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
                       Next →
                     </button>
                   ) : (
-                  
                     <button
                       type="submit"
-                      disabled={loading || isSubmitting}
+                      form="jobForm"
+                      disabled={loading}
                       className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                       <Save className="w-4 h-4" />
-                      {loading || isSubmitting ? 'Saving...' : editData ? 'Update Job' : 'Create Job'}
+                      {loading ? 'Saving...' : editData ? 'Update Job' : 'Create Job'}
                     </button>
                   )}
                 </div>
@@ -962,4 +771,4 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
   );
 };
 
-export default JobForm;
+export default JobFormEnhanced;

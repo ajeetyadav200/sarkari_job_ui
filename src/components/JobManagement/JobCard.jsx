@@ -182,15 +182,15 @@ const JobCard = ({ job, onView, onEdit, onDelete, onStatusChange, isAdmin = fals
             </div>
             
             <div className="flex items-center gap-2">
-              {onEdit && job.canEdit && (
-                <button
-                  onClick={() => onEdit(job)}
-                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  title="Edit Job"
-                >
-                  <Edit2 className="w-4 h-4" />
-                </button>
-              )}
+            {onEdit && (
+  <button
+    onClick={() => onEdit(job)}
+    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+    title="Edit Job"
+  >
+    <Edit2 className="w-4 h-4" />
+  </button>
+)}
               
               {onDelete && (
                 <button

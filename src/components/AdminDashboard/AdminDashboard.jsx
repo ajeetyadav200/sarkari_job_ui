@@ -821,7 +821,7 @@ import ConfirmationModal from '../../modals/ConfirmationModal';
 import ApiService from '../../services/api';
 
 const AdminDashboard = () => {
-  const user = useSelector(store => store.user);
+  const user = useSelector(store => store?.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   

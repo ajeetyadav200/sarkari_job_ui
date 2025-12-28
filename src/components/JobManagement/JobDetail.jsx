@@ -478,8 +478,8 @@ Generated on: ${new Date().toLocaleString()}
             </div>
 
             {/* Other Details */}
-            {(currentJob.otherDetails.bisixf1 || currentJob.otherDetails.format || 
-              currentJob.otherDetails.captchaCode || currentJob.otherDetails.digitCode) && (
+            {(currentJob?.otherDetails?.bisixf1 || currentJob?.otherDetails?.format || 
+              currentJob?.otherDetails?.captchaCode || currentJob?.otherDetails?.digitCode) && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <h2 className="text-lg font-bold text-gray-800 mb-4">Other Details</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
