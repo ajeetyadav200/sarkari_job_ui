@@ -23,7 +23,7 @@ export const isTokenValid = () => {
 };
 
 export const BASE_URL = import.meta.env.PROD 
-  ? "https://cornflowerblue-barracuda-442102.hostingersite.com" 
+  ? "https://deepskyblue-kangaroo-575029.hostingersite.com" 
   : "http://localhost:7777";
 
 export const logout = () => {
