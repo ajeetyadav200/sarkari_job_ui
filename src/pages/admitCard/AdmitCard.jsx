@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, AlertCircle, FileText } from 'lucide-react';
+import { Loader2, AlertCircle, FileText ,Circle} from 'lucide-react';
 import admitCardService from '../../services/admitCardService';
 
 const AdmitCard = () => {
@@ -82,7 +82,10 @@ const AdmitCard = () => {
             {admitCards.map((card) => (
               <li key={card._id} className="border-b border-dashed border-gray-300 pb-3 last:border-0">
                 <div className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">■</span>
+                  <span className="text-black rounded-2xl">
+  <Circle className="w-4 h-4  text-black" />
+</span>
+
                   <h3
                     onClick={() => handleCardClick(card._id)}
                     className="text-blue-700 font-semibold hover:text-blue-900 cursor-pointer flex items-center gap-2 flex-1"

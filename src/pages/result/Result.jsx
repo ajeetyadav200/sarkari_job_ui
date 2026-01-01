@@ -81,7 +81,7 @@ const Result = () => {
             {results.map((result) => (
               <li key={result._id} className="border-b border-dashed border-gray-300 pb-3 last:border-0">
                 <div className="flex items-start gap-2">
-                  <span className="text-red-600 mt-1">■</span>
+                  <span className="text-red-600 ">■</span>
                   <h3
                     onClick={() => handleResultClick(result._id)}
                     className="text-blue-700 font-semibold hover:text-blue-900 cursor-pointer flex items-center gap-2 flex-1"
