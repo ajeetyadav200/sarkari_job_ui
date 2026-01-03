@@ -23,7 +23,7 @@ export const isTokenValid = () => {
 };
 
 export const BASE_URL = import.meta.env.PROD 
-  ? "https://darkcyan-hippopotamus-579426.hostingersite.com" 
+  ? "/api" 
   : "http://localhost:7777";    
 
 
