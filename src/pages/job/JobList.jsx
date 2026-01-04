@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Search, Filter, Calendar, Briefcase, MapPin, Clock } from 'lucide-react';
+import { Search, Filter, Calendar, Briefcase, MapPin, Clock, ChevronRight, Users, IndianRupee } from 'lucide-react';
 import { fetchJobsList, resetJobs } from '../../slice/jobSlice';
 
 const JobList = () => {
@@ -107,37 +107,45 @@ const JobList = () => {
     { value: '12', label: 'December' }
   ];
 
+  // Get first line of description
+  const getFirstLine = (text) => {
+    if (!text) return '';
+    return text.split('\n')[0].substring(0, 150) + (text.split('\n')[0].length > 150 ? '...' : '');
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-white to-blue-50">
       {/* Header */}
-      <div className="bg-primary text-white py-6 shadow-md">
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold">All Jobs</h1>
-          <p className="text-blue-100 mt-2">Browse all available job opportunities</p>
+      <div className="bg-primary text-white py-8 lg:py-6 sm:py-4 shadow-lg">
+        <div className="max-w-6xl mx-auto px-4">
+          <h1 className="text-3xl lg:text-2xl sm:text-xl font-bold">All Job Opportunities</h1>
+          <p className="text-blue-100 mt-2 text-base lg:text-sm sm:text-xs">
+            Find and apply for government job openings across various departments
+          </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 py-8 lg:py-6 sm:py-4">
         {/* Search and Filter Section */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Filter className="w-5 h-5 text-primary" />
-            <h2 className="text-xl font-semibold">Search & Filter</h2>
+        <div className="bg-white rounded-xl shadow-lg p-6 lg:p-4 sm:p-3 mb-8 border border-gray-200">
+          <div className="flex items-center gap-2 mb-6 lg:mb-4 sm:mb-3">
+            <Filter className="w-6 h-6 lg:w-5 lg:h-5 sm:w-4 sm:h-4 text-primary" />
+            <h2 className="text-xl lg:text-lg sm:text-base font-bold text-gray-800">Search & Filter Jobs</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
             {/* Keyword Search */}
-            <div className="col-span-1 md:col-span-2 lg:col-span-4">
+            <div className="lg:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Search className="w-4 h-4 inline mr-1" />
-                Search by keyword
+                Search Keyword
               </label>
               <input
                 type="text"
                 value={filters.keyword}
                 onChange={(e) => setFilters({ ...filters, keyword: e.target.value })}
-                placeholder="Search department, post name, or qualification..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary"
+                placeholder="Job title, department, or keywords..."
+                className="w-full px-4 py-3 lg:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-base lg:text-sm"
               />
             </div>
 
@@ -149,7 +157,7 @@ const JobList = () => {
               <select
                 value={filters.year}
                 onChange={(e) => setFilters({ ...filters, year: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary"
+                className="w-full px-4 py-3 lg:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-base lg:text-sm"
               >
                 <option value="">All Years</option>
                 {yearOptions.map(year => (
@@ -166,7 +174,7 @@ const JobList = () => {
               <select
                 value={filters.month}
                 onChange={(e) => setFilters({ ...filters, month: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary"
+                className="w-full px-4 py-3 lg:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-base lg:text-sm"
               >
                 <option value="">All Months</option>
                 {monthOptions.map(month => (
@@ -175,35 +183,16 @@ const JobList = () => {
               </select>
             </div>
 
-            {/* Date Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Date
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="31"
-                value={filters.date}
-                onChange={(e) => setFilters({ ...filters, date: e.target.value })}
-                placeholder="DD"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary"
-              />
-            </div>
-
             {/* Latest Jobs Toggle */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Job Type
-              </label>
-              <label className="flex items-center space-x-2 cursor-pointer">
+            <div className="flex items-center justify-center">
+              <label className="flex items-center space-x-3 cursor-pointer bg-gray-50 px-4 py-3 lg:py-2 rounded-lg hover:bg-gray-100 transition-colors">
                 <input
                   type="checkbox"
                   checked={filters.isLatestJob}
                   onChange={(e) => setFilters({ ...filters, isLatestJob: e.target.checked })}
-                  className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
+                  className="w-5 h-5 lg:w-4 lg:h-4 text-primary border-gray-300 rounded focus:ring-primary"
                 />
-                <span className="text-sm">Latest Jobs Only</span>
+                <span className="text-gray-700 font-medium">Latest Jobs Only</span>
               </label>
             </div>
           </div>
@@ -212,104 +201,115 @@ const JobList = () => {
           <div className="flex gap-3">
             <button
               onClick={handleSearch}
-              className="bg-primary hover:bg-primary text-white px-6 py-2 rounded-md font-medium transition-colors"
+              className="bg-primary hover:bg-primary-dark text-white px-8 py-3 lg:px-6 lg:py-2 rounded-lg font-semibold transition-colors flex items-center gap-2 text-base lg:text-sm"
             >
-              Search
+              <Search className="w-5 h-5 lg:w-4 lg:h-4" />
+              Search Jobs
             </button>
             <button
               onClick={handleReset}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-md font-medium transition-colors"
+              className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 lg:px-5 lg:py-2 rounded-lg font-medium transition-colors text-base lg:text-sm"
             >
-              Reset
+              Reset Filters
             </button>
           </div>
         </div>
 
         {/* Jobs List */}
-        <div className="space-y-4">
+        <div className="space-y-6 lg:space-y-4">
           {jobs.map((job, index) => (
             <div
               key={job._id}
               ref={index === jobs.length - 1 ? lastJobElementRef : null}
               onClick={() => navigate(`/job-details/${job._id}`)}
-              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer p-6"
+              className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-200 hover:border-primary overflow-hidden group"
             >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  {/* Job Title */}
-                  <div className="flex items-center gap-2 mb-2">
-                    <Briefcase className="w-5 h-5 text-primary" />
-                    <h3 className="text-xl font-bold text-gray-800 hover:text-primary">
-                      {job.departmentName}
-                    </h3>
-                    {job.isLatestJob && (
-                      <span className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">
-                        Latest
-                      </span>
+              <div className="p-6 lg:p-4 sm:p-3">
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                  <div className="flex-1">
+                    {/* Job Header */}
+                    <div className="flex flex-wrap items-start gap-3 mb-4">
+                      <div className="flex items-center gap-2">
+                        <Briefcase className="w-6 h-6 lg:w-5 lg:h-5 text-primary flex-shrink-0" />
+                        <h3 className="text-xl lg:text-lg sm:text-base font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-2">
+                          {job.postName}
+                        </h3>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-2">
+                        {job.isLatestJob && (
+                          <span className="bg-green-100 text-green-800 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
+                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            Latest Job
+                          </span>
+                        )}
+                        {job.isRegistrationOpen && (
+                          <span className="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
+                            <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+                            Registration Open
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                   
+
+                    {/* Job Info Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                      {/* Vacancies */}
+                      <div className="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-lg">
+                        <Users className="w-5 h-5 lg:w-4 lg:h-4 text-primary" />
+                        <div>
+                          <p className="text-xs text-gray-500 font-medium">Total Vacancies</p>
+                          <p className="text-lg lg:text-base font-bold text-gray-800">
+                            {job.totalPost || 'N/A'}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Application Dates */}
+                      <div className="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-lg">
+                        <Calendar className="w-5 h-5 lg:w-4 lg:h-4 text-primary" />
+                        <div>
+                          <p className="text-xs text-gray-500 font-medium">Apply Dates</p>
+                          <p className="text-base lg:text-sm font-bold">
+                            <span className="text-green-600">{formatDate(job.importantDates?.startDate) || 'N/A'}</span>
+                            <span className="mx-2 text-gray-400">→</span>
+                            <span className="text-red-600">{formatDate(job.importantDates?.registrationLastDate) || 'N/A'}</span>
+                          </p>
+                        </div>
+                      </div>
+
+                     
+                    </div>
+
+                    {/* Description Preview */}
+                    {job.description && (
+                      <div className="mb-4">
+                        <p className="text-gray-600 text-sm lg:text-xs line-clamp-2">
+                          {getFirstLine(job.description)}
+                        </p>
+                      </div>
                     )}
-                  </div>
 
-                  {/* Post Name */}
-                  {job.postName && (
-                    <p className="text-gray-600 font-medium mb-3">
-                      Post: {job.postName}
-                    </p>
-                  )}
-
-                  {/* Job Details Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-3">
-                    {/* Total Posts */}
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm text-gray-600">
-                        <strong>Total Posts:</strong> {job.totalPost || 0}
+                    {/* Quick Info */}
+                    <div className="flex flex-wrap gap-3">
+                      <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {job.modeOfForm || 'Online'}
                       </span>
-                    </div>
-
-                    {/* Application Type */}
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-gray-500" />
-                      <span className="text-sm text-gray-600">
-                        <strong>Mode:</strong> {job.modeOfForm}
-                      </span>
-                    </div>
-
-                    {/* Payment Mode */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-600">
-                        <strong>Payment:</strong> {job.paymentMode}
+                      <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                        {job.paymentMode || 'Online'}
                       </span>
                     </div>
                   </div>
 
-                  {/* Important Dates */}
-                  {job.importantDates && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <Clock className="w-4 h-4 text-gray-500" />
-                      <span className="text-gray-600">
-                        <strong>Start Date:</strong>{' '}
-                        <span className="text-green-600 font-semibold">
-                          {formatDate(job.importantDates.startDate)}
-                        </span>
-                      </span>
-                      <span className="text-red-600 mx-2">⇔</span>
-                      <span className="text-gray-600">
-                        <strong>Last Date:</strong>{' '}
-                        <span className="text-red-600 font-semibold">
-                          {formatDate(job.importantDates.registrationLastDate)}
-                        </span>
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Registration Status */}
-                  {job.isRegistrationOpen && (
-                    <div className="mt-3">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                        Registration Open
-                      </span>
-                    </div>
-                  )}
+                  {/* View Details Button */}
+                  <div className="flex md:flex-col items-center justify-between md:justify-center gap-2">
+                    <button className="bg-primary hover:bg-primary-dark text-white px-6 py-3 lg:px-4 lg:py-2 rounded-lg font-semibold transition-colors flex items-center gap-2 group-hover:scale-105 transform transition-transform text-sm whitespace-nowrap">
+                      View Details
+                      <ChevronRight className="w-5 h-5 lg:w-4 lg:h-4 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -318,25 +318,38 @@ const JobList = () => {
 
         {/* Loading Indicator */}
         {loading && (
-          <div className="text-center py-8">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            <p className="mt-4 text-gray-600">Loading jobs...</p>
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-primary border-t-transparent"></div>
+            <p className="mt-4 text-gray-600 font-medium text-lg">Loading more jobs...</p>
           </div>
         )}
 
         {/* No More Jobs */}
         {!loading && !pagination.hasMore && jobs.length > 0 && (
-          <div className="text-center py-8">
-            <p className="text-gray-600 font-medium">No more jobs to load</p>
+          <div className="text-center py-12">
+            <div className="bg-gray-100 rounded-xl p-8 inline-block">
+              <p className="text-gray-700 font-semibold text-lg">🎉 All jobs loaded</p>
+              <p className="text-gray-500 mt-2">You've reached the end of the list</p>
+            </div>
           </div>
         )}
 
         {/* No Jobs Found */}
         {!loading && jobs.length === 0 && (
-          <div className="text-center py-12">
-            <Briefcase className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600 text-lg">No jobs found</p>
-            <p className="text-gray-500 mt-2">Try adjusting your search filters</p>
+          <div className="text-center py-16 bg-white rounded-2xl shadow-lg border border-gray-200">
+            <div className="bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Briefcase className="w-10 h-10 text-gray-400" />
+            </div>
+            <p className="text-gray-700 text-2xl font-bold mb-3">No jobs found</p>
+            <p className="text-gray-500 max-w-md mx-auto">
+              Try adjusting your search filters or check back later for new opportunities
+            </p>
+            <button
+              onClick={handleReset}
+              className="mt-6 bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Reset Filters
+            </button>
           </div>
         )}
       </div>

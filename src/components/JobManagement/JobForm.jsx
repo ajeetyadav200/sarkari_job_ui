@@ -19,6 +19,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
     totalPost: editData?.totalPost || 1,
     modeOfForm: editData?.modeOfForm || 'online',
     showInPortal: editData?.showInPortal !== false,
+    isLatestJob: editData?.isLatestJob || false,
     typeOfForm: editData?.typeOfForm || 'government',
     paymentMode: editData?.paymentMode || 'paid',
     categoryPosts: editData?.categoryPosts || {
@@ -420,17 +421,32 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
                 </select>
               </div>
 
-              <div className="flex items-center mt-6">
-                <input
-                  type="checkbox"
-                  id="showInPortal"
-                  checked={formData.showInPortal}
-                  onChange={(e) => handleDirectChange('showInPortal', e.target.checked)}
-                  className="rounded text-blue-600 focus:ring-blue-500"
-                />
-                <label htmlFor="showInPortal" className="ml-2 text-sm text-gray-700">
-                  Show this job in public portal
-                </label>
+              <div className="flex flex-col gap-3 mt-6">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="showInPortal"
+                    checked={formData.showInPortal}
+                    onChange={(e) => handleDirectChange('showInPortal', e.target.checked)}
+                    className="rounded text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="showInPortal" className="ml-2 text-sm text-gray-700">
+                    Show this job in public portal
+                  </label>
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="isLatestJob"
+                    checked={formData.isLatestJob}
+                    onChange={(e) => handleDirectChange('isLatestJob', e.target.checked)}
+                    className="rounded text-green-600 focus:ring-green-500"
+                  />
+                  <label htmlFor="isLatestJob" className="ml-2 text-sm text-gray-700">
+                    Mark as Latest Job
+                  </label>
+                </div>
               </div>
             </div>
           </div>
