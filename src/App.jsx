@@ -46,6 +46,7 @@ import HandlePage from "./data/HandlePage";
 
 import JobDetailPage from "./pages/job/JobDetailPage";
 import AdmitCardDetails from "./pages/admitCard/AdmitCardDetails";
+import ResultDetails from "./pages/result/ResultDetails";
 
 
 
@@ -100,7 +101,7 @@ function App() {
 
      //  result is here 
 
-      <Route path="/result-details/:id" element={<ResultDetail />} />
+      <Route path="/result-details/:id" element={<ResultDetails />} />
      <Route path="/result-details" element={<ResultDetail />} />
 
 

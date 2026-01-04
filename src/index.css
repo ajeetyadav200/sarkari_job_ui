@@ -1,44 +1,114 @@
-
-
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 @import "tailwindcss";
 
+/* ===============================
+   ROOT THEME VARIABLES
+================================ */
 :root {
   --primary-color: rgb(0, 142, 228);
   --primary-dark: rgb(0, 120, 200);
   --primary-light: rgb(64, 176, 240);
+
+  --text-important: rgb(217, 83, 79);   /* red */
+  --text-black: rgb(17, 24, 39);
+  --text-muted: rgb(107, 114, 128);
+  --text-white: rgb(255, 255, 255);
 }
 
+/* ===============================
+   GLOBAL FONT
+================================ */
 * {
   font-family: 'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  transition-property: color, background-color, border-color, transform, box-shadow;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
 }
 
 body {
-  font-family: 'Hind', 'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
-  color: rgb(0, 142, 228);
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  color: var(--text-black);
 }
 
-
+/* ===============================
+   TEXT COLORS
+================================ */
 .text-primary {
-  color: rgb(0, 142, 228);
+  color: var(--primary-color);
 }
 
+.text-primary-dark {
+  color: var(--primary-dark);
+}
+
+.text-primary-light {
+  color: var(--primary-light);
+}
+
+.text-imp {
+  color: var(--text-important);
+}
+
+.text-black {
+  color: var(--text-black);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-white {
+  color: var(--text-white);
+}
+
+/* ===============================
+   BACKGROUND COLORS
+================================ */
 .bg-primary {
-  background-color: rgb(0, 142, 228);
+  background-color: var(--primary-color);
 }
 
+.bg-primary-dark {
+  background-color: var(--primary-dark);
+}
+
+.bg-primary-light {
+  background-color: var(--primary-light);
+}
+
+.bg-imp {
+  background-color: var(--text-important);
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+/* ===============================
+   BORDER COLORS
+================================ */
 .border-primary {
-  border-color: rgb(0, 142, 228);
+  border-color: var(--primary-color);
 }
 
+.border-imp {
+  border-color: var(--text-important);
+}
+
+/* ===============================
+   HOVER UTILITIES
+================================ */
 .hover\:bg-primary:hover {
-  background-color: rgb(0, 120, 200);
+  background-color: var(--primary-dark);
 }
 
+.hover\:text-primary:hover {
+  color: var(--primary-color);
+}
 
-/* Custom scrollbar for sidebar */
+/* ===============================
+   SCROLLBAR (SIDEBAR)
+================================ */
 .sidebar-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
@@ -48,22 +118,17 @@ body {
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-thumb {
-  background: #4f46e5;
+  background: var(--primary-color);
   border-radius: 2px;
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #4338ca;
+  background: var(--primary-dark);
 }
 
-/* Smooth transitions */
-* {
-  transition-property: color, background-color, border-color, transform, box-shadow;
-  transition-duration: 200ms;
-  transition-timing-function: ease-in-out;
-}
-
-/* Loading animation */
+/* ===============================
+   LOADING ANIMATION
+================================ */
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
@@ -73,19 +138,25 @@ body {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Custom button hover effects */
+/* ===============================
+   BUTTON EFFECTS
+================================ */
 .btn-hover {
   @apply transform hover:scale-105 active:scale-95;
 }
 
-/* Glass morphism effect */
+/* ===============================
+   GLASS EFFECT
+================================ */
 .glass {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Gradient text */
+/* ===============================
+   GRADIENT TEXT
+================================ */
 .gradient-text {
   @apply bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent;
 }

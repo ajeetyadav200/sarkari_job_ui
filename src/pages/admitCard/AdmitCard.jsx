@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, AlertCircle, FileText ,Circle} from 'lucide-react';
+import { Loader2, AlertCircle, FileText, Circle } from 'lucide-react';
 import admitCardService from '../../services/admitCardService';
 
 const AdmitCard = () => {
@@ -51,48 +51,53 @@ const AdmitCard = () => {
 
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-      <div className="bg-gradient-to-r from-green-700 to-green-600 text-white p-4">
-        <h2 className="text-2xl font-bold text-center">Admit Card</h2>
+      {/* Header with primary color */}
+      <div className="bg-[rgb(0,142,228)] text-white p-4">
+        <h2 className="text-2xl lg:text-2xl md:text-xl sm:text-base font-bold text-center">Admit Card</h2>
       </div>
 
       <div className="max-h-96 overflow-y-auto p-4">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-8 gap-3">
-            <Loader2 className="w-8 h-8 animate-spin text-green-600" />
-            <p className="text-gray-600 text-sm">Loading admit cards...</p>
+            <Loader2 className="w-8 h-8 lg:w-8 lg:h-8 sm:w-6 sm:h-6 animate-spin text-[#1447e6]" />
+            <p className="text-gray-600 text-base lg:text-base sm:text-xs">Loading admit cards...</p>
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center py-8 gap-3">
-            <AlertCircle className="w-10 h-10 text-red-600" />
-            <p className="text-red-600 text-sm text-center">{error}</p>
+            <AlertCircle className="w-10 h-10 lg:w-10 lg:h-10 sm:w-7 sm:h-7 text-red-600" />
+            <p className="text-red-600 text-sm lg:text-base sm:text-xs text-center">{error}</p>
             <button
               onClick={fetchAdmitCards}
-              className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm"
+              className="px-4 py-2 lg:px-4 lg:py-2 bg-[rgb(0,142,228)] text-white rounded hover:bg-[rgb(0,120,200)] transition-colors text-sm lg:text-base sm:text-xs sm:px-2 sm:py-1"
             >
               Try Again
             </button>
           </div>
         ) : admitCards.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 gap-3">
-            <FileText className="w-10 h-10 text-gray-400" />
-            <p className="text-gray-600 text-sm">No admit cards available</p>
+            <FileText className="w-10 h-10 lg:w-10 lg:h-10 sm:w-7 sm:h-7 text-gray-400" />
+            <p className="text-gray-600 text-sm lg:text-base sm:text-xs">No admit cards available</p>
           </div>
         ) : (
           <ul className="space-y-3">
             {admitCards.map((card) => (
-              <li key={card._id} className="border-b border-dashed border-gray-300 pb-3 last:border-0">
+              <li 
+                key={card._id} 
+                className="border-b border-dashed border-gray-300 pb-3 last:border-0 cursor-pointer"
+              >
                 <div className="flex items-start gap-2">
-                  <span className="text-black rounded-2xl">
-  <Circle className="w-4 h-4  text-black" />
-</span>
-
+                  {/* Black circle */}
+                  <Circle className="w-2.5 h-2.5 mt-2 bg-black rounded-full text-black" />
+                  
                   <h3
                     onClick={() => handleCardClick(card._id)}
-                    className="text-blue-700 font-semibold hover:text-blue-900 cursor-pointer flex items-center gap-2 flex-1"
+                    className="text-[#1447e6] font-semibold hover:text-blue-900 hover:underline cursor-pointer flex items-center gap-2 flex-1 text-base lg:text-base sm:text-xs"
                   >
                     {card?.postTypeDetails || card?.title || 'Admit Card'}
                     {isNew(card.publishDate) && (
-                      <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">NEW</span>
+                      <span className="bg-red-500 text-white text-xs lg:text-xs px-2 py-1 lg:px-2 lg:py-1 rounded sm:text-[10px] sm:px-1.5 sm:py-0.5">
+                        NEW
+                      </span>
                     )}
                   </h3>
                 </div>
@@ -106,7 +111,7 @@ const AdmitCard = () => {
         <div className="border-t border-gray-200 p-3 text-center">
           <button
             onClick={() => navigate('/admit-cards')}
-            className="text-blue-700 font-semibold hover:text-blue-900 transition-colors text-sm"
+            className="text-[#1447e6] font-semibold hover:text-blue-900 hover:underline transition-colors text-sm lg:text-base sm:text-xs"
           >
             View All Admit Cards →
           </button>
@@ -116,4 +121,4 @@ const AdmitCard = () => {
   );
 };
 
-export default AdmitCard
+export default AdmitCard;

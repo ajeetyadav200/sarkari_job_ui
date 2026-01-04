@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchAllJobs } from "../../slice/jobSlice";
+import { Loader2, AlertCircle, FileText, Circle } from 'lucide-react';
 
 const JobAlert = () => {
   const dispatch = useDispatch();
@@ -29,76 +30,75 @@ const JobAlert = () => {
   };
 
   return (
-    <div className="bg-white border rounded-md shadow-sm overflow-hidden">
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="bg-green-700 text-white text-center py-3 font-bold text-xl">
-        Job Alert
+      <div className="bg-[rgb(0,142,228)] text-white p-4">
+        <h2 className="text-2xl lg:text-2xl md:text-xl sm:text-base font-bold text-center">Job Alert</h2>
       </div>
 
       {/* Body */}
-      <div className="max-h-[420px] overflow-y-auto px-4 py-3">
-        {loading && (
-          <p className="text-center text-gray-600 py-6">Loading jobs...</p>
-        )}
-
-        {!loading && jobs.length === 0 && (
-          <p className="text-center text-gray-600 py-6">No jobs available</p>
-        )}
-
-        <ul className="space-y-4">
-          {jobs.slice(0, 10).map((job) => (
-            <li
-              key={job._id}
-              onClick={() => navigate(`/job-details/${job._id}`)}
-              className="border-b border-dashed border-red-400 pb-3 cursor-pointer hover:bg-gray-50 transition-colors"
-            >
-              <div className="flex gap-2">
-                {/* Bullet */}
-                <span className="text-green-700 font-bold mt-1">■</span>
-
-                {/* Content */}
-                <div className="flex-1">
+      <div className="max-h-96 overflow-y-auto p-4">
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-8 gap-3">
+            <Loader2 className="w-8 h-8 lg:w-8 lg:h-8 sm:w-6 sm:h-6 animate-spin text-[#1447e6]" />
+            <p className="text-gray-600 text-base lg:text-base sm:text-xs">Loading jobs...</p>
+          </div>
+        ) : jobs.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-8 gap-3">
+            <FileText className="w-10 h-10 lg:w-10 lg:h-10 sm:w-7 sm:h-7 text-gray-400" />
+            <p className="text-gray-600 text-sm lg:text-base sm:text-xs">No jobs available</p>
+          </div>
+        ) : (
+          <ul className="space-y-3">
+            {jobs.slice(0, 10).map((job) => (
+              <li 
+                key={job._id} 
+                onClick={() => navigate(`/job-details/${job._id}`)}
+                className="border-b border-dashed border-gray-300 pb-3 last:border-0 cursor-pointer"
+              >
+                <div className="flex items-start gap-2">
+                  {/* Black circle */}
+                  <Circle className="w-2.5 h-2.5 mt-2 bg-black rounded-full text-black" />
+                  
                   {/* Title */}
-                  <h3 className="text-blue-700 font-semibold hover:underline leading-snug">
+                  <h3 className="text-[#1447e6] font-semibold hover:text-blue-900 hover:underline cursor-pointer flex items-center gap-2 flex-1 text-base lg:text-base sm:text-xs">
                     {job.departmentName}
                     {job.postName && ` - ${job.postName}`}
                   </h3>
-
-                  {/* Meta */}
-                  <div className="flex flex-wrap gap-6 mt-1 text-sm">
-                    <div>
-                      <span className="font-semibold">Date:</span>{" "}
-                      <span className="text-green-600 font-semibold">
-                        {formatDate(job.importantDates?.startDate)}
-                      </span>{" "}
-                      <span className="text-red-600 mx-1">⇔</span>
-                      <span className="text-red-600 font-semibold">
-                        {formatDate(
-                          job.importantDates?.registrationLastDate
-                        )}
-                      </span>
-                    </div>
-
-                    <div>
-                      <span className="font-semibold">Post:</span>{" "}
-                      <span className="text-blue-700 font-bold">
-                        {job.totalPost || 0}
-                      </span>
-                    </div>
+                </div>
+                
+                {/* Meta Information */}
+                <div className="ml-4 mt-1 flex flex-wrap gap-4 text-sm lg:text-xs sm:text-[11px]">
+                  <div className="flex items-center gap-1">
+                    <span className="font-semibold text-black">Date:</span>
+                    <span className="text-[#1447e6] font-semibold">
+                      {formatDate(job.importantDates?.startDate)}
+                    </span>
+                    <span className="text-red-600 mx-1">⇔</span>
+                    <span className="text-red-600 font-semibold">
+                      {formatDate(job.importantDates?.registrationLastDate)}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center gap-1">
+                    <span className="font-semibold text-black">Post:</span>
+                    <span className="text-[#1447e6] font-bold">
+                      {job.totalPost || 0}
+                    </span>
                   </div>
                 </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* View All Jobs Button */}
       {jobs.length > 0 && (
-        <div className="bg-gray-50 border-t px-4 py-3">
+        <div className="border-t border-gray-200 p-3 text-center">
           <button
             onClick={() => navigate("/jobs")}
-            className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded transition-colors"
+            className="text-[#1447e6] font-semibold hover:text-blue-900 hover:underline transition-colors text-sm lg:text-base sm:text-xs"
           >
             View All Jobs →
           </button>

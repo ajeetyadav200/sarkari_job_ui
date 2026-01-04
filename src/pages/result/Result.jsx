@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, AlertCircle, FileText } from 'lucide-react';
+import { Loader2, AlertCircle, FileText, Circle } from 'lucide-react';
 import resultService from '../../services/resultService';
 
 const Result = () => {
@@ -8,23 +8,31 @@ const Result = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     fetchResults();
   }, []);
 
-  const fetchResults = async () => {
+  const fetchResults = async (pageNum = 1) => {
     try {
       setLoading(true);
       const response = await resultService.getPublicResults({
-        page: 1,
+        page: pageNum,
         limit: 10,
         sortBy: 'publishDate',
         sortOrder: 'desc'
       });
 
       if (response.success) {
-        setResults(response.data);
+        if (pageNum === 1) {
+          setResults(response.data);
+        } else {
+          setResults(prev => [...prev, ...response.data]);
+        }
+        setHasMore(response.data.length === 10);
+        setPage(pageNum);
       } else {
         setError('Failed to load results');
       }
@@ -34,6 +42,10 @@ const Result = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadMore = () => {
+    fetchResults(page + 1);
   };
 
   const isNew = (publishDate) => {
@@ -50,45 +62,49 @@ const Result = () => {
 
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-      <div className="bg-gradient-to-r from-green-700 to-green-600 text-white p-4">
-        <h2 className="text-2xl font-bold text-center">Results</h2>
+      {/* Header with primary color */}
+      <div className="bg-[rgb(0,142,228)] text-white p-4">
+        <h2 className="text-2xl lg:text-2xl md:text-xl sm:text-base font-bold text-center">Results</h2>
       </div>
 
       <div className="max-h-96 overflow-y-auto p-4">
-        {loading ? (
+        {loading && page === 1 ? (
           <div className="flex flex-col items-center justify-center py-8 gap-3">
-            <Loader2 className="w-8 h-8 animate-spin text-red-600" />
-            <p className="text-gray-600 text-sm">Loading results...</p>
+            <Loader2 className="w-8 h-8 lg:w-8 lg:h-8 sm:w-6 sm:h-6 animate-spin text-[#1447e6]" />
+            <p className="text-gray-600 text-base lg:text-base sm:text-xs">Loading results...</p>
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center py-8 gap-3">
-            <AlertCircle className="w-10 h-10 text-red-600" />
-            <p className="text-red-600 text-sm text-center">{error}</p>
+            <AlertCircle className="w-10 h-10 lg:w-10 lg:h-10 sm:w-7 sm:h-7 text-red-600" />
+            <p className="text-red-600 text-sm lg:text-base sm:text-xs text-center">{error}</p>
             <button
-              onClick={fetchResults}
-              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors text-sm"
+              onClick={() => fetchResults(1)}
+              className="px-4 py-2 lg:px-4 lg:py-2 bg-[rgb(0,142,228)] text-white rounded hover:bg-[rgb(0,120,200)] transition-colors text-sm lg:text-base sm:text-xs sm:px-2 sm:py-1"
             >
               Try Again
             </button>
           </div>
         ) : results.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 gap-3">
-            <FileText className="w-10 h-10 text-gray-400" />
-            <p className="text-gray-600 text-sm">No results available</p>
+            <FileText className="w-10 h-10 lg:w-10 lg:h-10 sm:w-7 sm:h-7 text-gray-400" />
+            <p className="text-gray-600 text-sm lg:text-base sm:text-xs">No results available</p>
           </div>
         ) : (
           <ul className="space-y-3">
             {results.map((result) => (
               <li key={result._id} className="border-b border-dashed border-gray-300 pb-3 last:border-0">
                 <div className="flex items-start gap-2">
-                  <span className="text-red-600 ">■</span>
+                  {/* Black circle instead of square */}
+                   <Circle className="w-2.5 h-2.5 mt-2 bg-black rounded-full text-black" />
                   <h3
                     onClick={() => handleResultClick(result._id)}
-                    className="text-blue-700 font-semibold hover:text-blue-900 cursor-pointer flex items-center gap-2 flex-1"
+                    className="text-[#1447e6] font-semibold hover:text-blue-900 hover:underline cursor-pointer flex items-center gap-2 flex-1 text-base lg:text-base sm:text-xs"
                   >
                     {result?.postTypeDetails || result?.examName || 'Result'}
                     {isNew(result.publishDate) && (
-                      <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">NEW</span>
+                      <span className="bg-red-500 text-white text-xs lg:text-xs px-2 py-1 lg:px-2 lg:py-1 rounded sm:text-[10px] sm:px-1.5 sm:py-0.5">
+                        NEW
+                      </span>
                     )}
                   </h3>
                 </div>
@@ -96,13 +112,33 @@ const Result = () => {
             ))}
           </ul>
         )}
+
+        {/* Load More Button */}
+        {!loading && hasMore && results.length > 0 && (
+          <div className="text-center mt-4">
+            <button
+              onClick={loadMore}
+              className="px-4 py-2 lg:px-4 lg:py-2 bg-[rgb(0,142,228)] text-white rounded hover:bg-[rgb(0,120,200)] hover:underline transition-colors text-sm lg:text-base sm:text-xs sm:px-2 sm:py-1"
+            >
+              Load More
+            </button>
+          </div>
+        )}
+
+        {/* Loading more indicator */}
+        {loading && page > 1 && (
+          <div className="text-center mt-4">
+            <Loader2 className="w-6 h-6 lg:w-6 lg:h-6 animate-spin text-[#1447e6] mx-auto sm:w-4 sm:h-4" />
+            <p className="text-gray-600 text-sm lg:text-base mt-2 sm:text-xs">Loading more results...</p>
+          </div>
+        )}
       </div>
 
       {!loading && !error && results.length > 0 && (
         <div className="border-t border-gray-200 p-3 text-center">
           <button
             onClick={() => navigate('/results')}
-            className="text-blue-700 font-semibold hover:text-blue-900 transition-colors text-sm"
+            className="text-[#1447e6] font-semibold hover:text-blue-900 hover:underline transition-colors text-sm lg:text-base sm:text-xs"
           >
             View All Results →
           </button>
