@@ -16,6 +16,7 @@ import AdminDashboard from "./components/AdminDashboard/AdminDashboard";
 import JobDashboard from "./components/JobManagement/JobDashboard";
 import JobDetail from "./components/JobManagement/JobDetail";
 import JobForm from "./components/JobManagement/JobForm";
+import JobList from "./pages/job/JobList";
 
 
 // Publisher Pages
@@ -43,7 +44,7 @@ import AdmitCardForm from "./components/AdmitCardManagement/AdmitCardForm";
 
 import HandlePage from "./data/HandlePage";
 
-import JobDetailPage from "./pages/JobDetailPage";
+import JobDetailPage from "./pages/job/JobDetailPage";
 import AdmitCardDetails from "./pages/admitCard/AdmitCardDetails";
 
 
@@ -89,7 +90,7 @@ function App() {
       <Route path="/" element={<HandlePage />} />
 
       {/* 🌟 PUBLIC JOB PAGES */}
-     
+      <Route path="/jobs" element={<JobList />} />
       <Route path="/job-details/:id" element={<JobDetailPage />} />
       <Route path="/job-details" element={<JobDetailPage />} />
 

@@ -106,6 +106,11 @@ class ApiService {
       const url = `/api/jobs${queryString ? `?${queryString}` : ''}`;
       return this.request(url);
     },
+    getList: (params = {}) => {
+      const queryString = new URLSearchParams(params).toString();
+      const url = `/api/jobs/list${queryString ? `?${queryString}` : ''}`;
+      return this.request(url);
+    },
     search: (params = {}) => {
       const queryString = new URLSearchParams(params).toString();
       return this.request(`/api/jobs/search${queryString ? `?${queryString}` : ''}`);

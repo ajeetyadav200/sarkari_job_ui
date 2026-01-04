@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchAllJobs } from "../slice/jobSlice";
+import { fetchAllJobs } from "../../slice/jobSlice";
 
 const JobAlert = () => {
   const dispatch = useDispatch();
@@ -97,7 +97,7 @@ const JobAlert = () => {
       {jobs.length > 0 && (
         <div className="bg-gray-50 border-t px-4 py-3">
           <button
-            onClick={() => navigate("/job-alerts")}
+            onClick={() => navigate("/jobs")}
             className="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded transition-colors"
           >
             View All Jobs →

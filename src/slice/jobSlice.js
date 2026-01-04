@@ -153,11 +153,35 @@ export const fetchMyJobs = createAsyncThunk(
           currentPage: 1,
           totalPages: 1,
           totalJobs: response.data?.length || 0,
-          limit: params.limit || 10
+          limit: params.limit || 20
         }
       };
     } catch (error) {
       return rejectWithValue(error.message || 'Failed to fetch your jobs');
+    }
+  }
+);
+
+// Fetch jobs list with infinite scrolling
+export const fetchJobsList = createAsyncThunk(
+  'jobs/fetchJobsList',
+  async (params = {}, { rejectWithValue }) => {
+    try {
+      const response = await ApiService.jobs.getList(params);
+      return {
+        success: true,
+        data: response.data || [],
+        pagination: response.pagination || {
+          currentPage: params.page || 1,
+          totalPages: 1,
+          totalJobs: response.data?.length || 0,
+          limit: params.limit || 20,
+          hasMore: response.pagination?.hasMore || false
+        },
+        append: params.append || false
+      };
+    } catch (error) {
+      return rejectWithValue(error.message || 'Failed to fetch jobs list');
     }
   }
 );
@@ -174,7 +198,8 @@ const jobSlice = createSlice({
       currentPage: 1,
       totalPages: 1,
       totalJobs: 0,
-      limit: 10
+      limit: 20,
+      hasMore: false
     }
   },
   reducers: {
@@ -199,7 +224,8 @@ const jobSlice = createSlice({
         currentPage: 1,
         totalPages: 1,
         totalJobs: 0,
-        limit: 10
+        limit: 20,
+        hasMore: false
       };
     }
   },
@@ -223,7 +249,8 @@ const jobSlice = createSlice({
           currentPage: 1,
           totalPages: 1,
           totalJobs: 0,
-          limit: 10
+          limit: 20,
+          hasMore: false
         };
       })
       
@@ -357,8 +384,27 @@ const jobSlice = createSlice({
           currentPage: 1,
           totalPages: 1,
           totalJobs: 0,
-          limit: 10
+          limit: 20,
+          hasMore: false
         };
+      })
+
+      // Fetch jobs list (infinite scrolling)
+      .addCase(fetchJobsList.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchJobsList.fulfilled, (state, action) => {
+        state.loading = false;
+        // If append is true, add to existing list; otherwise replace
+        state.list = action.payload.append
+          ? [...state.list, ...action.payload.data]
+          : action.payload.data;
+        state.pagination = action.payload.pagination;
+      })
+      .addCase(fetchJobsList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   }
 });
