@@ -137,7 +137,7 @@ const Result = () => {
       {!loading && !error && results.length > 0 && (
         <div className="border-t border-gray-200 p-3 text-center">
           <button
-            onClick={() => navigate('/results')}
+            onClick={() => navigate('/AllResultList')}
             className="text-[#1447e6] font-semibold hover:text-blue-900 hover:underline transition-colors text-sm lg:text-base sm:text-xs"
           >
             View All Results →

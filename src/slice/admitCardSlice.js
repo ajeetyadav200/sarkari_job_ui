@@ -133,6 +133,29 @@ export const fetchPublicAdmitCards = createAsyncThunk(
   }
 );
 
+export const fetchAdmitCardsList = createAsyncThunk(
+  'admitCards/fetchAdmitCardsList',
+  async (params = {}, { rejectWithValue, getState }) => {
+    try {
+      const response = await admitCardService.getAdmitCardsList(params);
+      const currentList = params.append ? getState().admitCards.list : [];
+      return {
+        success: true,
+        data: params.append ? [...currentList, ...(response.data || [])] : (response.data || []),
+        pagination: {
+          currentPage: response.pagination?.currentPage || params.page || 1,
+          totalPages: response.pagination?.totalPages || 1,
+          total: response.pagination?.total || 0,
+          limit: params.limit || 20,
+          hasMore: response.pagination?.hasMore || false
+        }
+      };
+    } catch (error) {
+      return rejectWithValue(error.message || 'Failed to fetch admit cards list');
+    }
+  }
+);
+
 export const fetchAdmitCardsByJobId = createAsyncThunk(
   'admitCards/fetchAdmitCardsByJobId',
   async (jobId, { rejectWithValue }) => {
@@ -352,7 +375,22 @@ const admitCardSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
+      // Fetch admit cards list
+      .addCase(fetchAdmitCardsList.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAdmitCardsList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list = action.payload.data;
+        state.pagination = action.payload.pagination;
+      })
+      .addCase(fetchAdmitCardsList.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       // Fetch by job ID
       .addCase(fetchAdmitCardsByJobId.pending, (state) => {
         state.loading = true;

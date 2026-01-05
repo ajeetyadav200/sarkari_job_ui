@@ -110,7 +110,7 @@ const AdmitCard = () => {
       {!loading && !error && admitCards.length > 0 && (
         <div className="border-t border-gray-200 p-3 text-center">
           <button
-            onClick={() => navigate('/admit-cards')}
+            onClick={() => navigate('/AllAdmitCardList')}
             className="text-[#1447e6] font-semibold hover:text-blue-900 hover:underline transition-colors text-sm lg:text-base sm:text-xs"
           >
             View All Admit Cards →

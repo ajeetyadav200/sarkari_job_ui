@@ -56,6 +56,8 @@ import ResultDashboard from './components/resultManagement/ResultDashboard';
 import ResultDetail from './components/resultManagement/ResultDetail';
 import ResultForm from './components/resultManagement/ResultForm';
 import ResultList from './components/resultManagement/ResultList';
+import AllAdmitCardList from "./pages/admitCard/AllAdmitCardList";
+import AllResultList from "./pages/result/AllResultList";
 
 
 function App() {
@@ -97,12 +99,14 @@ function App() {
 
       <Route path="/admit-card-details/:id" element={<AdmitCardDetails />} />
      <Route path="/admit-cards" element={<AdmitCardDetails />} />
+     <Route path="/AllAdmitCardList" element={<AllAdmitCardList />} />
 
 
      //  result is here 
 
       <Route path="/result-details/:id" element={<ResultDetails />} />
      <Route path="/result-details" element={<ResultDetail />} />
+      <Route path="/AllResultList" element={<AllResultList />} />
 
 
      

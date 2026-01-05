@@ -5,20 +5,7 @@ import { fetchResultById } from '../../slice/resultSlice';
 import {
   ArrowLeft,
   Loader2,
-  AlertCircle,
-  Calendar,
-  Download,
-  ExternalLink,
-  FileText,
-  Info,
-  Clock,
-  User,
-  BookOpen,
-  CreditCard,
-  Phone,
-  Mail,
-  Globe,
-  Award
+  AlertCircle
 } from 'lucide-react';
 
 const ResultDetails = () => {
@@ -48,9 +35,9 @@ const ResultDetails = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen gap-4 bg-gray-50">
-        <Loader2 className="w-12 h-12 animate-spin text-purple-600" />
-        <p className="text-gray-600 text-lg">Loading Result Details...</p>
+      <div className="flex flex-col items-center justify-center gap-4 min-h-screen bg-gradient-to-br from-white to-blue-100">
+        <Loader2 className="w-12 h-12 lg:w-10 lg:h-10 sm:w-8 sm:h-8 animate-spin text-blue-600" />
+        <p className="text-gray-600 text-lg lg:text-base sm:text-sm">Loading Result Details...</p>
       </div>
     );
   }
@@ -58,13 +45,13 @@ const ResultDetails = () => {
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-6 px-4 bg-gray-50">
-        <AlertCircle className="w-16 h-16 text-red-600" />
-        <p className="text-red-600 text-lg font-medium text-center">{error}</p>
+        <AlertCircle className="w-16 h-16 lg:w-12 lg:h-12 sm:w-10 sm:h-10 text-red-600" />
+        <p className="text-red-600 text-lg lg:text-base sm:text-sm font-medium text-center">{error}</p>
         <button
           onClick={() => navigate('/results')}
-          className="px-6 py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors flex items-center gap-2"
+          className="px-6 py-3 lg:px-5 lg:py-2 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center gap-2 text-base lg:text-sm sm:text-xs"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft className="w-5 h-5 lg:w-4 lg:h-4 sm:w-3 sm:h-3" />
           Back to Results
         </button>
       </div>
@@ -74,12 +61,12 @@ const ResultDetails = () => {
   if (!currentResult) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-6 px-4 bg-gray-50">
-        <p className="text-gray-600 text-lg">Result not found</p>
+        <p className="text-gray-600 text-lg lg:text-base sm:text-sm">Result not found</p>
         <button
           onClick={() => navigate('/results')}
-          className="px-6 py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors flex items-center gap-2"
+          className="px-6 py-3 lg:px-5 lg:py-2 sm:px-4 sm:py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center gap-2 text-base lg:text-sm sm:text-xs"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft className="w-5 h-5 lg:w-4 lg:h-4 sm:w-3 sm:h-3" />
           Back to Results
         </button>
       </div>
@@ -87,206 +74,363 @@ const ResultDetails = () => {
   }
 
   const result = currentResult;
-  const reference = result.referenceId || {};
-  const referenceDates = reference.importantDates || {};
+  const job = result.referenceId || {};
+  const jobDates = job.importantDates || {};
 
   return (
-    <div className="min-h-screen bg-white">
+   <div className="min-h-screen bg-gradient-to-br from-white to-blue-100">
       {/* Main Content Container */}
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="max-w-5xl mx-auto px-4 py-8 lg:px-6 lg:py-6 sm:px-4 sm:py-4">
 
         {/* Page Title */}
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold mb-2" style={{ color: '#d9534f' }}>
-            {result.examName || result.postTypeDetails || reference.postName || 'Result'}
+          <h1 className="text-3xl lg:text-2xl sm:text-xl font-bold mb-2 text-imp">
+            {result.postTypeDetails || result.examName || job.departmentName || 'Result'}
           </h1>
-          <h2 className="text-xl font-semibold text-gray-800">
-            {result.linkMenuField || 'Result Details'}
+          <h2 className="text-xl lg:text-lg sm:text-base font-semibold text-black">
+            {result.linkMenuField || job.postName || 'Check Result'}
           </h2>
-          {result.resultType && (
-            <div className="mt-2">
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-full font-semibold">
-                <Award className="w-5 h-5" />
-                {result.resultType}
-              </span>
-            </div>
-          )}
         </div>
 
         {/* Description Section */}
-        {result.description && (
-          <div className="mb-6 p-4 border border-gray-300 rounded-lg bg-gray-50">
-            <h3 className="text-lg font-semibold mb-2 text-gray-800 flex items-center gap-2">
-              <Info className="w-5 h-5" />
-              Description:
-            </h3>
-            <p className="text-gray-700 whitespace-pre-line">{result.description}</p>
+        {(result.description || job.description) && (
+          <div className="mb-6 p-4 lg:p-3 sm:p-3 border border-gray-300 rounded-lg bg-gray-50">
+            <h3 className="text-lg lg:text-base sm:text-sm font-semibold mb-2 text-black">Description:</h3>
+            <p className="text-gray-700 whitespace-pre-line text-base lg:text-sm sm:text-xs">{result.description || job.description}</p>
           </div>
         )}
 
-        {/* Result Information Section */}
-        <div className="mb-6 grid grid-cols-2 gap-4 text-sm">
-          <div className="flex items-center">
-            <FileText className="w-5 h-5 text-purple-600 mr-2" />
-            <div>
-              <span className="font-semibold">Department:</span>
-              <span className="ml-2" style={{ color: '#d9534f' }}>
-                {reference.departmentName || 'N/A'}
-              </span>
-            </div>
+        {/* Advertisement Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm lg:text-xs sm:text-[11px]">
+          <div>
+            <span className="font-semibold text-black">Department:</span>
+            <span className="ml-2 text-imp">{job.departmentName || 'N/A'}</span>
           </div>
-          <div className="flex items-center justify-end">
-            <Clock className="w-5 h-5 text-purple-600 mr-2" />
-            <div>
-              <span className="font-semibold">Published:</span>
-              <span className="ml-2" style={{ color: '#0066cc' }}>
-                {formatDate(result.publishDate)}
-              </span>
-            </div>
+          <div className="md:text-right">
+            <span className="font-semibold text-black">Published Date:</span>
+            <span className="ml-2 text-primary">{formatDate(result.publishDate)}</span>
           </div>
-          <div className="flex items-center">
-            <Phone className="w-5 h-5 text-purple-600 mr-2" />
-            <div>
-              <span className="font-semibold">Help Contact:</span>
-              <span className="ml-2" style={{ color: '#d9534f' }}>
-                {reference.helpCareNo || 'N/A'}
-              </span>
-            </div>
+          <div>
+            <span className="font-semibold text-black">Help Contact No:</span>
+            <span className="ml-2 text-imp">{job.helpCareNo || 'N/A'}</span>
           </div>
-          <div className="flex items-center justify-end">
-            <Mail className="w-5 h-5 text-purple-600 mr-2" />
-            <div>
-              <span className="font-semibold">Help Email:</span>
-              <span className="ml-2" style={{ color: '#0066cc' }}>
-                {reference.helpEmailId || 'N/A'}
-              </span>
-            </div>
+          <div className="md:text-right">
+            <span className="font-semibold text-black">E-mail ID:</span>
+            <span className="ml-2 text-primary">{job.helpEmailId || 'N/A'}</span>
           </div>
         </div>
 
-        {/* Two Column Layout - Important Dates & Category */}
-        {(referenceDates.startDate || result.resultDate || result.category) && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-gray-400">
+        {/* Two Column Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-gray-400">
 
-            {/* Left Column - Important Dates */}
-            <div className="border-r border-gray-400">
-              <div className="bg-purple-700 text-white text-center py-3 px-4 font-bold text-lg flex items-center justify-center gap-2">
-                <Calendar className="w-6 h-6" />
-                Important Dates
-              </div>
-              <div className="p-4">
-                <ul className="space-y-3">
-                  {referenceDates.startDate && (
-                    <li className="flex items-start">
-                      <span className="text-black mr-2">▪</span>
-                      <div>
-                        <span className="font-semibold">Application Start Date:</span>
-                        <span className="ml-2" style={{ color: '#d9534f' }}>
-                          {formatDate(referenceDates.startDate)}
-                        </span>
-                      </div>
-                    </li>
-                  )}
-                  {referenceDates.registrationLastDate && (
-                    <li className="flex items-start">
-                      <span className="text-black mr-2">▪</span>
-                      <div>
-                        <span className="font-semibold">Registration Last Date:</span>
-                        <span className="ml-2" style={{ color: '#d9534f' }}>
-                          {formatDate(referenceDates.registrationLastDate)}
-                        </span>
-                      </div>
-                    </li>
-                  )}
-                  {result.resultDate && (
-                    <li className="flex items-start">
-                      <span className="text-black mr-2">▪</span>
-                      <div>
-                        <span className="font-semibold">Result Date:</span>
-                        <span className="ml-2" style={{ color: '#d9534f' }}>
-                          {formatDate(result.resultDate)}
-                        </span>
-                      </div>
-                    </li>
-                  )}
-                </ul>
-              </div>
+          {/* Left Column - Important Dates */}
+          <div className="md:border-r border-gray-400">
+            <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
+              Important Dates
             </div>
-
-            {/* Right Column - Category & Tags */}
-            <div>
-              <div className="bg-purple-700 text-white text-center py-3 px-4 font-bold text-lg flex items-center justify-center gap-2">
-                <Info className="w-6 h-6" />
-                Additional Information
-              </div>
-              <div className="p-4">
-                <ul className="space-y-3">
-                  {result.category && (
-                    <li className="flex items-start">
-                      <span className="text-black mr-2">▪</span>
-                      <div>
-                        <span className="font-semibold">Category:</span>
-                        <span className="ml-2" style={{ color: '#d9534f' }}>
-                          {result.category}
-                        </span>
-                      </div>
-                    </li>
-                  )}
-                  {result.tags && result.tags.length > 0 && (
-                    <li className="flex items-start">
-                      <span className="text-black mr-2">▪</span>
-                      <div>
-                        <span className="font-semibold">Tags:</span>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {result.tags.map((tag, index) => (
-                            <span key={index} className="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </li>
-                  )}
-                </ul>
-              </div>
+            <div className="p-4 lg:p-3 sm:p-2">
+              <ul className="space-y-2 lg:space-y-1.5 sm:space-y-1">
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Application Start Date:</span>
+                    <span className="ml-2 text-imp">
+                      {formatDate(jobDates?.startDate)}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Registration Last Date:</span>
+                    <span className="ml-2 text-imp">
+                      {formatDate(jobDates?.registrationLastDate)}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Result Date:</span>
+                    <span className="ml-2 text-imp">
+                      {formatDate(result.resultDate || jobDates?.resultDate)}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Exam Date:</span>
+                    <span className="ml-2 text-imp">
+                      {formatDate(jobDates?.examDate)}
+                    </span>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
-        )}
+
+          {/* Right Column - Application Fee Details */}
+          <div>
+            <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
+              Application Fee Details
+            </div>
+            <div className="p-4 lg:p-3 sm:p-2">
+              <ul className="space-y-2 lg:space-y-1.5 sm:space-y-1">
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">General/OBC Application Fee:</span>
+                    <span className="ml-2 text-imp">
+                      ₹{job.categoryFees?.general || job.categoryFees?.obc || 'N/A'}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">SC/ST Application Fee:</span>
+                    <span className="ml-2 text-imp">
+                      ₹{job.categoryFees?.sc || job.categoryFees?.st || 'N/A'}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">PH Application Fee:</span>
+                    <span className="ml-2 text-imp">
+                      ₹{job.categoryFees?.ph || 'N/A'}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Payment Mode:</span>
+                    <span className="ml-2 text-imp">
+                      {job.paymentMode || 'Online Only'}
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
         {/* Educational Qualification Section */}
-        {(reference.eligibilityEducational1 || reference.eligibilityEducational2) && (
+        {(job.eligibilityEducational1 || job.eligibilityEducational2) && (
           <div className="mt-4 border border-gray-400">
-            <div className="bg-purple-700 text-white text-center py-3 px-4 font-bold text-lg flex items-center justify-center gap-2">
-              <BookOpen className="w-6 h-6" />
+            <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
               Educational Qualification
             </div>
-            <div className="p-4">
-              {reference.eligibilityEducational1 && (
-                <div className="mb-3">
-                  <p className="text-gray-800 whitespace-pre-line">{reference.eligibilityEducational1}</p>
+            <div className="p-4 lg:p-3 sm:p-2">
+              {job.eligibilityEducational1 && (
+                <div className="mb-3 text-gray-800 whitespace-pre-line text-base lg:text-sm sm:text-xs">
+                  <p>{job.eligibilityEducational1}</p>
                 </div>
               )}
-              {reference.eligibilityEducational2 && (
-                <div>
-                  <p className="text-gray-800 whitespace-pre-line">{reference.eligibilityEducational2}</p>
+              {job.eligibilityEducational2 && (
+                <div className="text-gray-800 whitespace-pre-line text-base lg:text-sm sm:text-xs">
+                  <p>{job.eligibilityEducational2}</p>
                 </div>
               )}
             </div>
           </div>
         )}
 
-        {/* Important Instructions */}
-        {result.importantInstructions && result.importantInstructions.length > 0 && (
-          <div className="mt-4 border border-gray-400">
-            <div className="bg-purple-700 text-white text-center py-3 px-4 font-bold text-lg">
-              Important Instructions
+        {/* Two Column Layout - Eligibility and Age Limit */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-t-0 border-gray-400">
+
+          {/* Left Column - Eligibility */}
+          <div className="md:border-r border-gray-400">
+            <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
+              Eligibility
             </div>
-            <div className="p-4">
-              <ul className="space-y-2">
-                {result.importantInstructions.map((instruction, index) => (
-                  <li key={index} className="flex items-start">
-                    <span className="text-black mr-2">▪</span>
-                    <span className="font-semibold">{instruction}</span>
+            <div className="p-4 lg:p-3 sm:p-2">
+              <ul className="space-y-2 lg:space-y-1.5 sm:space-y-1">
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">
+                      {job.educationQualification || 'Min 10/12th Passed.'}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Please see Post wise Qualification</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Right Column - Age Limit */}
+          <div>
+            <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
+              Age Limit as on <span className="text-imp">{formatDate(jobDates?.ageOnDate)}</span>
+            </div>
+            <div className="p-4 lg:p-3 sm:p-2">
+              <ul className="space-y-2 lg:space-y-1.5 sm:space-y-1">
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Minimum Age:</span>
+                    <span className="ml-2 text-imp">
+                      {jobDates?.minimumAge || 'N/A'}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Maximum Age:</span>
+                    <span className="ml-2 text-imp">
+                      {jobDates?.maximumAge || 'N/A'}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Age Relaxation:</span>
+                    <span className="ml-2 text-imp">
+                      {jobDates?.ageRelaxation || 'As per Advertisement Rule'}
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Total Post Section */}
+        <div className="text-center py-4 border border-t-0 border-gray-400">
+          <h2 className="text-2xl lg:text-xl sm:text-lg font-bold">
+            <span className="text-imp">Total Post: {job.totalPost || 'N/A'}</span>
+            {job.categoryPosts?.ph && (
+              <span className="text-black">, PH: {job.categoryPosts.ph}</span>
+            )}
+          </h2>
+        </div>
+
+        {/* Important Website Details */}
+        <div className="border border-t-0 border-gray-400">
+          <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
+            Important Website Details
+          </div>
+          <div className="p-0">
+            <table className="w-full">
+              <tbody>
+                <tr className="border-b border-gray-400">
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                    Check Result 1 :
+                  </td>
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                    <a
+                      href={result.directWebURL || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
+                    >
+                      Click Here
+                    </a>
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-400">
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                    Check Result 2 :
+                  </td>
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                    <a
+                      href={result.linkMenuField || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
+                    >
+                      Click Here
+                    </a>
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-400">
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                    Official Website :
+                  </td>
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                    <a
+                      href={job.officialWebsite || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
+                    >
+                      Click Here
+                    </a>
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-400">
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                    Advertisement :
+                  </td>
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                    <a
+                      href={job.notificationLink || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
+                    >
+                      Click Here
+                    </a>
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-400">
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                    Registration :
+                  </td>
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                    <a
+                      href={job.applicationLink || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
+                    >
+                      Click Here
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                    HOW TO APPLY :
+                  </td>
+                  <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                    <a
+                      href={job.officialWebsite || job.notificationLink || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
+                    >
+                      Click Here
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Selection Process */}
+        {job.selectionProcess && job.selectionProcess.length > 0 && (
+          <div className="mt-4 border border-gray-400">
+            <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
+              Selection Process
+            </div>
+            <div className="p-4 lg:p-3 sm:p-2">
+              <ul className="space-y-2 lg:space-y-1.5 sm:space-y-1">
+                {job.selectionProcess.map((process, index) => (
+                  <li key={index} className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                    <span className="text-black mr-1">▪</span>
+                    <span className="font-semibold text-black">{process}</span>
                   </li>
                 ))}
               </ul>
@@ -294,18 +438,18 @@ const ResultDetails = () => {
           </div>
         )}
 
-        {/* Documents Required Section */}
-        {result.documentsRequired && result.documentsRequired.length > 0 && (
+        {/* Documents Required */}
+        {job.documentsRequired && job.documentsRequired.length > 0 && (
           <div className="mt-4 border border-gray-400">
-            <div className="bg-purple-700 text-white text-center py-3 px-4 font-bold text-lg">
+            <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
               Documents Required
             </div>
-            <div className="p-4">
-              <ul className="space-y-2">
-                {result.documentsRequired.map((doc, index) => (
-                  <li key={index} className="flex items-start">
-                    <span className="text-black mr-2">▪</span>
-                    <span className="font-semibold">{doc}</span>
+            <div className="p-4 lg:p-3 sm:p-2">
+              <ul className="space-y-2 lg:space-y-1.5 sm:space-y-1">
+                {job.documentsRequired.map((doc, index) => (
+                  <li key={index} className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                    <span className="text-black mr-1">▪</span>
+                    <span className="font-semibold text-black">{doc}</span>
                   </li>
                 ))}
               </ul>
@@ -313,211 +457,20 @@ const ResultDetails = () => {
           </div>
         )}
 
-        {/* RESULT SECTION */}
-        <div className="mt-8">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold" style={{ color: '#d9534f' }}>
-              Result Information
-            </h2>
-            <p className="text-gray-600 mt-2">Check your result from the links below</p>
-          </div>
-
-          <div className="border border-t-0 border-gray-400">
-            <div className="bg-purple-700 text-white text-center py-3 px-4 font-bold text-lg">
-              Important Website Details
-            </div>
-            <div className="p-0">
-              <table className="w-full">
-                <tbody>
-                  <tr className="border-b border-gray-400">
-                    <td className="py-3 px-4 font-semibold text-center" style={{ color: '#d9534f' }}>
-                      Check Result 1
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <a
-                        href={result.directWebURL || '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline"
-                        style={{ color: '#0066cc' }}
-                      >
-                        Click Here
-                      </a>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-400">
-                    <td className="py-3 px-4 font-semibold text-center" style={{ color: '#d9534f' }}>
-                      Check Result 2:
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <a
-                        href={reference.directWebURL || '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline"
-                        style={{ color: '#0066cc' }}
-                      >
-                        Click Here
-                      </a>
-                    </td>
-                  </tr>
-
-                  <tr className="border-b border-gray-400">
-                    <td className="py-3 px-4 font-semibold text-center" style={{ color: '#d9534f' }}>
-                      Official Website :
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <a
-                        href={reference.officialWebsite || '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline"
-                        style={{ color: '#0066cc' }}
-                      >
-                        Click Here
-                      </a>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-400">
-                    <td className="py-3 px-4 font-semibold text-center" style={{ color: '#d9534f' }}>
-                      Advertisement :
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <a
-                        href={reference.notificationLink || '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline"
-                        style={{ color: '#0066cc' }}
-                      >
-                        Click Here
-                      </a>
-                    </td>
-                  </tr>
-                  <tr className="border-b border-gray-400">
-                    <td className="py-3 px-4 font-semibold text-center" style={{ color: '#d9534f' }}>
-                      Registration :
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <a
-                        href={reference.applicationLink || '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline"
-                        style={{ color: '#0066cc' }}
-                      >
-                        Click Here
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-4 font-semibold text-center" style={{ color: '#d9534f' }}>
-                      HOW TO APPLY :
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <a
-                        href={reference.officialWebsite || reference.notificationLink || '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline"
-                        style={{ color: '#0066cc' }}
-                      >
-                        Click Here
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        {/* Result Status & Information */}
-        <div className="mt-4 border border-gray-400">
-          <div className="bg-purple-700 text-white text-center py-3 px-4 font-bold text-lg">
-            Result Status
-          </div>
-          <div className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center">
-                <Info className="w-5 h-5 text-purple-600 mr-3" />
-                <div>
-                  <p className="font-semibold">Result Status:</p>
-                  <p className="text-gray-800 capitalize">{result.resultStatus || 'Active'}</p>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <Calendar className="w-5 h-5 text-purple-600 mr-3" />
-                <div>
-                  <p className="font-semibold">Published On:</p>
-                  <p className="text-gray-800">{formatDate(result.publishDate)}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Important Instructions for Result */}
-        <div className="mt-4 border border-gray-400">
-          <div className="bg-purple-700 text-white text-center py-3 px-4 font-bold text-lg">
-            Important Instructions for Result
-          </div>
-          <div className="p-4">
-            <ul className="space-y-3 text-gray-700">
-              <li className="flex items-start">
-                <span className="text-black mr-2">1.</span>
-                <span>Download and save your result/scorecard for future reference.</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-black mr-2">2.</span>
-                <span>Verify all details carefully (Name, Roll Number, Marks, Grade).</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-black mr-2">3.</span>
-                <span>In case of any discrepancy, contact the examination authority immediately.</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-black mr-2">4.</span>
-                <span>Keep multiple copies of your result for future applications.</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-black mr-2">5.</span>
-                <span>Check for any re-evaluation or supplementary exam notifications.</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
         {/* Footer Note */}
-        <div className="text-center mt-8 p-4 border border-gray-300 rounded-lg bg-purple-50">
-          <p className="text-gray-800 font-semibold">
-            📌 Important: Download your result immediately and keep multiple copies for future use.
-            Verify all details carefully. In case of any error, contact the helpline immediately.
-          </p>
+        <div className="text-center mt-6 text-sm lg:text-xs sm:text-[11px] font-semibold text-black">
+          Interested Applicant Can Read every Information at Official Website before Checking Result
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col md:flex-row gap-4 justify-center mt-8">
+        {/* Back Button */}
+        <div className="text-center mt-6">
           <button
-            onClick={() => navigate('/results')}
-            className="px-8 py-3 text-white rounded font-semibold hover:opacity-90 transition-opacity inline-flex items-center justify-center gap-2"
-            style={{ backgroundColor: '#0066cc' }}
+            onClick={() => navigate('/')}
+            className="px-8 py-3 lg:px-6 lg:py-2 sm:px-4 sm:py-2 text-white rounded font-semibold hover:opacity-90 transition-opacity inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-base lg:text-sm sm:text-xs"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 lg:w-4 lg:h-4 sm:w-3 sm:h-3" />
             Back to Results List
           </button>
-
-          {reference.officialWebsite && (
-            <a
-              href={reference.officialWebsite}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-3 bg-purple-600 text-white rounded font-semibold hover:bg-purple-700 transition-colors inline-flex items-center justify-center gap-2 text-center"
-            >
-              <Globe className="w-5 h-5" />
-              Visit Official Website
-            </a>
-          )}
         </div>
       </div>
     </div>

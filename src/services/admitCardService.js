@@ -54,6 +54,12 @@ class AdmitCardService {
     return api.request(`/api/admit-cards/public${queryString ? `?${queryString}` : ''}`);
   };
 
+  // Get admit cards list with infinite scrolling
+  getAdmitCardsList = (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return api.request(`/api/admit-cards/list${queryString ? `?${queryString}` : ''}`);
+  };
+
   // ✅ ADD THIS METHOD: Get available references for job selection
   getAvailableReferences = (params = {}) => {
     const queryString = new URLSearchParams(params).toString();

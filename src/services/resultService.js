@@ -141,6 +141,12 @@ class ResultService {
     return api.request(`/api/results/public${queryString ? `?${queryString}` : ''}`);
   };
 
+  // Get results list with infinite scrolling
+  getResultsList = (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return api.request(`/api/results/list${queryString ? `?${queryString}` : ''}`);
+  };
+
   // Get available references for reference selection
   getAvailableReferences = (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
