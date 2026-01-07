@@ -163,6 +163,80 @@ class ApiService {
     }
   };
 
+  // Admission APIs
+  admissions = {
+    // Public endpoints
+    getAll: (params = {}) => {
+      const queryString = new URLSearchParams(params).toString();
+      const url = `/api/admissions/public${queryString ? `?${queryString}` : ''}`;
+      return this.request(url);
+    },
+    getList: (params = {}) => {
+      const queryString = new URLSearchParams(params).toString();
+      const url = `/api/admissions/list${queryString ? `?${queryString}` : ''}`;
+      return this.request(url);
+    },
+    getLatest: (params = {}) => {
+      const queryString = new URLSearchParams(params).toString();
+      return this.request(`/api/admissions/latest${queryString ? `?${queryString}` : ''}`);
+    },
+    search: (params = {}) => {
+      const queryString = new URLSearchParams(params).toString();
+      return this.request(`/api/admissions/search${queryString ? `?${queryString}` : ''}`);
+    },
+    getOpenAdmissions: () => this.request('/api/admissions/open'),
+    getById: (id) => this.request(`/api/admissions/${id}`),
+
+    // Protected endpoints
+    getMyAdmissions: (params = {}) => {
+      const queryString = new URLSearchParams(params).toString();
+      return this.request(`/api/admissions/my/admissions${queryString ? `?${queryString}` : ''}`);
+    },
+    create: (data) => this.request('/api/admissions', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+    update: (id, data) => this.request(`/api/admissions/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+    delete: (id) => this.request(`/api/admissions/${id}`, {
+      method: 'DELETE',
+    }),
+    changeStatus: (id, status, remark = '', rejectionReason = '') => this.request(`/api/admissions/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status, remark, rejectionReason }),
+    }),
+    getStats: () => this.request('/api/admissions/admin/stats'),
+
+    // Filtered admissions endpoints for admin dashboard
+    getPendingAdmissions: (params = {}) => {
+      const queryParams = { ...params, status: 'pending' };
+      const queryString = new URLSearchParams(queryParams).toString();
+      return this.request(`/api/admissions/public${queryString ? `?${queryString}` : ''}`);
+    },
+    getClosedAdmissions: (params = {}) => {
+      const queryParams = { ...params, status: 'closed' };
+      const queryString = new URLSearchParams(queryParams).toString();
+      return this.request(`/api/admissions/public${queryString ? `?${queryString}` : ''}`);
+    },
+    getRejectedAdmissions: (params = {}) => {
+      const queryParams = { ...params, status: 'rejected' };
+      const queryString = new URLSearchParams(queryParams).toString();
+      return this.request(`/api/admissions/public${queryString ? `?${queryString}` : ''}`);
+    },
+    getVerifiedAdmissions: (params = {}) => {
+      const queryParams = { ...params, status: 'verified' };
+      const queryString = new URLSearchParams(queryParams).toString();
+      return this.request(`/api/admissions/public${queryString ? `?${queryString}` : ''}`);
+    },
+    getArchivedAdmissions: (params = {}) => {
+      const queryParams = { ...params, status: 'archived' };
+      const queryString = new URLSearchParams(queryParams).toString();
+      return this.request(`/api/admissions/public${queryString ? `?${queryString}` : ''}`);
+    }
+  };
+
   // User Management APIs
   users = {
     create: (data) => this.request('/api/auth/create-user', {

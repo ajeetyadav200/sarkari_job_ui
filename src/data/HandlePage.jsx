@@ -6,11 +6,12 @@ import AdmitCard from '../pages/admitCard/AdmitCard'
 import NewsPaperGallery from '../pages/NewsPaperGallery'
 import GovtLinkForm from '../pages/GovtLinkForm'
 
-import Admission from '../pages/Admission'
+import Admission from '../pages/admission/AdmissionAlert'
 import Syllabus from '../pages/Syllabus'
 import AnswerKey from '../pages/AnswerKey'
 import Footer from '../components/Footer/Footer'
 import HelpSession from '../helpSession/HelpSession'
+
 
 const HandlePage = () => {
   return (
@@ -141,6 +142,7 @@ const HandlePage = () => {
 
       <Footer />
       <HelpSession />
+      
     </div>
   )
 }

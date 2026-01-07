@@ -30,6 +30,7 @@ import publisherSlice from '../slice/publisherSlice';
 import jobReducer from '../slice/jobSlice';
 import admitCardReducer from '../slice/admitCardSlice';
 import resultReducer from '../slice/resultSlice';
+import admissionReducer from '../slice/admissionSlice';
 
 const appStore = configureStore({
   reducer: {
@@ -38,7 +39,8 @@ const appStore = configureStore({
     publishers: publisherSlice,
     jobs: jobReducer,
     admitCards: admitCardReducer,
-    results: resultReducer
+    results: resultReducer,
+    admissions: admissionReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

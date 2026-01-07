@@ -42,11 +42,17 @@ import AdmitCardList from "./components/AdmitCardManagement/AdmitCardList";
 import AdmitCardDetail from "./components/AdmitCardManagement/AdmitCardDetail";
 import AdmitCardForm from "./components/AdmitCardManagement/AdmitCardForm";
 
+// Admission Components
+import AdmissionDashboard from "./components/AdmissionManagement/AdmissionDashboard";
+import AdmissionDetail from "./components/AdmissionManagement/AdmissionDetail";
+import AdmissionForm from "./components/AdmissionManagement/AdmissionForm";
+
 import HandlePage from "./data/HandlePage";
 
 import JobDetailPage from "./pages/job/JobDetailPage";
 import AdmitCardDetails from "./pages/admitCard/AdmitCardDetails";
 import ResultDetails from "./pages/result/ResultDetails";
+import Layout from "./components/Layout/Layout";
 
 
 
@@ -93,20 +99,20 @@ function App() {
       <Route path="/" element={<HandlePage />} />
 
       {/* 🌟 PUBLIC JOB PAGES */}
-      <Route path="/jobs" element={<JobList />} />
-      <Route path="/job-details/:id" element={<JobDetailPage />} />
-      <Route path="/job-details" element={<JobDetailPage />} />
+      <Route path="/jobs" element={<Layout><JobList /></Layout>} />
+      <Route path="/job-details/:id" element={<Layout><JobDetailPage /></Layout>} />
+      <Route path="/job-details" element={<Layout><JobDetailPage /></Layout>} />
 
-      <Route path="/admit-card-details/:id" element={<AdmitCardDetails />} />
-     <Route path="/admit-cards" element={<AdmitCardDetails />} />
-     <Route path="/AllAdmitCardList" element={<AllAdmitCardList />} />
+      <Route path="/admit-card-details/:id" element={<Layout><AdmitCardDetails /></Layout>} />
+     <Route path="/admit-cards" element={<Layout><AdmitCardDetails /></Layout>} />
+     <Route path="/AllAdmitCardList" element={<Layout><AllAdmitCardList /></Layout>} />
 
 
-     //  result is here 
+     {/* result is here */}
 
-      <Route path="/result-details/:id" element={<ResultDetails />} />
-     <Route path="/result-details" element={<ResultDetail />} />
-      <Route path="/AllResultList" element={<AllResultList />} />
+      <Route path="/result-details/:id" element={<Layout><ResultDetails /></Layout>} />
+     <Route path="/result-details" element={<Layout><ResultDetail /></Layout>} />
+      <Route path="/AllResultList" element={<Layout><AllResultList /></Layout>} />
 
 
      
@@ -194,7 +200,97 @@ function App() {
           </PrivateRoute>
         }
       />
-    
+
+      <Route
+        path="/admin/jobs/edit/:id"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <JobForm />
+          </PrivateRoute>
+        }
+      />
+
+      {/* Admin Admission Routes */}
+      <Route
+        path="/admin/admissions"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AdmissionDashboard mode="all" showStats={true} userRole="admin" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/admissions/pending"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AdmissionDashboard mode="pending" userRole="admin" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/admissions/verified"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AdmissionDashboard mode="verified" userRole="admin" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/admissions/rejected"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AdmissionDashboard mode="rejected" userRole="admin" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/admissions/closed"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AdmissionDashboard mode="closed" userRole="admin" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/admissions/archived"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AdmissionDashboard mode="archived" userRole="admin" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/admissions/:id"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AdmissionDetail />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/admissions/create"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AdmissionForm />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/admissions/edit/:id"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AdmissionForm />
+          </PrivateRoute>
+        }
+      />
 
            {/* Admin Admit Card Routes */}
         <Route
