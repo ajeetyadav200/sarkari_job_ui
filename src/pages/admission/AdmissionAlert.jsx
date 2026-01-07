@@ -53,7 +53,7 @@ const AdmissionAlert = () => {
             {admissions.slice(0, 10).map((admission) => (
               <li
                 key={admission._id}
-                onClick={() => navigate(`/admission-details/${admission._id}`)}
+                onClick={() => navigate(`/admission/${admission._id}`)}
                 className="border-b border-dashed border-gray-300 pb-3 last:border-0 cursor-pointer"
               >
                 <div className="flex items-start gap-2">
@@ -99,7 +99,7 @@ const AdmissionAlert = () => {
       {admissions.length > 0 && (
         <div className="border-t border-gray-200 p-3 text-center">
           <button
-            onClick={() => navigate("/admissions")}
+            onClick={() => navigate("/allAdmission")}
             className="text-[#1447e6] font-semibold hover:text-blue-900 hover:underline transition-colors text-sm lg:text-base sm:text-xs"
           >
             View All Admissions →

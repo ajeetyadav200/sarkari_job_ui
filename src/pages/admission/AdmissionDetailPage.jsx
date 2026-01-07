@@ -504,7 +504,7 @@ const AdmissionDetailPage = () => {
         {/* Back Button */}
         <div className="text-center mt-6">
           <button
-            onClick={() => navigate('/admissions')}
+            onClick={() => navigate('/')}
             className="px-8 py-3 lg:px-6 lg:py-2 sm:px-4 sm:py-2 text-white rounded font-semibold hover:opacity-90 transition-opacity inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-base lg:text-sm sm:text-xs"
           >
             <ArrowLeft className="w-5 h-5 lg:w-4 lg:h-4 sm:w-3 sm:h-3" />

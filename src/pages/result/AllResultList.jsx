@@ -112,10 +112,10 @@ const AllResultList = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-blue-50">
       {/* Header */}
-      <div className="bg-primary text-white py-8 lg:py-6 sm:py-4 shadow-lg">
+      <div className=" text-black py-8 lg:py-6 sm:py-4 shadow-lg">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-3xl lg:text-2xl sm:text-xl font-bold">All Result Opportunities</h1>
-          <p className="text-blue-100 mt-2 text-base lg:text-sm sm:text-xs">
+          <p className="text-black mt-2 text-base lg:text-sm sm:text-xs">
             Find and check results for various government examinations
           </p>
         </div>

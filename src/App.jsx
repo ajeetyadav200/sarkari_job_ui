@@ -66,6 +66,12 @@ import AllAdmitCardList from "./pages/admitCard/AllAdmitCardList";
 import AllResultList from "./pages/result/AllResultList";
 
 
+// admission is here
+
+import AdmissionDetailPage from './pages/admission/AdmissionDetailPage'
+import AdmissionList  from './pages/admission/AdmissionList'
+
+
 function App() {
   const dispatch = useDispatch();
 
@@ -101,20 +107,24 @@ function App() {
       {/* 🌟 PUBLIC JOB PAGES */}
       <Route path="/jobs" element={<Layout><JobList /></Layout>} />
       <Route path="/job-details/:id" element={<Layout><JobDetailPage /></Layout>} />
-      <Route path="/job-details" element={<Layout><JobDetailPage /></Layout>} />
+      {/* <Route path="/job-details" element={<Layout><JobDetailPage /></Layout>} /> */}
 
       <Route path="/admit-card-details/:id" element={<Layout><AdmitCardDetails /></Layout>} />
-     <Route path="/admit-cards" element={<Layout><AdmitCardDetails /></Layout>} />
+     {/* <Route path="/admit-cards" element={<Layout><AdmitCardDetails /></Layout>} /> */}
      <Route path="/AllAdmitCardList" element={<Layout><AllAdmitCardList /></Layout>} />
 
 
      {/* result is here */}
 
       <Route path="/result-details/:id" element={<Layout><ResultDetails /></Layout>} />
-     <Route path="/result-details" element={<Layout><ResultDetail /></Layout>} />
+     {/* <Route path="/result-details" element={<Layout><ResultDetail /></Layout>} /> */}
       <Route path="/AllResultList" element={<Layout><AllResultList /></Layout>} />
 
 
+      // admission details is here
+
+     <Route path="/admission/:id" element={<Layout><AdmissionDetailPage /></Layout>} />
+     <Route path="/allAdmission" element={<Layout><AdmissionList /></Layout>}/>
      
 
       {/* 🌟 LOGIN PAGE */}
