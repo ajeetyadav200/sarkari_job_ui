@@ -20,6 +20,8 @@ const AnswerKeyDetailPage = () => {
   const dispatch = useDispatch();
   const { currentAnswer, loading, error } = useSelector(state => state.answers);
 
+ 
+
   useEffect(() => {
     if (id) {
       dispatch(fetchAnswerById(id));
@@ -27,7 +29,7 @@ const AnswerKeyDetailPage = () => {
   }, [dispatch, id]);
 
   const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
+    if (!dateString) return 'Will Be Updated Here Soon';
     try {
       const date = new Date(dateString);
       const day = String(date.getDate()).padStart(2, '0');
@@ -81,6 +83,8 @@ const AnswerKeyDetailPage = () => {
 
   const answer = currentAnswer;
 
+  console.log(answer)
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-blue-100">
       {/* Main Content Container */}
@@ -88,17 +92,6 @@ const AnswerKeyDetailPage = () => {
 
         {/* Page Title with Status */}
         <div className="text-center mb-6 relative">
-          <div className="absolute top-0 right-0">
-            <div className={`px-4 py-2 rounded-lg font-semibold text-sm ${
-              answer.status === 'verified' ? 'bg-green-100 text-green-800' :
-              answer.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-              'bg-red-100 text-red-800'
-            }`}>
-              {answer.status === 'verified' ? 'Verified' :
-               answer.status === 'pending' ? 'Pending' :
-               answer.status === 'rejected' ? 'Rejected' : 'On Hold'}
-            </div>
-          </div>
 
           <h1 className="text-3xl lg:text-2xl sm:text-xl font-bold mb-2 text-imp">
             {answer.examName || 'Answer Key'}
@@ -111,353 +104,136 @@ const AnswerKeyDetailPage = () => {
         </div>
 
         {/* Answer Key Status Info */}
-        <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
-            <Award className="w-5 h-5 text-blue-600" />
-            <div>
-              <p className="text-sm font-semibold text-gray-700">Type</p>
-              <p className="text-lg font-bold text-imp">{answer.type || 'N/A'}</p>
-            </div>
-          </div>
+      
 
-          <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg border border-green-200">
-            <FileText className="w-5 h-5 text-green-600" />
-            <div>
-              <p className="text-sm font-semibold text-gray-700">Answer Status</p>
-              <p className="text-lg font-bold text-imp capitalize">{answer.answerStatus || 'Active'}</p>
-            </div>
+        {/* Description Section */}
+        {answer?.referenceId?.description && (
+          <div className="mb-6 p-4 lg:p-3 sm:p-3 border border-gray-300 rounded-lg bg-gray-50">
+            <h3 className="text-lg lg:text-base sm:text-sm font-semibold mb-2 text-black">Description:</h3>
+            <p className="text-gray-700 whitespace-pre-line text-base lg:text-sm sm:text-xs">{answer?.referenceId?.description}</p>
           </div>
+        )}
 
-          <div className="flex items-center gap-2 p-3 bg-purple-50 rounded-lg border border-purple-200">
-            <Calendar className="w-5 h-5 text-purple-600" />
-            <div>
-              <p className="text-sm font-semibold text-gray-700">Published On</p>
-              <p className="text-lg font-bold text-imp">{formatDate(answer.publishDate) || 'N/A'}</p>
-            </div>
+       
+        {/* Advertisement Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm lg:text-xs sm:text-[11px]">
+          <div>
+            <span className="font-semibold text-black">Department:</span>
+            <span className="ml-2 text-imp">{answer?.referenceId?.departmentName || 'N/A'}</span>
+          </div>
+          <div className="md:text-right">
+            <span className="font-semibold text-black">Published Date:</span>
+            <span className="ml-2 text-primary">{formatDate(answer?.referenceId?.publishDate)}</span>
+          </div>
+          <div>
+            <span className="font-semibold text-black">Help Contact No:</span>
+            <span className="ml-2 text-imp">{answer?.referenceId?.helpCareNo || 'N/A'}</span>
+          </div>
+          <div className="md:text-right">
+            <span className="font-semibold text-black">E-mail ID:</span>
+            <span className="ml-2 text-primary">{answer?.referenceId?.helpEmailId || 'N/A'}</span>
           </div>
         </div>
 
-        {/* Description Section */}
-        {answer.description && (
-          <div className="mb-6 p-4 lg:p-3 sm:p-3 border border-gray-300 rounded-lg bg-gray-50">
-            <h3 className="text-lg lg:text-base sm:text-sm font-semibold mb-2 text-black">Description:</h3>
-            <p className="text-gray-700 whitespace-pre-line text-base lg:text-sm sm:text-xs">{answer.description}</p>
-          </div>
-        )}
+          {/* Two Column Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-gray-400">
 
-        {/* Link Information */}
-        {(answer.linkMenuField || answer.directWebURL) && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm lg:text-xs sm:text-[11px]">
-            {answer.linkMenuField && (
-              <div>
-                <span className="font-semibold text-black">Link Menu Field:</span>
-                <a
-                  href={answer.linkMenuField}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ml-2 text-primary hover:underline"
-                >
-                  Click Here
-                </a>
-              </div>
-            )}
-            {answer.directWebURL && (
-              <div className="md:text-right">
-                <span className="font-semibold text-black">Direct Web URL:</span>
-                <a
-                  href={answer.directWebURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ml-2 text-primary hover:underline"
-                >
-                  Click Here
-                </a>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Reference Information from Job/Admission/LatestNotice */}
-        {answer.referenceId && (
-          <div className="border border-gray-400 mb-4">
-            <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
-              {answer.referenceModel} Reference Information
-            </div>
-            <div className="p-4 lg:p-3 sm:p-2">
-              <ul className="space-y-2 lg:space-y-1.5 sm:space-y-1">
-                {answer.referenceId.departmentName && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Department Name:</span>
-                      <span className="ml-2 text-imp">{answer.referenceId.departmentName}</span>
-                    </div>
-                  </li>
-                )}
-                {answer.referenceId.postName && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Post Name:</span>
-                      <span className="ml-2 text-imp">{answer.referenceId.postName}</span>
-                    </div>
-                  </li>
-                )}
-                {answer.referenceId.title && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Title:</span>
-                      <span className="ml-2 text-imp">{answer.referenceId.title}</span>
-                    </div>
-                  </li>
-                )}
-                {answer.referenceId.totalPost && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Total Post:</span>
-                      <span className="ml-2 text-imp">{answer.referenceId.totalPost}</span>
-                    </div>
-                  </li>
-                )}
-                {answer.referenceId.modeOfForm && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Mode of Form:</span>
-                      <span className="ml-2 text-imp capitalize">{answer.referenceId.modeOfForm}</span>
-                    </div>
-                  </li>
-                )}
-                {answer.referenceId.officialWebsite && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Official Website:</span>
-                      <a
-                        href={answer.referenceId.officialWebsite}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="ml-2 text-primary hover:underline"
-                      >
-                        Click Here
-                      </a>
-                    </div>
-                  </li>
-                )}
-                {answer.referenceId.helpEmailId && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Help Email:</span>
-                      <span className="ml-2 text-imp">{answer.referenceId.helpEmailId}</span>
-                    </div>
-                  </li>
-                )}
-                {answer.referenceId.helpCareNo && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Help Contact No:</span>
-                      <span className="ml-2 text-imp">{answer.referenceId.helpCareNo}</span>
-                    </div>
-                  </li>
-                )}
-              </ul>
-            </div>
-          </div>
-        )}
-
-        {/* Important Dates from Reference */}
-        {answer.referenceId?.importantDates && (
-          <div className="border border-gray-400 border-t-0">
+          {/* Left Column - Important Dates */}
+          <div className="md:border-r border-gray-400">
             <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
               Important Dates
             </div>
             <div className="p-4 lg:p-3 sm:p-2">
               <ul className="space-y-2 lg:space-y-1.5 sm:space-y-1">
-                {answer.referenceId.importantDates.startDate && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Application Start Date:</span>
-                      <span className="ml-2 text-imp">{formatDate(answer.referenceId.importantDates.startDate)}</span>
-                    </div>
-                  </li>
-                )}
-                {answer.referenceId.importantDates.registrationLastDate && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Registration Last Date:</span>
-                      <span className="ml-2 text-imp">{formatDate(answer.referenceId.importantDates.registrationLastDate)}</span>
-                    </div>
-                  </li>
-                )}
-                {answer.referenceId.importantDates.examDate && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Exam Date:</span>
-                      <span className="ml-2 text-imp">{formatDate(answer.referenceId.importantDates.examDate)}</span>
-                    </div>
-                  </li>
-                )}
-                {answer.referenceId.importantDates.answerKeyDate && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Answer Key Date:</span>
-                      <span className="ml-2 text-imp">{formatDate(answer.referenceId.importantDates.answerKeyDate)}</span>
-                    </div>
-                  </li>
-                )}
-                {answer.referenceId.importantDates.resultDate && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Result Date:</span>
-                      <span className="ml-2 text-imp">{formatDate(answer.referenceId.importantDates.resultDate)}</span>
-                    </div>
-                  </li>
-                )}
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Application Start Date:</span>
+                    <span className="ml-2 text-imp">
+                      {formatDate(answer?.referenceId?.importantDates?.startDate) || "Will Be Updated Here Soon"}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Registration Last Date:</span>
+                    <span className="ml-2 text-imp">
+                      {formatDate(answer?.referenceId?.importantDates?.registrationLastDate)|| "Will Be Updated Here Soon"}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Fee Pay Last Date:</span>
+                    <span className="ml-2 text-imp">
+                      {formatDate(answer?.referenceId?.importantDates?.feeLastDate) || "Will Be Updated Here Soon"}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Final Submit Last Date:</span>
+                    <span className="ml-2 text-imp">
+                      {formatDate(answer?.referenceId?.importantDates?.finalLastDate) || "Will Be Updated Here Soon"}
+                    </span>
+                  </div>
+                </li>
+                
               </ul>
             </div>
           </div>
-        )}
 
-        {/* Download Files Section */}
-        <div className="border border-gray-400 border-t-0">
-          <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
-            Download Answer Key Files
-          </div>
-          <div className="p-0">
-            <table className="w-full">
-              <tbody>
-                {answer.officialNotification?.fileUrl && (
-                  <tr className="border-b border-gray-400">
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
-                      Official Notification :
-                    </td>
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
-                      <a
-                        href={answer.officialNotification.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
-                      >
-                        Download <Download className="w-3 h-3" />
-                      </a>
-                    </td>
-                  </tr>
-                )}
-                {answer.examDateNotice?.fileUrl && (
-                  <tr className="border-b border-gray-400">
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
-                      Exam Date Notice :
-                    </td>
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
-                      <a
-                        href={answer.examDateNotice.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
-                      >
-                        Download
-                      </a>
-                    </td>
-                  </tr>
-                )}
-                {answer.syllabusFile?.fileUrl && (
-                  <tr className="border-b border-gray-400">
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
-                      Syllabus File :
-                    </td>
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
-                      <a
-                        href={answer.syllabusFile.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
-                      >
-                        Download
-                      </a>
-                    </td>
-                  </tr>
-                )}
-                {answer.admitCardFile?.fileUrl && (
-                  <tr className="border-b border-gray-400">
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
-                      Admit Card File :
-                    </td>
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
-                      <a
-                        href={answer.admitCardFile.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
-                      >
-                        Download
-                      </a>
-                    </td>
-                  </tr>
-                )}
-                {answer.answerKeyFile?.fileUrl && (
-                  <tr className="border-b border-gray-400">
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
-                      Answer Key File :
-                    </td>
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
-                      <a
-                        href={answer.answerKeyFile.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
-                      >
-                        Download
-                      </a>
-                    </td>
-                  </tr>
-                )}
-                {answer.resultFile?.fileUrl && (
-                  <tr className="border-b border-gray-400">
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
-                      Result File :
-                    </td>
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
-                      <a
-                        href={answer.resultFile.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
-                      >
-                        Download
-                      </a>
-                    </td>
-                  </tr>
-                )}
-                {answer.otherFile?.fileUrl && (
-                  <tr>
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
-                      {answer.otherFile.fileName || 'Other File'} :
-                    </td>
-                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
-                      <a
-                        href={answer.otherFile.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs"
-                      >
-                        Download
-                      </a>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          {/* Right Column - Application Fee Details */}
+          <div>
+            <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
+              Application Fee Details
+            </div>
+            <div className="p-4 lg:p-3 sm:p-2">
+              <ul className="space-y-2 lg:space-y-1.5 sm:space-y-1">
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">General/OBC Application Fee:</span>
+                    <span className="ml-2 text-imp">
+                      ₹{answer?.referenceId?.categoryFees?.general || answer?.referenceId?.categoryFees?.obc || 'N/A'}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">SC/ST Application Fee:</span>
+                    <span className="ml-2 text-imp">
+                      ₹{answer?.referenceId?.categoryFees?.sc || answer?.referenceId?.categoryFees?.st || 'N/A'}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">PH Application Fee:</span>
+                    <span className="ml-2 text-imp">
+                      ₹{answer?.referenceId?.categoryFees?.ph || 'N/A'}
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  <span className="text-black mr-1">▪</span>
+                  <div>
+                    <span className="font-semibold text-black">Payment Mode:</span>
+                    <span className="ml-2 text-imp">
+                      {answer?.referenceId?.paymentMode || 'Online Only'}
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
+
 
         {/* Selection Process from Reference */}
         {answer.referenceId?.selectionProcess && answer.referenceId.selectionProcess.length > 0 && (

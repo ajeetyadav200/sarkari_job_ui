@@ -88,7 +88,7 @@ const AdmitCardDetails = () => {
             {card.postTypeDetails || job.departmentName || 'Admit Card'}
           </h1>
           <h2 className="text-xl lg:text-lg sm:text-base font-semibold text-black">
-            {card.linkMenuField || job.postName || 'Download Admit Card'}
+            { job.postName || 'Download Admit Card'}
           </h2>
         </div>
 

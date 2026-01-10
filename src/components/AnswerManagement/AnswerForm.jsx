@@ -9,6 +9,7 @@ import {
   fetchAvailableReferences,
   clearReferences
 } from '../../slice/answerSlice';
+import uploadService from '../../services/uploadService';
 import { toast } from 'react-toastify';
 import {
   ArrowLeft,
@@ -18,10 +19,11 @@ import {
   Search,
   CheckCircle,
   AlertCircle,
-  FileText,
   Upload,
   File,
-  Plus
+  Plus,
+  Loader2,
+  Check
 } from 'lucide-react';
 
 const AnswerForm = () => {
@@ -59,7 +61,7 @@ const AnswerForm = () => {
     documentsRequired: []
   });
 
-  // File state
+  // File state - stores File objects for new uploads
   const [files, setFiles] = useState({
     officialNotification: null,
     examDateNotice: null,
@@ -70,6 +72,18 @@ const AnswerForm = () => {
     otherFile: null
   });
 
+  // File URLs after upload (for form submission)
+  const [uploadedFileData, setUploadedFileData] = useState({
+    officialNotification: null,
+    examDateNotice: null,
+    syllabusFile: null,
+    admitCardFile: null,
+    answerKeyFile: null,
+    resultFile: null,
+    otherFile: null
+  });
+
+  // File names for custom naming
   const [fileNames, setFileNames] = useState({
     officialNotification: '',
     examDateNotice: '',
@@ -80,6 +94,17 @@ const AnswerForm = () => {
     otherFile: ''
   });
 
+  // Upload progress state for individual files
+  const [uploadingFiles, setUploadingFiles] = useState({
+    officialNotification: false,
+    examDateNotice: false,
+    syllabusFile: false,
+    admitCardFile: false,
+    answerKeyFile: false,
+    resultFile: false,
+    otherFile: false
+  });
+
   const [selectedReference, setSelectedReference] = useState(null);
   const [referenceSearch, setReferenceSearch] = useState('');
   const [errors, setErrors] = useState({});
@@ -88,6 +113,7 @@ const AnswerForm = () => {
   const [showAlsoShowLink, setShowAlsoShowLink] = useState(false);
   const [currentTag, setCurrentTag] = useState('');
   const [showOtherFileName, setShowOtherFileName] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const typeOptions = [
     { value: '', label: 'Select Type', disabled: true },
@@ -146,14 +172,17 @@ const AnswerForm = () => {
         setSelectedReference(currentAnswer.referenceId);
       }
 
-      // Set existing file names
-      const existingFileNames = {};
+      // Set existing uploaded file data from current answer
+      const existingFileData = {};
+      const existingFileNamesData = {};
       Object.keys(fileTypeLabels).forEach(key => {
-        if (currentAnswer[key] && currentAnswer[key].fileName) {
-          existingFileNames[key] = currentAnswer[key].fileName;
+        if (currentAnswer[key] && currentAnswer[key].fileUrl) {
+          existingFileData[key] = currentAnswer[key];
+          existingFileNamesData[key] = currentAnswer[key].fileName || '';
         }
       });
-      setFileNames(existingFileNames);
+      setUploadedFileData(existingFileData);
+      setFileNames(existingFileNamesData);
     }
   }, [currentAnswer, isEditMode]);
 
@@ -199,6 +228,54 @@ const AnswerForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  /**
+   * Upload individual file immediately when selected
+   * Calls POST /api/upload/single and stores the returned file data
+   */
+  const uploadFileImmediately = async (fieldName, file) => {
+    if (!file) return null;
+
+    try {
+      // Start upload for this specific file
+      setUploadingFiles(prev => ({ ...prev, [fieldName]: true }));
+
+      // Use custom name if provided
+      const customName = fileNames[fieldName] || file.name;
+
+      // Call upload service - pass file directly, not FormData
+      const result = await uploadService.uploadSingleFile(file, fieldName, customName);
+
+      if (result.success && result.data) {
+        // Store the uploaded file data with structure matching backend expectations
+        const uploadedFileInfo = {
+          fileUrl: result.data.fileUrl,
+          fileName: result.data.fileName || customName,
+          cloudinaryId: result.data.cloudinaryId,
+          fileType: result.data.fileType || result.data.format,
+          uploadedAt: new Date().toISOString()
+        };
+
+        setUploadedFileData(prev => ({
+          ...prev,
+          [fieldName]: uploadedFileInfo
+        }));
+
+        toast.success(`${fileTypeLabels[fieldName]} uploaded successfully!`);
+        return uploadedFileInfo;
+      } else {
+        throw new Error(result.message || 'Upload failed');
+      }
+    } catch (error) {
+      toast.error(`Failed to upload ${fileTypeLabels[fieldName]}: ${error.message}`);
+      return null;
+    } finally {
+      setUploadingFiles(prev => ({ ...prev, [fieldName]: false }));
+    }
+  };
+
+  /**
+   * Handle form submission - now just uses already uploaded files
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -207,63 +284,49 @@ const AnswerForm = () => {
       return;
     }
 
-    // Create FormData for file uploads
-    const submitData = new FormData();
-
-    // Add all text fields
-    submitData.append('type', formData.type);
-    submitData.append('linkMenuField', formData.linkMenuField.trim());
-    submitData.append('postTypeDetails', formData.postTypeDetails.trim());
-    submitData.append('description', formData.description.trim());
-    submitData.append('examName', formData.examName.trim());
-    submitData.append('publishDate', formData.publishDate);
-    submitData.append('answerStatus', formData.answerStatus);
-    submitData.append('status', formData.status);
-    submitData.append('category', formData.category.trim());
-
-    // Add optional fields
-    if (formData.type !== 'Other' && formData.referenceId) {
-      submitData.append('referenceId', formData.referenceId);
-      submitData.append('referenceModel', formData.referenceModel);
-    }
-
-    if (formData.directWebURL && formData.directWebURL.trim()) {
-      submitData.append('directWebURL', formData.directWebURL.trim());
-    }
-
-    if (formData.lastDate) {
-      submitData.append('lastDate', formData.lastDate);
-    }
-
-    // Add arrays as JSON strings
-    if (formData.tags.length > 0) {
-      submitData.append('tags', JSON.stringify(formData.tags));
-    }
-    if (formData.dynamicContent.length > 0) {
-      submitData.append('dynamicContent', JSON.stringify(formData.dynamicContent));
-    }
-    if (formData.contentSections.length > 0) {
-      submitData.append('contentSections', JSON.stringify(formData.contentSections));
-    }
-    if (formData.importantInstructions.length > 0) {
-      submitData.append('importantInstructions', JSON.stringify(formData.importantInstructions));
-    }
-    if (formData.documentsRequired.length > 0) {
-      submitData.append('documentsRequired', JSON.stringify(formData.documentsRequired));
-    }
-
-    // Add files
-    Object.keys(files).forEach(fieldName => {
-      if (files[fieldName]) {
-        submitData.append(fieldName, files[fieldName]);
-        // Add custom file name if provided
-        if (fileNames[fieldName]) {
-          submitData.append(`${fieldName}_name`, fileNames[fieldName]);
-        }
-      }
-    });
+    setIsSubmitting(true);
 
     try {
+      // Prepare submit data with already uploaded file URLs
+      const submitData = {
+        type: formData.type,
+        linkMenuField: formData.linkMenuField.trim(),
+        postTypeDetails: formData.postTypeDetails.trim(),
+        description: formData.description.trim(),
+        examName: formData.examName.trim(),
+        publishDate: formData.publishDate,
+        answerStatus: formData.answerStatus,
+        status: formData.status,
+        category: formData.category.trim(),
+        tags: formData.tags,
+        dynamicContent: formData.dynamicContent,
+        contentSections: formData.contentSections,
+        importantInstructions: formData.importantInstructions,
+        documentsRequired: formData.documentsRequired
+      };
+
+      // Add optional fields
+      if (formData.type !== 'Other' && formData.referenceId) {
+        submitData.referenceId = formData.referenceId;
+        submitData.referenceModel = formData.referenceModel;
+      }
+
+      if (formData.directWebURL && formData.directWebURL.trim()) {
+        submitData.directWebURL = formData.directWebURL.trim();
+      }
+
+      if (formData.lastDate) {
+        submitData.lastDate = formData.lastDate;
+      }
+
+      // Add uploaded file URLs
+      Object.keys(uploadedFileData).forEach(fieldName => {
+        if (uploadedFileData[fieldName]) {
+          submitData[fieldName] = uploadedFileData[fieldName];
+        }
+      });
+
+      // Step 3: Submit the form with JSON data
       if (isEditMode) {
         await dispatch(updateAnswer({ id, formData: submitData })).unwrap();
         toast.success('Answer updated successfully!');
@@ -271,10 +334,12 @@ const AnswerForm = () => {
         await dispatch(createAnswer(submitData)).unwrap();
         toast.success('Answer created successfully!');
       }
+
       navigate(`/${userRole}/answers`);
     } catch (error) {
-      console.error('Error submitting answer:', error);
       toast.error(error?.message || 'Failed to submit answer');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -314,49 +379,85 @@ const AnswerForm = () => {
     setErrors(prev => ({ ...prev, referenceId: null }));
   };
 
-  const handleFileChange = (e, fieldName) => {
+  const handleFileChange = async (e, fieldName) => {
     const file = e.target.files[0];
-    if (file) {
-      setFiles(prev => ({
-        ...prev,
-        [fieldName]: file
-      }));
+    if (!file) return;
 
-      // Auto-set file name from uploaded file
-      if (!fileNames[fieldName]) {
-        setFileNames(prev => ({
-          ...prev,
-          [fieldName]: file.name
-        }));
-      }
-
-      // Show custom name input for "Other File"
-      if (fieldName === 'otherFile') {
-        setShowOtherFileName(true);
-      }
+    // Check file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    if (file.size > maxSize) {
+      toast.error('File size exceeds 10MB limit');
+      return;
     }
+
+    // Store file object
+    setFiles(prev => ({
+      ...prev,
+      [fieldName]: file
+    }));
+
+    // Auto-set file name from uploaded file if not already set
+    if (!fileNames[fieldName]) {
+      setFileNames(prev => ({
+        ...prev,
+        [fieldName]: file.name
+      }));
+    }
+
+    // Show custom name input for "Other File"
+    if (fieldName === 'otherFile') {
+      setShowOtherFileName(true);
+    }
+
+    // Start immediate upload
+    await uploadFileImmediately(fieldName, file);
   };
 
   const handleFileNameChange = (e, fieldName) => {
+    const newName = e.target.value;
     setFileNames(prev => ({
       ...prev,
-      [fieldName]: e.target.value
+      [fieldName]: newName
     }));
+
+    // If file is already uploaded and we change the name, we might want to re-upload
+    // For simplicity, we'll just update the name in uploadedFileData
+    if (uploadedFileData[fieldName]) {
+      setUploadedFileData(prev => ({
+        ...prev,
+        [fieldName]: {
+          ...prev[fieldName],
+          fileName: newName
+        }
+      }));
+    }
   };
 
   const removeFile = (fieldName) => {
+    // Clear file object
     setFiles(prev => ({
       ...prev,
       [fieldName]: null
     }));
+
+    // Clear uploaded file data
+    setUploadedFileData(prev => ({
+      ...prev,
+      [fieldName]: null
+    }));
+
+    // Clear file name
     setFileNames(prev => ({
       ...prev,
       [fieldName]: ''
     }));
 
+    // Hide custom name input for otherFile
     if (fieldName === 'otherFile') {
       setShowOtherFileName(false);
     }
+
+    toast.info(`${fileTypeLabels[fieldName]} removed`);
   };
 
   const addTag = () => {
@@ -392,6 +493,35 @@ const AnswerForm = () => {
     }
 
     return [];
+  };
+
+  // Check if there's a file (either uploaded or being uploaded)
+  const hasFile = (fieldName) => {
+    return uploadedFileData[fieldName] !== null || files[fieldName] !== null;
+  };
+
+  // Check if file is currently uploading
+  const isFileUploading = (fieldName) => {
+    return uploadingFiles[fieldName];
+  };
+
+  // Get display file name
+  const getDisplayFileName = (fieldName) => {
+    if (uploadedFileData[fieldName]) {
+      return uploadedFileData[fieldName].fileName || 'Uploaded file';
+    }
+    if (files[fieldName]) {
+      return files[fieldName].name;
+    }
+    return '';
+  };
+
+  // Get file status
+  const getFileStatus = (fieldName) => {
+    if (isFileUploading(fieldName)) return 'uploading';
+    if (uploadedFileData[fieldName]) return 'uploaded';
+    if (files[fieldName]) return 'selected'; // File selected but not uploaded yet (shouldn't happen with immediate upload)
+    return 'none';
   };
 
   return (
@@ -649,76 +779,137 @@ const AnswerForm = () => {
             </div>
           </div>
 
-          {/* File Uploads Section */}
+          {/* File Uploads Section - IMMEDIATE UPLOAD */}
           <div className="space-y-6 p-6 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
               <Upload className="w-5 h-5" />
               File Uploads
+              <span className="text-sm font-normal text-gray-500">(Files upload immediately when selected)</span>
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {Object.keys(fileTypeLabels).map((fieldName) => (
-                <div key={fieldName} className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    {fileTypeLabels[fieldName]}
-                  </label>
+              {Object.keys(fileTypeLabels).map((fieldName) => {
+                const fileStatus = getFileStatus(fieldName);
+                const isUploading = isFileUploading(fieldName);
+                const isUploaded = fileStatus === 'uploaded';
 
-                  {files[fieldName] ? (
-                    <div className="p-4 bg-white rounded-lg border-2 border-green-200">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <File className="w-5 h-5 text-green-500 flex-shrink-0" />
-                          <span className="text-sm text-gray-700 truncate">
-                            {files[fieldName].name}
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => removeFile(fieldName)}
-                          className="ml-2 p-1 hover:bg-red-50 rounded transition-colors flex-shrink-0"
-                        >
-                          <X className="w-4 h-4 text-red-500" />
-                        </button>
-                      </div>
-
-                      {/* Custom name input for otherFile */}
-                      {fieldName === 'otherFile' && showOtherFileName && (
-                        <div className="mt-3">
-                          <input
-                            type="text"
-                            value={fileNames.otherFile}
-                            onChange={(e) => handleFileNameChange(e, 'otherFile')}
-                            placeholder="Enter custom file name"
-                            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                          />
-                        </div>
+                return (
+                  <div key={fieldName} className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      {fileTypeLabels[fieldName]}
+                      {isUploading && (
+                        <span className="ml-2 text-xs text-blue-600">
+                          <Loader2 className="inline w-3 h-3 animate-spin mr-1" />
+                          Uploading...
+                        </span>
                       )}
-                    </div>
-                  ) : (
-                    <div className="relative">
-                      <input
-                        type="file"
-                        id={`file-${fieldName}`}
-                        onChange={(e) => handleFileChange(e, fieldName)}
-                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor={`file-${fieldName}`}
-                        className="flex items-center justify-center gap-2 px-4 py-3 bg-white border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
-                      >
-                        <Upload className="w-5 h-5 text-gray-400" />
-                        <span className="text-sm text-gray-600">Choose file</span>
-                      </label>
-                    </div>
-                  )}
-                </div>
-              ))}
+                      {isUploaded && (
+                        <Check className="inline w-4 h-4 text-green-500 ml-1" />
+                      )}
+                    </label>
+
+                    {hasFile(fieldName) ? (
+                      <div className={`p-4 rounded-lg border-2 ${
+                        isUploading 
+                          ? 'border-blue-300 bg-blue-50' 
+                          : isUploaded 
+                          ? 'border-green-200 bg-white'
+                          : 'border-yellow-200 bg-yellow-50'
+                      }`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            <File className={`w-5 h-5 flex-shrink-0 ${
+                              isUploading ? 'text-blue-500' : isUploaded ? 'text-green-500' : 'text-yellow-500'
+                            }`} />
+                            <span className="text-sm text-gray-700 truncate">
+                              {getDisplayFileName(fieldName)}
+                            </span>
+                            {isUploading && (
+                              <span className="text-xs text-blue-600 bg-blue-100 px-2 py-0.5 rounded">
+                                Uploading
+                              </span>
+                            )}
+                            {isUploaded && (
+                              <span className="text-xs text-green-600 bg-green-100 px-2 py-0.5 rounded">
+                                Uploaded
+                              </span>
+                            )}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => removeFile(fieldName)}
+                            disabled={isUploading}
+                            className="ml-2 p-1 hover:bg-red-50 rounded transition-colors flex-shrink-0 disabled:opacity-50"
+                          >
+                            <X className="w-4 h-4 text-red-500" />
+                          </button>
+                        </div>
+
+                        {/* Custom name input for otherFile */}
+                        {fieldName === 'otherFile' && showOtherFileName && (
+                          <div className="mt-3">
+                            <input
+                              type="text"
+                              value={fileNames.otherFile}
+                              onChange={(e) => handleFileNameChange(e, 'otherFile')}
+                              placeholder="Enter custom file name"
+                              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                            />
+                            {isUploaded && (
+                              <p className="text-xs text-gray-500 mt-1">
+                                Changing name will update in database on form submit
+                              </p>
+                            )}
+                          </div>
+                        )}
+
+                        {/* View uploaded file link */}
+                        {isUploaded && uploadedFileData[fieldName]?.fileUrl && (
+                          <a
+                            href={uploadedFileData[fieldName].fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-2 text-xs text-blue-600 hover:underline block"
+                          >
+                            View uploaded file
+                          </a>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="relative">
+                        <input
+                          type="file"
+                          id={`file-${fieldName}`}
+                          onChange={(e) => handleFileChange(e, fieldName)}
+                          accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                          className="hidden"
+                          disabled={isUploading}
+                        />
+                        <label
+                          htmlFor={`file-${fieldName}`}
+                          className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg cursor-pointer transition-all ${
+                            isUploading
+                              ? 'bg-gray-100 border-2 border-gray-300 cursor-not-allowed'
+                              : 'bg-white border-2 border-dashed border-gray-300 hover:border-blue-400 hover:bg-blue-50'
+                          }`}
+                        >
+                          <Upload className="w-5 h-5 text-gray-400" />
+                          <span className="text-sm text-gray-600">
+                            {isUploading ? 'Uploading...' : 'Choose file'}
+                          </span>
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
-            <p className="text-sm text-gray-500">
-              Supported formats: PDF, JPG, JPEG, PNG, DOC, DOCX (Max 10MB)
-            </p>
+            <div className="text-sm text-gray-500 space-y-1">
+              <p>• Files upload immediately when selected</p>
+              <p>• Supported formats: PDF, JPG, JPEG, PNG, DOC, DOCX (Max 10MB per file)</p>
+              <p>• Uploaded files will be saved even if you cancel the form</p>
+            </div>
           </div>
 
           {/* Tags */}
@@ -795,17 +986,21 @@ const AnswerForm = () => {
             <button
               type="button"
               onClick={() => navigate(`/${userRole}/answers`)}
-              className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium"
+              disabled={isSubmitting || Object.values(uploadingFiles).some(v => v)}
+              className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || isSubmitting || Object.values(uploadingFiles).some(v => v)}
               className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              {loading ? (
-                <>Processing...</>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Submitting...
+                </>
               ) : (
                 <>
                   <Save className="w-5 h-5" />

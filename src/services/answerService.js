@@ -1,77 +1,64 @@
+// services/answerService.js
 import api from './api';
-import { BASE_URL } from '../utils/auth';
+
+/**
+ * Answer Service - Industry Standard Pattern
+ *
+ * File Upload Pattern:
+ * 1. Upload files using uploadService -> Get file URLs
+ * 2. Submit form with URLs using this service (JSON)
+ *
+ * This separates concerns and makes the code more scalable
+ */
 
 class AnswerService {
-  // Create new answer with files
-  createAnswer = async (formData) => {
-    const token = localStorage.getItem('token');
-
-    const response = await fetch(`${BASE_URL}/api/answers`, {
+  /**
+   * Create new answer with file URLs (not FormData)
+   * Files should be uploaded first using uploadService
+   * @param {Object} data - Answer data with file URLs
+   */
+  createAnswer = (data) => {
+    return api.request('/api/answers', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        // Don't set Content-Type - browser will set it with boundary for FormData
-      },
-      body: formData,
+      body: JSON.stringify(data),
     });
-
-    const contentType = response.headers.get("content-type");
-    let data;
-
-    if (contentType && contentType.includes("application/json")) {
-      data = await response.json();
-    } else {
-      data = await response.text();
-    }
-
-    if (!response.ok) {
-      throw new Error(data.message || `API request failed: ${response.status}`);
-    }
-
-    return data;
   };
 
-  // Get all answers with filters
+  /**
+   * Get all answers with filters
+   * @param {Object} params - Query parameters
+   */
   getAllAnswers = (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
     return api.request(`/api/answers${queryString ? `?${queryString}` : ''}`);
   };
 
-  // Get single answer by ID
+  /**
+   * Get single answer by ID
+   * @param {string} id - Answer ID
+   */
   getAnswerById = (id) => {
     return api.request(`/api/answers/${id}`);
   };
 
-  // Update answer with files
-  updateAnswer = async (id, formData) => {
-    const token = localStorage.getItem('token');
-
-    const response = await fetch(`${BASE_URL}/api/answers/${id}`, {
+  /**
+   * Update answer with file URLs (not FormData)
+   * New files should be uploaded first using uploadService
+   * @param {string} id - Answer ID
+   * @param {Object} data - Answer data with file URLs
+   */
+  updateAnswer = (id, data) => {
+    return api.request(`/api/answers/${id}`, {
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        // Don't set Content-Type - browser will set it with boundary for FormData
-      },
-      body: formData,
+      body: JSON.stringify(data),
     });
-
-    const contentType = response.headers.get("content-type");
-    let data;
-
-    if (contentType && contentType.includes("application/json")) {
-      data = await response.json();
-    } else {
-      data = await response.text();
-    }
-
-    if (!response.ok) {
-      throw new Error(data.message || `API request failed: ${response.status}`);
-    }
-
-    return data;
   };
 
-  // Update status (admin only)
+  /**
+   * Update status (admin only)
+   * @param {string} id - Answer ID
+   * @param {Object} data - Status data
+   */
   updateStatus = (id, data) => {
     return api.request(`/api/answers/${id}/status`, {
       method: 'PATCH',
@@ -79,31 +66,46 @@ class AnswerService {
     });
   };
 
-  // Delete answer
+  /**
+   * Delete answer
+   * @param {string} id - Answer ID
+   */
   deleteAnswer = (id) => {
     return api.request(`/api/answers/${id}`, {
       method: 'DELETE',
     });
   };
 
-  // Get answers by job ID
+  /**
+   * Get answers by job ID
+   * @param {string} jobId - Job ID
+   */
   getAnswersByJobId = (jobId) => {
     return api.request(`/api/answers/job/${jobId}`);
   };
 
-  // Get public answers
+  /**
+   * Get public answers
+   * @param {Object} params - Query parameters
+   */
   getPublicAnswers = (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
     return api.request(`/api/answers/public${queryString ? `?${queryString}` : ''}`);
   };
 
-  // Get answers list with infinite scrolling
+  /**
+   * Get answers list with infinite scrolling
+   * @param {Object} params - Query parameters
+   */
   getAnswersList = (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
     return api.request(`/api/answers/list${queryString ? `?${queryString}` : ''}`);
   };
 
-  // Get available references for answer selection
+  /**
+   * Get available references for answer selection
+   * @param {Object} params - Query parameters
+   */
   getAvailableReferences = (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
     return api.request(`/api/answers/references/available${queryString ? `?${queryString}` : ''}`);

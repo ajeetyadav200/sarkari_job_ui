@@ -3,22 +3,18 @@ import Home from '../pages/Home'
 import JobAlert from '../pages/job/JobAlert'
 import Result from '../pages/result/Result'
 import AdmitCard from '../pages/admitCard/AdmitCard'
-import NewsPaperGallery from '../pages/NewsPaperGallery'
-import GovtLinkForm from '../pages/GovtLinkForm'
-
 import Admission from '../pages/admission/AdmissionAlert'
 import Syllabus from '../pages/Syllabus'
 import AnswerKey from '../pages/answerkey/AnswerKeyAlert'
 import Footer from '../components/Footer/Footer'
 import HelpSession from '../helpSession/HelpSession'
 
-
 const HandlePage = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Home />
       
-      {/* Desktop Layout - 88.png (3x3 grid) */}
+      {/* Desktop Layout - 3x3 grid */}
       <div className="hidden lg:block">
         <div className="max-w-7xl mx-auto px-4 py-8">
           {/* First Row */}
@@ -34,14 +30,11 @@ const HandlePage = () => {
             </div>
           </div>
 
-          {/* Second Row */}
+          {/* Second Row - Now only one component, can adjust as needed */}
           <div className="grid grid-cols-3 gap-6 mb-6">
-            <div>
-              <NewsPaperGallery />
-            </div>
-            <div>
-              <GovtLinkForm />
-            </div>
+            {/* Left empty or add another component later */}
+            <div></div>
+            <div></div>
             {/* <div>
               <LatestNotice />
             </div> */}
@@ -53,7 +46,7 @@ const HandlePage = () => {
               <Admission />
             </div>
             <div>
-              <Syllabus  />
+              <Syllabus />
             </div>
             <div>
               <AnswerKey />
@@ -81,59 +74,47 @@ const HandlePage = () => {
               <AdmitCard />
             </div>
             <div>
-              <NewsPaperGallery />
+              <Admission />
             </div>
           </div>
           
           {/* Third Row - 2 columns */}
           <div className="grid grid-cols-2 gap-6 mb-6">
             <div>
-              <GovtLinkForm />
-            </div>
-            {/* <div>
-              <LatestNotice />
-            </div> */}
-          </div>
-          
-          {/* Fourth Row - 2 columns */}
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <Admission />
-            </div>
-            <div>
               <Syllabus />
             </div>
+            <div>
+              <AnswerKey />
+            </div>
           </div>
           
-          {/* Fifth Row - Single column for AnswerKey */}
-          <div className="mt-6">
-            <AnswerKey />
-          </div>
+          {/* Fourth Row - Single column for any additional component */}
+          {/* <div className="mt-6">
+            <LatestNotice />
+          </div> */}
         </div>
       </div>
 
-      {/* Mobile Layout - 99.png (single column) */}
+      {/* Mobile Layout - single column */}
       <div className="md:hidden">
         <div className="px-4 py-6 space-y-6">
-          {/* Results First (as shown in 99.png) */}
+          {/* Results First */}
+          <div>
+             <JobAlert />
+           
+          </div>
+          
+          {/* Latest Jobs Second */}
           <div>
             <Result />
           </div>
           
-          {/* Latest Jobs Second (as shown in 99.png) */}
-          <div>
-            <JobAlert />
-          </div>
-          
-          {/* Admit Cards (likely next in sequence) */}
+          {/* Admit Cards */}
           <div>
             <AdmitCard />
           </div>
           
           {/* Other sections in single column */}
-          <NewsPaperGallery />
-          <GovtLinkForm />
-          {/* <LatestNotice /> */}
           <Admission />
           <Syllabus />
           <AnswerKey />
@@ -142,7 +123,6 @@ const HandlePage = () => {
 
       <Footer />
       <HelpSession />
-      
     </div>
   )
 }
