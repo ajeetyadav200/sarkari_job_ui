@@ -31,6 +31,7 @@ import jobReducer from '../slice/jobSlice';
 import admitCardReducer from '../slice/admitCardSlice';
 import resultReducer from '../slice/resultSlice';
 import admissionReducer from '../slice/admissionSlice';
+import answerReducer from '../slice/answerSlice';
 
 const appStore = configureStore({
   reducer: {
@@ -40,7 +41,8 @@ const appStore = configureStore({
     jobs: jobReducer,
     admitCards: admitCardReducer,
     results: resultReducer,
-    admissions: admissionReducer
+    admissions: admissionReducer,
+    answers: answerReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

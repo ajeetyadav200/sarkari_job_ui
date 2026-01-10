@@ -47,6 +47,11 @@ import AdmissionDashboard from "./components/AdmissionManagement/AdmissionDashbo
 import AdmissionDetail from "./components/AdmissionManagement/AdmissionDetail";
 import AdmissionForm from "./components/AdmissionManagement/AdmissionForm";
 
+// Answer Components
+import AnswerDashboard from "./components/AnswerManagement/AnswerDashboard";
+import AnswerDetail from "./components/AnswerManagement/AnswerDetail";
+import AnswerForm from "./components/AnswerManagement/AnswerForm";
+
 import HandlePage from "./data/HandlePage";
 
 import JobDetailPage from "./pages/job/JobDetailPage";
@@ -70,6 +75,11 @@ import AllResultList from "./pages/result/AllResultList";
 
 import AdmissionDetailPage from './pages/admission/AdmissionDetailPage'
 import AdmissionList  from './pages/admission/AdmissionList'
+
+// answer key is here
+
+import AnswerKeyDetailPage from './pages/answerkey/AnswerKeyDetailPage'
+import AnswerKeyList from './pages/answerkey/AnswerKeyList'
 
 
 function App() {
@@ -121,11 +131,17 @@ function App() {
       <Route path="/AllResultList" element={<Layout><AllResultList /></Layout>} />
 
 
-      // admission details is here
+      {/* admission details is here */}
 
      <Route path="/admission/:id" element={<Layout><AdmissionDetailPage /></Layout>} />
      <Route path="/allAdmission" element={<Layout><AdmissionList /></Layout>}/>
-     
+
+
+      {/* answer key details is here */}
+
+     <Route path="/answer-key-details/:id" element={<Layout><AnswerKeyDetailPage /></Layout>} />
+     <Route path="/answer-keys" element={<Layout><AnswerKeyList /></Layout>}/>
+
 
       {/* 🌟 LOGIN PAGE */}
       <Route path="/login" element={<LoginPage />} />
@@ -298,6 +314,79 @@ function App() {
         element={
           <PrivateRoute requiredRole="admin">
             <AdmissionForm />
+          </PrivateRoute>
+        }
+      />
+
+      {/* Admin Answer Routes */}
+      <Route
+        path="/admin/answers"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AnswerDashboard mode="all" showStats={true} userRole="admin" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/answers/pending"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AnswerDashboard mode="pending" userRole="admin" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/answers/verified"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AnswerDashboard mode="verified" userRole="admin" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/answers/rejected"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AnswerDashboard mode="rejected" userRole="admin" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/answers/on-hold"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AnswerDashboard mode="onHold" userRole="admin" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/answers/:id"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AnswerDetail />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/answers/create"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AnswerForm />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/admin/answers/edit/:id"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <AnswerForm />
           </PrivateRoute>
         }
       />
@@ -561,6 +650,44 @@ function App() {
           </PrivateRoute>
         }
       />
+
+      {/* Publisher Answer Routes */}
+      <Route
+        path="/publisher/answers"
+        element={
+          <PrivateRoute requiredRole="publisher">
+            <AnswerDashboard mode="my" userRole="publisher" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/publisher/answers/create"
+        element={
+          <PrivateRoute requiredRole="publisher">
+            <AnswerForm />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/publisher/answers/:id"
+        element={
+          <PrivateRoute requiredRole="publisher">
+            <AnswerDetail />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/publisher/answers/edit/:id"
+        element={
+          <PrivateRoute requiredRole="publisher">
+            <AnswerForm />
+          </PrivateRoute>
+        }
+      />
+
         <Route
           path="/publisher/admit-cards"
           element={
@@ -633,6 +760,44 @@ function App() {
           </PrivateRoute>
         }
       />
+
+      {/* Assistant Answer Routes */}
+      <Route
+        path="/assistant/answers"
+        element={
+          <PrivateRoute requiredRole="assistant">
+            <AnswerDashboard mode="my" userRole="assistant" />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/assistant/answers/create"
+        element={
+          <PrivateRoute requiredRole="assistant">
+            <AnswerForm />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/assistant/answers/:id"
+        element={
+          <PrivateRoute requiredRole="assistant">
+            <AnswerDetail />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/assistant/answers/edit/:id"
+        element={
+          <PrivateRoute requiredRole="assistant">
+            <AnswerForm />
+          </PrivateRoute>
+        }
+      />
+
         {/* Assistant Admit Card Routes */}
         <Route
           path="/assistant/admit-cards"

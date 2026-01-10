@@ -8,7 +8,7 @@ import GovtLinkForm from '../pages/GovtLinkForm'
 
 import Admission from '../pages/admission/AdmissionAlert'
 import Syllabus from '../pages/Syllabus'
-import AnswerKey from '../pages/AnswerKey'
+import AnswerKey from '../pages/answerkey/AnswerKeyAlert'
 import Footer from '../components/Footer/Footer'
 import HelpSession from '../helpSession/HelpSession'
 
@@ -53,7 +53,7 @@ const HandlePage = () => {
               <Admission />
             </div>
             <div>
-              <Syllabus />
+              <Syllabus  />
             </div>
             <div>
               <AnswerKey />
