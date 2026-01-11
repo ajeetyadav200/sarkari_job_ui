@@ -112,7 +112,7 @@ const AdminDashboard = () => {
         { 
           label: 'Govt. Link', 
           icon: Link, 
-          onClick: () => navigate('/admin/govt-links'),
+          onClick: () => navigate('/admin/government-services'),
           description: 'Government links'
         },
         { 

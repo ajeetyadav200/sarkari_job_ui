@@ -36,6 +36,14 @@ import RemoveAssistance from "./components/AdminDashboard/assistants/RemoveAssis
 import AssistantDashboard from "./components/AssistantDashboard/AssistantDashboard";
 
 
+//   governement is here 
+
+import GovernmentServiceDashboard from './components/GovernmentServiceManagement/GovernmentServiceDashboard';
+import GovernmentServiceDetail from './components/GovernmentServiceManagement/GovernmentServiceDetail';
+import GovernmentServiceForm from './components/GovernmentServiceManagement/GovernmentServiceForm';
+import GovernmentServiceCard from './components/GovernmentServiceManagement/GovernmentServiceCard'; 
+
+
 // Admit Card Components
 import AdmitCardDashboard from "./components/AdmitCardManagement/AdmitCardDashboard";
 import AdmitCardList from "./components/AdmitCardManagement/AdmitCardList";
@@ -80,6 +88,11 @@ import AdmissionList  from './pages/admission/AdmissionList'
 
 import AnswerKeyDetailPage from './pages/answerkey/AnswerKeyDetailPage'
 import AnswerKeyList from './pages/answerkey/AnswerKeyList'
+
+// government page is here
+
+import GovernmentServiceDetailPage from "./pages/governmentService/GovernmentServiceDetailPage";
+import GovernmentServiceList from "./pages/governmentService/GovernmentServiceList";
 
 
 function App() {
@@ -141,6 +154,12 @@ function App() {
 
      <Route path="/answer-key-details/:id" element={<Layout><AnswerKeyDetailPage /></Layout>} />
      <Route path="/answer-keys" element={<Layout><AnswerKeyList /></Layout>}/>
+
+
+     {/* government page is here  */}
+
+     <Route path="/government-service-details/:id" element={<Layout><GovernmentServiceDetailPage /></Layout>} />
+     <Route path="/government-services-all" element={<Layout><GovernmentServiceList /></Layout>}/>
 
 
       {/* 🌟 LOGIN PAGE */}
@@ -612,6 +631,81 @@ function App() {
     </PrivateRoute>
   }
 />
+
+<Route
+  path="/admin/government-services"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <GovernmentServiceDashboard mode="all" showStats={true} userRole="admin" />
+    </PrivateRoute>
+  }
+/>
+
+<Route
+  path="/admin/government-services/pending"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <GovernmentServiceDashboard mode="pending" userRole="admin" />
+    </PrivateRoute>
+  }
+/>
+
+<Route
+  path="/admin/government-services/verified"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <GovernmentServiceDashboard mode="verified" userRole="admin" />
+    </PrivateRoute>
+  }
+/>
+
+<Route
+  path="/admin/government-services/rejected"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <GovernmentServiceDashboard mode="rejected" userRole="admin" />
+    </PrivateRoute>
+  }
+/>
+
+<Route
+  path="/admin/government-services/on-hold"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <GovernmentServiceDashboard mode="onHold" userRole="admin" />
+    </PrivateRoute>
+  }
+/>
+
+<Route
+  path="/admin/government-services/create"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <GovernmentServiceForm />
+    </PrivateRoute>
+  }
+/>
+
+<Route
+  path="/admin/government-services/:id"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <GovernmentServiceDetail />
+    </PrivateRoute>
+  }
+/>
+
+<Route
+  path="/admin/government-services/edit/:id"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <GovernmentServiceForm />
+    </PrivateRoute>
+  }
+/>
+   
+
+
 
 
       {/* Publisher Routes */}

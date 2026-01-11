@@ -62,8 +62,8 @@ const JobAlert = () => {
                   
                   {/* Title */}
                   <h3 className="text-[#1447e6] font-semibold hover:text-blue-900 hover:underline cursor-pointer flex items-center gap-2 flex-1 text-base lg:text-base sm:text-xs">
-                    {job.departmentName}
-                    {job.postName && ` - ${job.postName}`}
+                    {job.postName}
+                   
                   </h3>
                 </div>
                 

@@ -30,7 +30,7 @@ const Syllabus = () => {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
       <div className="bg-gradient-to-r from-green-700 to-green-600 text-white p-4">
-        <h2 className="text-2xl font-bold text-center">Syllabus</h2>
+        <h2 className="text-2xl font-bold text-center">Government Services</h2>
       </div>
       <div className="max-h-96 overflow-y-auto p-4">
         <ul className="space-y-3">

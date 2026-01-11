@@ -32,6 +32,7 @@ import admitCardReducer from '../slice/admitCardSlice';
 import resultReducer from '../slice/resultSlice';
 import admissionReducer from '../slice/admissionSlice';
 import answerReducer from '../slice/answerSlice';
+import governmentServiceReducer from '../slice/governmentServiceSlice';
 
 const appStore = configureStore({
   reducer: {
@@ -42,7 +43,8 @@ const appStore = configureStore({
     admitCards: admitCardReducer,
     results: resultReducer,
     admissions: admissionReducer,
-    answers: answerReducer
+    answers: answerReducer,
+    governmentServices: governmentServiceReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
