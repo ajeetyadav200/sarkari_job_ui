@@ -93,6 +93,7 @@ import AnswerKeyList from './pages/answerkey/AnswerKeyList'
 
 import GovernmentServiceDetailPage from "./pages/governmentService/GovernmentServiceDetailPage";
 import GovernmentServiceList from "./pages/governmentService/GovernmentServiceList";
+import PolicyRouter from "./router/PolicyRouter";
 
 
 function App() {
@@ -123,9 +124,13 @@ function App() {
         pauseOnHover
         theme="light"
       />
+      
     <Routes>
       {/* 🌟 MAIN HOME PAGE */}
       <Route path="/" element={<HandlePage />} />
+       <Route path="/" element={<PolicyRouter />} />
+
+     
 
       {/* 🌟 PUBLIC JOB PAGES */}
       <Route path="/jobs" element={<Layout><JobList /></Layout>} />

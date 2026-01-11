@@ -1,4 +1,5 @@
 import { Instagram, LucideYoutube } from 'lucide-react'
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -8,16 +9,20 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-6 items-center">
           {/* About Section */}
           <div className="text-center md:text-left">
+            <Link to='/'>
             <h3 className="text-2xl font-bold text-[rgb(0,142,228)]">
               Naukari Store
-            </h3>
+            </h3></Link>
+            <Link to='/'>
             <p className="text-lg text-gray-300 mt-1">नौकरी स्टोर</p>
+            </Link>
             <div className="mt-3 flex gap-3 justify-center md:justify-start">
               <a 
                 href="https://www.facebook.com/Naukaristores?rdid=vb3U3uXRO5VWJnlE&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1AvgKkTMYE%2F#" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
+                className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700  hover:scale-110
+                    transition-all duration-300"
               >
                 <span>f</span>
               </a>
@@ -25,7 +30,7 @@ const Footer = () => {
                 href="https://x.com/naukaristore?fbclid=IwY2xjawPQqUdleHRuA2FlbQIxMABicmlkETF5aUdVWVZrSldWbjVYamh4c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHr_qzaWthZEQQ11GyJMo7jlXiiaEbGAtE5PgF0VbQxoQl_CZVpM5la90VNxU_aem_8S5YstfGdMeW5hGRtViJQQ" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-sky-500 rounded-full flex items-center justify-center hover:bg-sky-600 transition-colors"
+                className="w-8 h-8 bg-black rounded-full flex items-center justify-center hover:bg-black hover:scale-110 transition-all duration-300"
               >
                 <span>𝕏</span>
               </a>
@@ -33,15 +38,22 @@ const Footer = () => {
                 href="https://www.instagram.com/naukaristore?fbclid=IwY2xjawPQpQJleHRuA2FlbQIxMABicmlkETF5aUdVWVZrSldWbjVYamh4c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHhGo7ow_KNzoRzaJLLwd_jBxyDubDHyG7d-vrgqUOodZ1o5fkAH-FfY4pgzH_aem_9vfEGxZAVUulq5EEOVPk4Q" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors"
-              >
-                <span><Instagram /></span>
+               className="w-8 h-8 
+                    rounded-full 
+                    flex items-center justify-center 
+                    bg-[linear-gradient(45deg,#FFD600,#FF7A00,#FF0069,#D300C5,#7638FA)]
+                    hover:scale-110
+                    transition-all duration-300
+                    shadow-md
+                  "
+                >
+                  <Instagram className="text-white w-4 h-4" />
               </a>
               <a 
                 href="https://www.youtube.com/@naukaristore" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors"
+                className="w-8 h-8 bg-[#FF0000] rounded-full flex items-center justify-center hover:bg-[#e20202] hover:scale-110 transition-all duration-300"
               >
                 <span><LucideYoutube /></span>
               </a>
@@ -52,15 +64,21 @@ const Footer = () => {
           <div className="text-center">
             <h3 className="text-lg font-bold text-white mb-3">Quick Links</h3>
             <div className="flex flex-wrap gap-3 justify-center text-sm">
-              <a href="#" className="text-gray-300 hover:text-[rgb(0,142,228)] transition-colors">Home</a>
+              <Link to='/'>
+              <p className="text-gray-300 hover:text-[rgb(0,142,228)] transition-colors">Home</p></Link>
               <span className="text-gray-600">|</span>
-              <a href="#" className="text-gray-300 hover:text-[rgb(0,142,228)] transition-colors">Jobs</a>
+              <Link to='/jobs'>
+              <p className="text-gray-300 hover:text-[rgb(0,142,228)] transition-colors">Jobs</p></Link>
               <span className="text-gray-600">|</span>
-              <a href="#" className="text-gray-300 hover:text-[rgb(0,142,228)] transition-colors">Results</a>
+               <Link to='/AllResultList'>
+              <p className="text-gray-300 hover:text-[rgb(0,142,228)] transition-colors">Results</p></Link>
               <span className="text-gray-600">|</span>
-              <a href="#" className="text-gray-300 hover:text-[rgb(0,142,228)] transition-colors">Admit Card</a>
+                <Link to='/AllAdmitCardList'>
+              <p className="text-gray-300 hover:text-[rgb(0,142,228)] transition-colors">Admit Card</p></Link>
               <span className="text-gray-600">|</span>
-              <a href="#" className="text-gray-300 hover:text-[rgb(0,142,228)] transition-colors">Syllabus</a>
+               <Link to='/government-services-all'>
+              <p className="text-gray-300 hover:text-[rgb(0,142,228)] transition-colors">Government Services</p>
+              </Link>
             </div>
           </div>
 

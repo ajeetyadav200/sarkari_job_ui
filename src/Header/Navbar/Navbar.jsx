@@ -1,5 +1,6 @@
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,13 +10,13 @@ const Navbar = () => {
   const toggleMore = () => setIsMoreOpen(!isMoreOpen);
 
   const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'Latest Job', href: '#latest-job' },
-    { name: 'Admit Card', href: '#admit-card' },
-    { name: 'Result', href: '#result' },
-    { name: 'Admission', href: '#admission' },
-    { name: 'Syllabus', href: '#syllabus' },
-    { name: 'Answer Key', href: '#answer-key' },
+    { name: 'Home', path: '/' },
+    { name: 'Latest Job', path: '/jobs' },
+    { name: 'Admit Card', path: '/AllAdmitCardList' },
+    { name: 'Result', path: '/AllResultList' },
+    { name: 'Admission', path: '/allAdmission' },
+    { name: 'Government Services', path: '/government-services-all' },
+    { name: 'Answer Key', path: '/answer-keys' },
   ];
 
   const moreItems = [
@@ -31,13 +32,15 @@ const Navbar = () => {
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center space-x-1 w-full justify-center">
             {navItems.map((item) => (
-              <a
+              <Link to={item.path}>
+              <p
                 key={item.name}
-                href={item.href}
+               
                 className="text-white font-semibold px-4 py-2 rounded-md hover:bg-red-800 hover:bg-opacity-20 transition-all duration-300 transform hover:scale-105"
               >
                 {item.name}
-              </a>
+              </p>
+              </Link>
             ))}
             
             {/* More Dropdown */}
