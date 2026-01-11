@@ -102,16 +102,16 @@ const GovernmentServiceDetailPage = () => {
 
   // Check if application is open
   const isApplicationOpen = (() => {
-    if (!dates.lastDate) return false;
+    if (!dates.applicationLastDate) return false;
     const now = new Date();
-    const lastDate = new Date(dates.lastDate);
+    const lastDate = new Date(dates.applicationLastDate);
     return now <= lastDate;
   })();
 
   // Calculate remaining days
   const remainingDays = (() => {
-    if (!dates.lastDate) return null;
-    const endDate = new Date(dates.lastDate);
+    if (!dates.applicationLastDate) return null;
+    const endDate = new Date(dates.applicationLastDate);
     const now = new Date();
     const diffTime = endDate - now;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -216,7 +216,7 @@ const GovernmentServiceDetailPage = () => {
                   <div>
                     <span className="font-semibold text-black">Application Start Date:</span>
                     <span className="ml-2 text-imp">
-                      {formatDate(dates.startDate)}
+                      {formatDate(dates.applicationStartDate)}
                     </span>
                   </div>
                 </li>
@@ -225,17 +225,28 @@ const GovernmentServiceDetailPage = () => {
                   <div>
                     <span className="font-semibold text-black">Application Last Date:</span>
                     <span className="ml-2 text-imp">
-                      {formatDate(dates.lastDate)}
+                      {formatDate(dates.applicationLastDate)}
                     </span>
                   </div>
                 </li>
-                {dates.feePaymentLastDate && (
+                {dates.lastDateForFreshApply && (
                   <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
                     <span className="text-black mr-1">▪</span>
                     <div>
-                      <span className="font-semibold text-black">Fee Payment Last Date:</span>
+                      <span className="font-semibold text-black">Last Date For Fresh Apply:</span>
                       <span className="ml-2 text-imp">
-                        {formatDate(dates.feePaymentLastDate)}
+                        {formatDate(dates.lastDateForFreshApply)}
+                      </span>
+                    </div>
+                  </li>
+                )}
+                {dates.lastDateForRenewal && (
+                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                    <span className="text-black mr-1">▪</span>
+                    <div>
+                      <span className="font-semibold text-black">Last Date For Renewal:</span>
+                      <span className="ml-2 text-imp">
+                        {formatDate(dates.lastDateForRenewal)}
                       </span>
                     </div>
                   </li>
@@ -251,24 +262,13 @@ const GovernmentServiceDetailPage = () => {
                     </div>
                   </li>
                 )}
-                {dates.correctionEndDate && (
+                {dates.correctionLastDate && (
                   <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
                     <span className="text-black mr-1">▪</span>
                     <div>
-                      <span className="font-semibold text-black">Correction End Date:</span>
+                      <span className="font-semibold text-black">Correction Last Date:</span>
                       <span className="ml-2 text-imp">
-                        {formatDate(dates.correctionEndDate)}
-                      </span>
-                    </div>
-                  </li>
-                )}
-                {dates.resultDate && (
-                  <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
-                    <span className="text-black mr-1">▪</span>
-                    <div>
-                      <span className="font-semibold text-black">Result Date:</span>
-                      <span className="ml-2 text-imp">
-                        {formatDate(dates.resultDate)}
+                        {formatDate(dates.correctionLastDate)}
                       </span>
                     </div>
                   </li>
@@ -283,7 +283,7 @@ const GovernmentServiceDetailPage = () => {
               Application Fee Details
             </div>
             <div className="p-4 lg:p-3 sm:p-2">
-              {service.isFree ? (
+              {service.isFreeService ? (
                 <div className="text-center py-4">
                   <span className="bg-green-100 text-green-800 px-4 py-2 rounded-lg font-bold">
                     FREE SERVICE - No Fee Required
@@ -291,26 +291,67 @@ const GovernmentServiceDetailPage = () => {
                 </div>
               ) : (
                 <ul className="space-y-2 lg:space-y-1.5 sm:space-y-1">
-                  {service.categoryFees?.map((fee, index) => (
-                    <li key={index} className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                  {service.categoryFees?.general !== undefined && (
+                    <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
                       <span className="text-black mr-1">▪</span>
                       <div>
-                        <span className="font-semibold text-black">{fee.category} Fee:</span>
+                        <span className="font-semibold text-black">General Application Fee:</span>
                         <span className="ml-2 text-imp">
-                          ₹{fee.amount}
+                          ₹{service.categoryFees.general}
                         </span>
                       </div>
                     </li>
-                  ))}
-                  {(!service.categoryFees || service.categoryFees.length === 0) && (
-                    <li className="text-gray-500 text-sm">Fee details not available</li>
+                  )}
+                  {service.categoryFees?.obc !== undefined && (
+                    <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                      <span className="text-black mr-1">▪</span>
+                      <div>
+                        <span className="font-semibold text-black">OBC Application Fee:</span>
+                        <span className="ml-2 text-imp">
+                          ₹{service.categoryFees.obc}
+                        </span>
+                      </div>
+                    </li>
+                  )}
+                  {(service.categoryFees?.sc !== undefined || service.categoryFees?.st !== undefined) && (
+                    <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                      <span className="text-black mr-1">▪</span>
+                      <div>
+                        <span className="font-semibold text-black">SC/ST Application Fee:</span>
+                        <span className="ml-2 text-imp">
+                          ₹{service.categoryFees?.sc || service.categoryFees?.st || 0}
+                        </span>
+                      </div>
+                    </li>
+                  )}
+                  {service.categoryFees?.ews !== undefined && (
+                    <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                      <span className="text-black mr-1">▪</span>
+                      <div>
+                        <span className="font-semibold text-black">EWS Application Fee:</span>
+                        <span className="ml-2 text-imp">
+                          ₹{service.categoryFees.ews}
+                        </span>
+                      </div>
+                    </li>
+                  )}
+                  {service.categoryFees?.ph !== undefined && (
+                    <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
+                      <span className="text-black mr-1">▪</span>
+                      <div>
+                        <span className="font-semibold text-black">PH Application Fee:</span>
+                        <span className="ml-2 text-imp">
+                          ₹{service.categoryFees.ph}
+                        </span>
+                      </div>
+                    </li>
                   )}
                   <li className="flex items-start text-sm lg:text-xs sm:text-[11px]">
                     <span className="text-black mr-1">▪</span>
                     <div>
                       <span className="font-semibold text-black">Payment Mode:</span>
                       <span className="ml-2 text-imp">
-                        {service.paymentMode || 'Online'}
+                        {service.feePaymentModes?.join(', ') || 'Online'}
                       </span>
                     </div>
                   </li>
@@ -451,14 +492,14 @@ const GovernmentServiceDetailPage = () => {
         )}
 
         {/* Important Instructions */}
-        {service.instructions && service.instructions.length > 0 && (
+        {service.importantInstructions && service.importantInstructions.length > 0 && (
           <div className="mt-4 border border-gray-400">
             <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
               Important Instructions
             </div>
             <div className="p-4 lg:p-3 sm:p-2">
               <ul className="space-y-2 lg:space-y-1.5 sm:space-y-1">
-                {service.instructions.map((instruction, index) => (
+                {service.importantInstructions.map((instruction, index) => (
                   <li key={index} className="flex items-start text-sm lg:text-xs sm:text-[11px]">
                     <span className="text-black mr-1">▪</span>
                     <span className="font-semibold text-black">{instruction}</span>
@@ -511,14 +552,48 @@ const GovernmentServiceDetailPage = () => {
                     </td>
                   </tr>
                 )}
-                {service.applyLink && (
+                {service.applyOnlineLink && (
                   <tr className="border-b border-gray-400">
                     <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
                       Apply Online :
                     </td>
                     <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
                       <a
-                        href={service.applyLink}
+                        href={service.applyOnlineLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
+                      >
+                        Click Here <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </td>
+                  </tr>
+                )}
+                {service.loginLink && (
+                  <tr className="border-b border-gray-400">
+                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                      Login :
+                    </td>
+                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                      <a
+                        href={service.loginLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
+                      >
+                        Click Here <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </td>
+                  </tr>
+                )}
+                {service.statusCheckLink && (
+                  <tr className="border-b border-gray-400">
+                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                      Check Status :
+                    </td>
+                    <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                      <a
+                        href={service.statusCheckLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
@@ -533,36 +608,28 @@ const GovernmentServiceDetailPage = () => {
           </div>
         </div>
 
-        {/* Uploaded Files/Downloads */}
-        {service.uploadedFiles && service.uploadedFiles.length > 0 && (
+        {/* Official Notification */}
+        {service.officialNotification && service.officialNotification.fileUrl && (
           <div className="mt-4 border border-gray-400">
             <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
-              Download Documents
+              Download Official Notification
             </div>
-            <div className="p-4 lg:p-3 sm:p-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {service.uploadedFiles.map((file, index) => (
-                  <a
-                    key={index}
-                    href={file.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                  >
-                    <Download className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="font-semibold text-gray-800">{file.name || `Document ${index + 1}`}</p>
-                      <p className="text-xs text-gray-500">{file.type || 'PDF'}</p>
-                    </div>
-                  </a>
-                ))}
-              </div>
+            <div className="p-4 lg:p-3 sm:p-2 text-center">
+              <a
+                href={service.officialNotification.fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-semibold"
+              >
+                <Download className="w-5 h-5" />
+                Download Notification ({service.officialNotification.fileType?.toUpperCase() || 'PDF'})
+              </a>
             </div>
           </div>
         )}
 
         {/* Contact Information */}
-        {(service.helplineNumber || service.email || service.address) && (
+        {(service.helplineNumber || service.helpEmail || service.helpAddress) && (
           <div className="mt-4 border border-gray-400">
             <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
               Contact Information
@@ -578,12 +645,12 @@ const GovernmentServiceDetailPage = () => {
                     </div>
                   </div>
                 )}
-                {service.email && (
+                {service.helpEmail && (
                   <div className="flex items-center gap-3">
                     <Mail className="w-5 h-5 text-primary" />
                     <div>
                       <p className="text-xs text-gray-500">Email</p>
-                      <p className="font-semibold text-gray-800">{service.email}</p>
+                      <p className="font-semibold text-gray-800">{service.helpEmail}</p>
                     </div>
                   </div>
                 )}
@@ -599,10 +666,10 @@ const GovernmentServiceDetailPage = () => {
                   </div>
                 )}
               </div>
-              {service.address && (
+              {service.helpAddress && (
                 <div className="mt-4">
                   <p className="text-xs text-gray-500">Address</p>
-                  <p className="font-semibold text-gray-800">{service.address}</p>
+                  <p className="font-semibold text-gray-800">{service.helpAddress}</p>
                 </div>
               )}
             </div>
@@ -629,7 +696,7 @@ const GovernmentServiceDetailPage = () => {
         {/* Back Button */}
         <div className="text-center mt-6">
           <button
-            onClick={() => navigate('/government-services')}
+            onClick={() => navigate('/government-services-all')}
             className="px-8 py-3 lg:px-6 lg:py-2 sm:px-4 sm:py-2 text-white rounded font-semibold hover:opacity-90 transition-opacity inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-base lg:text-sm sm:text-xs"
           >
             <ArrowLeft className="w-5 h-5 lg:w-4 lg:h-4 sm:w-3 sm:h-3" />

@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { X, Save, Calendar, Briefcase, User, FileText, DollarSign, Award, List, Plus, Trash2, GripVertical } from 'lucide-react';
+import { X, Save, Calendar, Briefcase, User, FileText, DollarSign, Award, List, Plus, Trash2, GripVertical, Upload, Trash, File, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { createJob, updateJob } from '../../slice/jobSlice';
+import uploadService from '../../services/uploadService';
 
 const JobForm = ({ onClose, onSuccess, editData, user }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading } = useSelector(state => state.jobs);
-  
+
   const [formData, setFormData] = useState({
     departmentName: editData?.departmentName || '',
     postName: editData?.postName || '',
@@ -63,6 +64,62 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
     importantInstructions: editData?.importantInstructions || [],
     dynamicContent: editData?.dynamicContent || []
   });
+
+  // File upload states
+  const [files, setFiles] = useState({
+    officialNotification: null,
+    examDateNotice: null,
+    syllabusFile: null,
+    admitCardFile: null,
+    answerKeyFile: null,
+    resultFile: null,
+    applicationForm: null,
+    otherFile: null
+  });
+
+  const [uploadedFileData, setUploadedFileData] = useState({
+    officialNotification: editData?.officialNotification || null,
+    examDateNotice: editData?.examDateNotice || null,
+    syllabusFile: editData?.syllabusFile || null,
+    admitCardFile: editData?.admitCardFile || null,
+    answerKeyFile: editData?.answerKeyFile || null,
+    resultFile: editData?.resultFile || null,
+    applicationForm: editData?.applicationForm || null,
+    otherFile: editData?.otherFile || null
+  });
+
+  const [fileNames, setFileNames] = useState({
+    officialNotification: editData?.officialNotification?.fileName || '',
+    examDateNotice: editData?.examDateNotice?.fileName || '',
+    syllabusFile: editData?.syllabusFile?.fileName || '',
+    admitCardFile: editData?.admitCardFile?.fileName || '',
+    answerKeyFile: editData?.answerKeyFile?.fileName || '',
+    resultFile: editData?.resultFile?.fileName || '',
+    applicationForm: editData?.applicationForm?.fileName || '',
+    otherFile: editData?.otherFile?.fileName || ''
+  });
+
+  const [uploadingFiles, setUploadingFiles] = useState({
+    officialNotification: false,
+    examDateNotice: false,
+    syllabusFile: false,
+    admitCardFile: false,
+    answerKeyFile: false,
+    resultFile: false,
+    applicationForm: false,
+    otherFile: false
+  });
+
+  const fileTypeLabels = {
+    officialNotification: 'Official Notification',
+    examDateNotice: 'Exam Date Notice',
+    syllabusFile: 'Syllabus File',
+    admitCardFile: 'Admit Card File',
+    answerKeyFile: 'Answer Key File',
+    resultFile: 'Result File',
+    applicationForm: 'Application Form',
+    otherFile: 'Other File'
+  };
 
   const [errors, setErrors] = useState({});
   const [activeSection, setActiveSection] = useState('basic');
@@ -168,6 +225,68 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
     }));
   };
 
+  // File upload handlers
+  const uploadFileImmediately = async (fieldName, file) => {
+    if (!file) return null;
+
+    try {
+      setUploadingFiles(prev => ({ ...prev, [fieldName]: true }));
+      const customName = fileNames[fieldName] || file.name;
+      const result = await uploadService.uploadSingleFile(file, fieldName, customName);
+
+      if (result.success && result.data) {
+        const uploadedFileInfo = {
+          fileUrl: result.data.fileUrl,
+          fileName: result.data.fileName || customName,
+          cloudinaryId: result.data.cloudinaryId,
+          fileType: result.data.fileType || result.data.format,
+          uploadedAt: new Date().toISOString()
+        };
+
+        setUploadedFileData(prev => ({
+          ...prev,
+          [fieldName]: uploadedFileInfo
+        }));
+
+        toast.success(`${fileTypeLabels[fieldName]} uploaded successfully!`);
+        return uploadedFileInfo;
+      } else {
+        throw new Error(result.message || 'Upload failed');
+      }
+    } catch (error) {
+      toast.error(`Failed to upload ${fileTypeLabels[fieldName]}: ${error.message}`);
+      return null;
+    } finally {
+      setUploadingFiles(prev => ({ ...prev, [fieldName]: false }));
+    }
+  };
+
+  const handleFileChange = async (e, fieldName) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const maxSize = 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error('File size exceeds 10MB limit');
+      return;
+    }
+
+    setFiles(prev => ({ ...prev, [fieldName]: file }));
+
+    if (!fileNames[fieldName]) {
+      setFileNames(prev => ({ ...prev, [fieldName]: file.name }));
+    }
+
+    await uploadFileImmediately(fieldName, file);
+  };
+
+  const removeFile = (fieldName) => {
+    setFiles(prev => ({ ...prev, [fieldName]: null }));
+    setUploadedFileData(prev => ({ ...prev, [fieldName]: null }));
+    setFileNames(prev => ({ ...prev, [fieldName]: '' }));
+    toast.info(`${fileTypeLabels[fieldName]} removed`);
+  };
+
   const validateForm = () => {
     const newErrors = {};
 
@@ -209,11 +328,11 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (isSubmitting) return;
-    
+
     setIsSubmitting(true);
-    
+
     if (!validateForm()) {
       toast.error('Please fix the form errors before submitting.', {
         position: "top-right",
@@ -224,17 +343,26 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
     }
 
     try {
+      const submitData = { ...formData };
+
+      // Add uploaded file URLs to submit data
+      Object.keys(uploadedFileData).forEach(fieldName => {
+        if (uploadedFileData[fieldName]) {
+          submitData[fieldName] = uploadedFileData[fieldName];
+        }
+      });
+
       if (editData) {
-        await dispatch(updateJob({ 
-          id: editData._id, 
-          data: formData 
+        await dispatch(updateJob({
+          id: editData._id,
+          data: submitData
         })).unwrap();
-        
+
         toast.success('Job updated successfully!', {
           position: "top-right",
           autoClose: 2000,
         });
-        
+
         setTimeout(() => {
           setIsSubmitting(false);
           if (onSuccess) {
@@ -244,13 +372,13 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
           }
         }, 1000);
       } else {
-        await dispatch(createJob(formData)).unwrap();
-        
+        await dispatch(createJob(submitData)).unwrap();
+
         toast.success('Job created successfully!', {
           position: "top-right",
           autoClose: 2000,
         });
-        
+
         setTimeout(() => {
           setIsSubmitting(false);
           if (onSuccess) {
@@ -275,7 +403,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
     // Programmatically submit the form
     const form = document.getElementById('jobForm');
     if (form) {
-      form.dispatchEvent(new Event('submit', { cancelable: true }));
+      form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
     }
   };
 
@@ -288,7 +416,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
               <Briefcase className="w-5 h-5" />
               Job Department Details
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -459,7 +587,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
               <User className="w-5 h-5" />
               Category-wise Posts Distribution
             </h3>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               {[
                 { id: 'general', label: 'General' },
@@ -483,7 +611,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
                 </div>
               ))}
             </div>
-            
+
             <div className="bg-blue-50 p-4 rounded-lg">
               <p className="text-sm text-gray-700">
                 Total Posts: <span className="font-bold text-blue-600">
@@ -496,7 +624,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
               <DollarSign className="w-5 h-5" />
               Category-wise Application Fees (₹)
             </h3>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               {[
                 { id: 'general', label: 'General' },
@@ -531,7 +659,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
               <Award className="w-5 h-5" />
               Eligibility Criteria
             </h3>
-            
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Primary Educational Qualification *
@@ -568,7 +696,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
               <Calendar className="w-5 h-5" />
               Important Dates
             </h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
                 { id: 'startDate', label: 'Start Date' },
@@ -841,6 +969,72 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
           </div>
         );
 
+      case 'files':
+        return (
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <Upload className="w-5 h-5" />
+              File Uploads
+            </h3>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <p className="text-sm text-blue-800">
+                <strong>Note:</strong> Maximum file size is 10MB. Supported formats: PDF, JPG, JPEG, PNG, DOC, DOCX
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {Object.keys(fileTypeLabels).map((fieldName) => (
+                <div key={fieldName} className="border border-gray-300 rounded-lg p-4 bg-white">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {fileTypeLabels[fieldName]}
+                  </label>
+
+                  {!uploadedFileData[fieldName] ? (
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                        onChange={(e) => handleFileChange(e, fieldName)}
+                        disabled={uploadingFiles[fieldName]}
+                        className="flex-1 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"
+                      />
+                      {uploadingFiles[fieldName] && (
+                        <div className="flex items-center gap-2 text-blue-600">
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span className="text-sm">Uploading...</span>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+                      <div className="flex items-center gap-3">
+                        <File className="w-5 h-5 text-green-600" />
+                        <div>
+                          <p className="text-sm font-medium text-green-800">
+                            {uploadedFileData[fieldName].fileName}
+                          </p>
+                          <p className="text-xs text-green-600">
+                            Uploaded successfully
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeFile(fieldName)}
+                        className="text-red-600 hover:text-red-800 transition-colors"
+                        title="Remove file"
+                      >
+                        <Trash className="w-5 h-5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
       default:
         return null;
     }
@@ -851,7 +1045,8 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
     { id: 'posts', label: 'Posts & Fees', icon: User },
     { id: 'eligibility', label: 'Eligibility', icon: Award },
     { id: 'dates', label: 'Important Dates', icon: Calendar },
-    { id: 'additional', label: 'Additional Details', icon: List }
+    { id: 'additional', label: 'Additional Details', icon: List },
+    { id: 'files', label: 'File Uploads', icon: Upload }
   ];
 
   return (
@@ -869,7 +1064,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
                   {editData ? 'Update the job details below' : 'Fill in all required details for the new job posting'}
                 </p>
               </div>
-              
+
               <div className="flex items-center gap-3">
                 <button
                   type="button"
@@ -879,8 +1074,8 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
                   <X className="w-4 h-4" />
                   Cancel
                 </button>
-                
-                
+
+
                 <button
                   type="button"
                   onClick={handleHeaderSaveClick}
@@ -920,7 +1115,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
 
           {/* Form Content */}
           <div className="p-6">
-          
+
             <form id="jobForm" onSubmit={handleSubmit}>
               {renderSection()}
 
@@ -958,7 +1153,7 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
                       Next →
                     </button>
                   ) : (
-                  
+
                     <button
                       type="submit"
                       disabled={loading || isSubmitting}

@@ -88,13 +88,13 @@ const GovernmentServiceAlert = () => {
                   <div className="flex items-center gap-1">
                     <span className="font-semibold text-black">Apply:</span>
                     <span className="text-[#1447e6] font-semibold">
-                      {formatDate(service.importantDates?.startDate)}
+                      {formatDate(service.importantDates?.applicationStartDate)}
                     </span>
-                    {service.importantDates?.lastDate && (
+                    {service.importantDates?.applicationLastDate && (
                       <>
                         <span className="text-red-600 mx-1">⇔</span>
                         <span className="text-red-600 font-semibold">
-                          {formatDate(service.importantDates?.lastDate)}
+                          {formatDate(service.importantDates?.applicationLastDate)}
                         </span>
                       </>
                     )}

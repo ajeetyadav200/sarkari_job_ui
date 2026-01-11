@@ -328,9 +328,9 @@ const GovernmentServiceList = () => {
                         <div>
                           <p className="text-xs text-gray-500 font-medium">Apply Dates</p>
                           <p className="text-base lg:text-sm font-bold">
-                            <span className="text-green-600">{formatDate(service.importantDates?.startDate) || 'N/A'}</span>
+                            <span className="text-green-600">{formatDate(service.importantDates?.applicationStartDate) || 'N/A'}</span>
                             <span className="mx-2 text-gray-400">-</span>
-                            <span className="text-red-600">{formatDate(service.importantDates?.lastDate) || 'N/A'}</span>
+                            <span className="text-red-600">{formatDate(service.importantDates?.applicationLastDate) || 'N/A'}</span>
                           </p>
                         </div>
                       </div>
