@@ -128,7 +128,7 @@ function App() {
     <Routes>
       {/* 🌟 MAIN HOME PAGE */}
       <Route path="/" element={<HandlePage />} />
-       <Route path="/" element={<PolicyRouter />} />
+       <Route path="/public/*" element={<PolicyRouter />} />
 
      
 
