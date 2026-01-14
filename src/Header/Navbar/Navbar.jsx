@@ -20,10 +20,12 @@ const Navbar = () => {
   ];
 
   const moreItems = [
-    { name: "Contact Us", path: "contact" },
-    { name: "Privacy Policy", path: "privacy-policy" },
-    { name: "Disclaimer", path: "disclaimer" },
-    { name: "Terms & Conditions", path: "terms-and-conditions" },
+    { name: "Cyber Cafe", path: "/cyber-cafe" },
+    { name: "Image Tool", path: "/image-tool" },
+    { name: "Contact Us", path: "/public/contact" },
+    { name: "Privacy Policy", path: "/public/privacy-policy" },
+    { name: "Disclaimer", path: "/public/disclaimer" },
+    { name: "Terms & Conditions", path: "/public/terms-and-conditions" },
   ];
 
   return (

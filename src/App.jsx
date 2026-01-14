@@ -95,6 +95,18 @@ import GovernmentServiceDetailPage from "./pages/governmentService/GovernmentSer
 import GovernmentServiceList from "./pages/governmentService/GovernmentServiceList";
 import PolicyRouter from "./router/PolicyRouter";
 
+// Cyber Cafe Pages
+import CyberCafeLanding from "./pages/cyberCafe/CyberCafeLanding";
+import CyberCafeLogin from "./pages/cyberCafe/CyberCafeLogin";
+import CyberCafeSignup from "./pages/cyberCafe/CyberCafeSignup";
+import CyberCafeDashboard from "./pages/cyberCafe/CyberCafeDashboard";
+
+// Image Tool
+import ImageTool from "./components/ImageTool/ImageTool";
+
+// Cyber Cafe Private Route
+import CyberCafePrivateRoute from "./components/private/CyberCafePrivateRoute";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -130,7 +142,22 @@ function App() {
       <Route path="/" element={<HandlePage />} />
        <Route path="/public/*" element={<PolicyRouter />} />
 
-     
+      {/* 🌟 CYBER CAFE ROUTES */}
+      <Route path="/cyber-cafe" element={<CyberCafeLanding />} />
+      <Route path="/cyber-cafe/login" element={<CyberCafeLogin />} />
+      <Route path="/cyber-cafe/signup" element={<CyberCafeSignup />} />
+      <Route path="/cyber-cafe/dashboard" element={
+        <CyberCafePrivateRoute>
+          <CyberCafeDashboard />
+        </CyberCafePrivateRoute>
+      } />
+
+      {/* 🌟 IMAGE TOOL - Protected for Cyber Cafe users */}
+      <Route path="/image-tool" element={
+        <CyberCafePrivateRoute>
+          <Layout><ImageTool /></Layout>
+        </CyberCafePrivateRoute>
+      } />
 
       {/* 🌟 PUBLIC JOB PAGES */}
       <Route path="/jobs" element={<Layout><JobList /></Layout>} />
