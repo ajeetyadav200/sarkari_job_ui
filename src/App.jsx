@@ -140,7 +140,7 @@ function App() {
     <Routes>
       {/* 🌟 MAIN HOME PAGE */}
       <Route path="/" element={<HandlePage />} />
-       <Route path="/public/*" element={<PolicyRouter />} />
+       <Route path="/public/*" element={<Layout><PolicyRouter /></Layout>} />
 
       {/* 🌟 CYBER CAFE ROUTES */}
       <Route path="/cyber-cafe" element={<CyberCafeLanding />} />

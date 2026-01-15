@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchAnswers } from "../../slice/answerSlice";
+import { fetchPublicAnswers } from "../../slice/answerSlice";
 import { Loader2, FileText, Circle } from 'lucide-react';
 
 const AnswerKeyAlert = () => {
@@ -12,7 +12,7 @@ const AnswerKeyAlert = () => {
 
   useEffect(() => {
     dispatch(
-      fetchAnswers({
+      fetchPublicAnswers({
         page: 1,
         limit: 20,
         sortBy: "createdAt",

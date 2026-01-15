@@ -1,6 +1,5 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertTriangle, ArrowLeft, Info, ExternalLink, Shield, AlertCircle } from 'lucide-react';
+import { AlertTriangle, ArrowLeft, Info, ExternalLink, Shield, AlertCircle, Ban, FileWarning, Globe, Phone } from 'lucide-react';
 
 const Disclaimer = () => {
   const navigate = useNavigate();
@@ -21,13 +20,36 @@ const Disclaimer = () => {
               <p className="text-sm text-gray-500 mt-1">Last Updated: January 2026</p>
             </div>
           </div>
-          <p className="text-gray-600 text-base lg:text-sm sm:text-xs">
-            Please read this disclaimer carefully before using our website. This disclaimer governs your use of our website and the information provided on it.
-          </p>
+          <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded">
+            <p className="text-gray-700 text-base lg:text-sm sm:text-xs">
+              Please read this disclaimer carefully before using <strong>NaukariStore.com</strong> (<a href="https://www.naukaristore.com" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">https://www.naukaristore.com</a>). This disclaimer governs your use of our website and the information provided on it.
+            </p>
+          </div>
         </div>
 
         {/* Content Sections */}
         <div className="space-y-6 lg:space-y-4">
+          {/* Critical Notice Banner */}
+          <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-xl shadow-lg p-6 lg:p-5 sm:p-4 text-white">
+            <div className="flex items-start gap-3">
+              <Shield className="w-8 h-8 flex-shrink-0 mt-1" />
+              <div>
+                <h2 className="text-2xl lg:text-xl sm:text-lg font-bold mb-3">
+                  CRITICAL NOTICE - NOT A GOVERNMENT WEBSITE
+                </h2>
+                <p className="text-white/95 text-base lg:text-sm sm:text-xs mb-3">
+                  <strong>NaukariStore.com</strong> is an INDEPENDENT, PRIVATE job information portal. We are:
+                </p>
+                <ul className="list-disc list-inside space-y-2 text-white/90">
+                  <li><strong>NOT</strong> an official government website</li>
+                  <li><strong>NOT</strong> affiliated with, endorsed by, or connected to any government organization</li>
+                  <li><strong>NOT</strong> associated with any recruitment board, PSC, SSC, UPSC, or examination authority</li>
+                  <li><strong>NOT</strong> authorized to conduct recruitment, issue admit cards, or publish results</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
           {/* General Disclaimer */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
             <div className="flex items-center gap-3 mb-4">
@@ -37,63 +59,112 @@ const Disclaimer = () => {
               </h2>
             </div>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>The information contained on this website is for general information purposes only. While we endeavor to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about:</p>
+              <p>The information on <strong>NaukariStore.com</strong> is provided for general information and educational purposes only. While we strive to keep information accurate and up-to-date, we make NO representations or warranties about:</p>
               <ul className="list-disc list-inside ml-4 space-y-2">
-                <li>The completeness, accuracy, reliability, suitability, or availability of the website or the information, products, services, or related graphics contained on the website</li>
-                <li>The timeliness of job notifications, exam dates, results, or admit card information</li>
+                <li>The completeness, accuracy, reliability, or availability of any information</li>
+                <li>The timeliness of job notifications, exam dates, results, or admit card releases</li>
                 <li>The authenticity of information gathered from various sources</li>
+                <li>The suitability of information for any particular purpose</li>
+                <li>The continuous availability or error-free operation of the website</li>
               </ul>
-              <p className="mt-3 font-semibold text-red-600">
-                Any reliance you place on such information is therefore strictly at your own risk.
-              </p>
-            </div>
-          </div>
-
-          {/* No Official Affiliation */}
-          <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
-            <div className="flex items-center gap-3 mb-4">
-              <Shield className="w-6 h-6 lg:w-5 lg:h-5 text-red-600" />
-              <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
-                No Official Affiliation
-              </h2>
-            </div>
-            <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <div className="bg-red-50 border-l-4 border-red-600 p-4 rounded">
-                <p className="font-semibold text-red-800">IMPORTANT NOTICE:</p>
-                <p className="mt-2">This website is NOT an official government website. We are NOT affiliated with, endorsed by, or connected to any government organization, recruitment board, or examination authority.</p>
+              <div className="bg-red-50 border-l-4 border-red-600 p-4 rounded mt-4">
+                <p className="font-bold text-red-800">ANY RELIANCE YOU PLACE ON INFORMATION FROM NAUKARISTORE.COM IS STRICTLY AT YOUR OWN RISK.</p>
               </div>
-              <ul className="list-disc list-inside ml-4 space-y-2 mt-4">
-                <li>We are an independent job information portal</li>
-                <li>We aggregate information from various official government sources and make it available in one place for user convenience</li>
-                <li>We do NOT conduct any recruitment, examination, or selection process</li>
-                <li>We do NOT accept job applications</li>
-                <li>We do NOT issue admit cards, results, or certificates</li>
-                <li>All recruitment processes are conducted by respective government organizations</li>
-              </ul>
             </div>
           </div>
 
-          {/* Information Accuracy */}
+          {/* What We Do NOT Do */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
             <div className="flex items-center gap-3 mb-4">
-              <AlertCircle className="w-6 h-6 lg:w-5 lg:h-5 text-yellow-600" />
+              <Ban className="w-6 h-6 lg:w-5 lg:h-5 text-red-600" />
               <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
-                Information Accuracy and Verification
+                What NaukariStore.com Does NOT Do
+              </h2>
+            </div>
+            <div className="text-gray-700 text-base lg:text-sm sm:text-xs">
+              <p className="mb-4">To avoid any confusion, NaukariStore.com clearly states that we do NOT:</p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-red-800 mb-2">Recruitment & Jobs</h3>
+                  <ul className="list-disc list-inside space-y-1 text-red-700 text-sm">
+                    <li>Conduct any recruitment process</li>
+                    <li>Accept job applications</li>
+                    <li>Guarantee employment or selection</li>
+                    <li>Provide job placements</li>
+                    <li>Issue appointment letters</li>
+                  </ul>
+                </div>
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-red-800 mb-2">Examinations</h3>
+                  <ul className="list-disc list-inside space-y-1 text-red-700 text-sm">
+                    <li>Conduct any examinations</li>
+                    <li>Issue admit cards or hall tickets</li>
+                    <li>Publish official results</li>
+                    <li>Release official answer keys</li>
+                    <li>Issue certificates or mark sheets</li>
+                  </ul>
+                </div>
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-red-800 mb-2">Financial</h3>
+                  <ul className="list-disc list-inside space-y-1 text-red-700 text-sm">
+                    <li>Charge fees for job information</li>
+                    <li>Accept payments for applications</li>
+                    <li>Sell courses or study materials</li>
+                    <li>Provide coaching services</li>
+                    <li>Process refunds for any service</li>
+                  </ul>
+                </div>
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-red-800 mb-2">Official Services</h3>
+                  <ul className="list-disc list-inside space-y-1 text-red-700 text-sm">
+                    <li>Verify documents or certificates</li>
+                    <li>Provide official notifications</li>
+                    <li>Handle grievances or complaints</li>
+                    <li>Offer career counseling</li>
+                    <li>Provide legal advice</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Information Sources */}
+          <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
+            <div className="flex items-center gap-3 mb-4">
+              <Globe className="w-6 h-6 lg:w-5 lg:h-5 text-primary" />
+              <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
+                Information Sources & Accuracy
               </h2>
             </div>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>While we strive to provide accurate and timely information:</p>
+              <p>Information on NaukariStore.com is compiled from:</p>
               <ul className="list-disc list-inside ml-4 space-y-2">
-                <li>Information on this website is collected from various official government websites and third-party sources</li>
-                <li>We cannot guarantee 100% accuracy of all information published</li>
-                <li>Dates, eligibility criteria, fees, and other details may change without notice</li>
-                <li>There may be delays in updating information on our website</li>
-                <li>Typographical errors or inaccuracies may occur</li>
+                <li>Official government websites and portals</li>
+                <li>Public notices and advertisements</li>
+                <li>Press releases and news sources</li>
+                <li>Third-party information providers</li>
               </ul>
 
               <div className="bg-yellow-50 border-l-4 border-yellow-600 p-4 rounded mt-4">
-                <p className="font-semibold text-yellow-800">Recommendation:</p>
-                <p className="mt-2">Users are strongly advised to verify all information from the official website of the respective organization before taking any action, applying for jobs, or making any decisions.</p>
+                <p className="font-semibold text-yellow-800 mb-2">Accuracy Warning:</p>
+                <ul className="list-disc list-inside space-y-1 text-yellow-700">
+                  <li>We cannot guarantee 100% accuracy of any information</li>
+                  <li>Dates, eligibility criteria, fees may change without notice</li>
+                  <li>There may be delays in updating information</li>
+                  <li>Typographical errors or inaccuracies may occur</li>
+                  <li>Information may become outdated between updates</li>
+                </ul>
+              </div>
+
+              <div className="bg-green-50 border-l-4 border-green-600 p-4 rounded mt-4">
+                <p className="font-semibold text-green-800 mb-2">Mandatory Action:</p>
+                <p className="text-green-700">Users MUST verify ALL information from the official website of the respective government organization before:</p>
+                <ul className="list-disc list-inside ml-4 mt-2 text-green-700">
+                  <li>Applying for any job or examination</li>
+                  <li>Paying any application fees</li>
+                  <li>Making travel plans for examinations</li>
+                  <li>Taking any career-related decisions</li>
+                </ul>
               </div>
             </div>
           </div>
@@ -103,86 +174,103 @@ const Disclaimer = () => {
             <div className="flex items-center gap-3 mb-4">
               <ExternalLink className="w-6 h-6 lg:w-5 lg:h-5 text-primary" />
               <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
-                External Links and Third-Party Content
+                External Links & Third-Party Websites
               </h2>
             </div>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>This website may contain links to external websites and third-party content that are not provided or maintained by us.</p>
+              <p>NaukariStore.com contains links to external websites for user convenience. Regarding these links:</p>
               <ul className="list-disc list-inside ml-4 space-y-2">
-                <li>We do not guarantee the accuracy, relevance, timeliness, or completeness of any information on external websites</li>
-                <li>We are not responsible for the content, privacy policies, or practices of external websites</li>
-                <li>The inclusion of any links does not imply endorsement by us</li>
-                <li>Users access external links at their own risk</li>
-                <li>We shall not be liable for any loss or damage arising from the use of external websites</li>
+                <li>We have no control over external website content, availability, or accuracy</li>
+                <li>Links do NOT imply endorsement or partnership by NaukariStore.com</li>
+                <li>We are not responsible for privacy policies of external sites</li>
+                <li>External websites may have different terms and conditions</li>
+                <li>Users access external links entirely at their own risk</li>
+                <li>We shall not be liable for any loss from using external websites</li>
               </ul>
             </div>
           </div>
 
           {/* Limitation of Liability */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
-            <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              Limitation of Liability
-            </h2>
+            <div className="flex items-center gap-3 mb-4">
+              <AlertCircle className="w-6 h-6 lg:w-5 lg:h-5 text-red-600" />
+              <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
+                Limitation of Liability
+              </h2>
+            </div>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>In no event shall we be liable for any loss or damage including without limitation:</p>
+              <p>NaukariStore.com and its owners shall NOT be liable for any loss or damage including:</p>
               <ul className="list-disc list-inside ml-4 space-y-2">
-                <li>Indirect or consequential loss or damage</li>
-                <li>Loss of data or information</li>
-                <li>Loss of profit or opportunity</li>
-                <li>Missed job applications or exam dates</li>
-                <li>Any loss or damage whatsoever arising from the use of this website</li>
-                <li>Any loss or damage arising from reliance on information published on this website</li>
-                <li>Technical issues, downtime, or unavailability of the website</li>
-                <li>Errors or omissions in the content</li>
+                <li>Direct, indirect, incidental, or consequential damages</li>
+                <li>Loss of data, information, or profits</li>
+                <li>Loss of employment opportunities</li>
+                <li>Missed job applications or examination dates</li>
+                <li>Wrong decisions based on website information</li>
+                <li>Financial loss from incorrect fee information</li>
+                <li>Technical issues, downtime, or service interruptions</li>
+                <li>Errors, omissions, or inaccuracies in content</li>
+                <li>Third-party actions or external website content</li>
+                <li>Any damages arising from the use or inability to use this website</li>
               </ul>
             </div>
           </div>
 
-          {/* No Guarantee of Employment */}
+          {/* Fraud Warning */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
-            <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              No Guarantee of Employment or Selection
-            </h2>
-            <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <div className="bg-orange-50 border-l-4 border-orange-600 p-4 rounded">
-                <p className="font-semibold text-orange-800">Important Notice:</p>
-                <ul className="list-disc list-inside ml-4 space-y-2 mt-2">
-                  <li>We do NOT guarantee employment or selection in any job</li>
-                  <li>We do NOT charge any fees for job information</li>
-                  <li>We do NOT offer any paid courses, coaching, or exam preparation services</li>
-                  <li>Beware of fraudulent websites or persons claiming to provide guaranteed jobs</li>
-                  <li>Never pay money to anyone claiming to offer jobs through our website</li>
+            <div className="flex items-center gap-3 mb-4">
+              <FileWarning className="w-6 h-6 lg:w-5 lg:h-5 text-orange-600" />
+              <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
+                Fraud Alert & Warning
+              </h2>
+            </div>
+            <div className="text-gray-700 text-base lg:text-sm sm:text-xs">
+              <div className="bg-orange-50 border-2 border-orange-400 rounded-lg p-4">
+                <p className="font-bold text-orange-800 text-lg mb-3">BEWARE OF FRAUD!</p>
+                <ul className="list-disc list-inside space-y-2 text-orange-700">
+                  <li><strong>NaukariStore.com does NOT charge any fees</strong> for job information</li>
+                  <li><strong>Never pay money</strong> to anyone claiming to offer jobs through our website</li>
+                  <li><strong>No guaranteed jobs</strong> - Anyone promising guaranteed selection is a fraudster</li>
+                  <li><strong>Report suspicious activity</strong> to local police if you encounter fraud</li>
+                  <li><strong>Verify official channels</strong> - Always apply through official government websites</li>
                 </ul>
+                <p className="mt-4 text-orange-800 font-semibold">
+                  If anyone contacts you claiming to be from NaukariStore.com and asks for money, it is a SCAM. Please report immediately.
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Professional Advice Disclaimer */}
+          {/* Copyright Notice */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
             <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              Professional Advice Disclaimer
+              Copyright & Intellectual Property
             </h2>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>The information on this website is provided for general informational and educational purposes only and is not intended as professional advice.</p>
+              <p>Regarding intellectual property on NaukariStore.com:</p>
               <ul className="list-disc list-inside ml-4 space-y-2">
-                <li>We do NOT provide career counseling, legal advice, or professional guidance</li>
-                <li>Users should consult with qualified professionals for specific advice tailored to their situation</li>
-                <li>We are not responsible for decisions made based on information from this website</li>
+                <li>Job notifications and official documents are property of respective government organizations</li>
+                <li>NaukariStore.com claims no ownership over official government content</li>
+                <li>All trademarks, logos belong to their respective owners</li>
+                <li>We use official information under fair use for informational purposes</li>
+                <li>Original website content and design are property of NaukariStore.com</li>
               </ul>
             </div>
           </div>
 
-          {/* Copyright and Intellectual Property */}
+          {/* User Responsibility */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
             <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              Copyright and Intellectual Property
+              User Responsibility & Agreement
             </h2>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>All job notifications, exam details, and official documents are the property of their respective government organizations and recruitment boards.</p>
+              <p>By using NaukariStore.com, you acknowledge and agree that:</p>
               <ul className="list-disc list-inside ml-4 space-y-2">
-                <li>We claim no ownership over official government notifications or documents</li>
-                <li>All trademarks, logos, and service marks displayed are the property of their respective owners</li>
-                <li>We use official notifications and information under fair use for informational purposes only</li>
+                <li>You are solely responsible for verifying all information before use</li>
+                <li>You will check official websites for accurate and updated information</li>
+                <li>You understand NaukariStore.com is not liable for any consequences</li>
+                <li>You will not hold us responsible for missed opportunities or incorrect information</li>
+                <li>You accept all risks associated with using information from this website</li>
+                <li>You have read and understood this disclaimer in its entirety</li>
               </ul>
             </div>
           </div>
@@ -193,36 +281,28 @@ const Disclaimer = () => {
               Changes to This Disclaimer
             </h2>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>We may update our Disclaimer from time to time. We will notify you of any changes by posting the new Disclaimer on this page and updating the "Last Updated" date.</p>
-              <p>You are advised to review this Disclaimer periodically for any changes.</p>
-            </div>
-          </div>
-
-          {/* User Responsibility */}
-          <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
-            <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              User Responsibility
-            </h2>
-            <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>By using this website, you acknowledge and agree that:</p>
-              <ul className="list-disc list-inside ml-4 space-y-2">
-                <li>You are solely responsible for verifying all information before use</li>
-                <li>You will check official websites for accurate and updated information</li>
-                <li>You understand that we are not liable for any consequences arising from the use of this website</li>
-                <li>You will not hold us responsible for missed opportunities, incorrect information, or any other issues</li>
-                <li>You accept all risks associated with using the information provided</li>
-              </ul>
+              <p>NaukariStore.com may update this Disclaimer at any time without prior notice.</p>
+              <p>Changes will be posted on this page with an updated "Last Updated" date.</p>
+              <p>Continued use of NaukariStore.com after changes constitutes acceptance of the modified disclaimer.</p>
+              <p>We encourage users to review this Disclaimer periodically.</p>
             </div>
           </div>
 
           {/* Contact Information */}
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 lg:p-5 sm:p-4">
-            <h2 className="text-xl lg:text-lg sm:text-base font-bold text-gray-800 mb-3">
-              Questions or Concerns?
-            </h2>
-            <p className="text-gray-700 text-base lg:text-sm sm:text-xs mb-3">
-              If you have any questions or concerns about this Disclaimer, please feel free to contact us.
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6 lg:p-5 sm:p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <Phone className="w-6 h-6 text-primary" />
+              <h2 className="text-xl lg:text-lg sm:text-base font-bold text-gray-800">
+                Questions or Concerns?
+              </h2>
+            </div>
+            <p className="text-gray-700 text-base lg:text-sm sm:text-xs mb-2">
+              If you have any questions about this Disclaimer, please contact us:
             </p>
+            <div className="text-gray-700 text-base lg:text-sm sm:text-xs mb-4">
+              <p><strong>Website:</strong> <a href="https://www.naukaristore.com" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">https://www.naukaristore.com</a></p>
+              <p><strong>Email:</strong> <a href="mailto:info@naukaristore.com" className="text-primary hover:underline">info@naukaristore.com</a></p>
+            </div>
             <button
               onClick={() => navigate('/contact')}
               className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-semibold text-sm"
@@ -234,14 +314,17 @@ const Disclaimer = () => {
           {/* Final Notice */}
           <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-300 rounded-xl p-6 lg:p-5 sm:p-4">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
+              <AlertTriangle className="w-8 h-8 text-red-600 flex-shrink-0 mt-1" />
               <div>
-                <h3 className="text-lg font-bold text-red-800 mb-2">Final Important Notice</h3>
-                <p className="text-gray-800 text-sm font-semibold">
-                  By using this website, you acknowledge that you have read, understood, and agree to be bound by this Disclaimer. If you do not agree with this Disclaimer, please do not use this website.
+                <h3 className="text-xl font-bold text-red-800 mb-3">Final Important Notice</h3>
+                <p className="text-gray-800 text-base lg:text-sm font-semibold mb-2">
+                  By using NaukariStore.com, you acknowledge that you have read, understood, and agree to be bound by this Disclaimer.
                 </p>
-                <p className="text-gray-700 text-sm mt-2">
-                  Always verify information from official government sources. We are NOT responsible for any decisions you make based on the information provided on this website.
+                <p className="text-gray-700 text-sm mb-2">
+                  <strong>If you do not agree with this Disclaimer, please do not use this website.</strong>
+                </p>
+                <p className="text-red-700 text-sm font-semibold">
+                  ALWAYS verify information from official government sources. NaukariStore.com is NOT responsible for any decisions you make based on information provided on this website.
                 </p>
               </div>
             </div>

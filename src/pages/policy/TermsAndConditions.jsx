@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, ArrowLeft, CheckCircle, XCircle, AlertTriangle, Scale } from 'lucide-react';
+import { FileText, ArrowLeft, CheckCircle, XCircle, AlertTriangle, Scale, Globe, Users, Gavel, BookOpen } from 'lucide-react';
 
 const TermsAndConditions = () => {
   const navigate = useNavigate();
@@ -21,13 +21,40 @@ const TermsAndConditions = () => {
               <p className="text-sm text-gray-500 mt-1">Last Updated: January 2026</p>
             </div>
           </div>
-          <p className="text-gray-600 text-base lg:text-sm sm:text-xs">
-            Please read these Terms and Conditions carefully before using our website. By accessing or using our website, you agree to be bound by these Terms and Conditions.
-          </p>
+          <div className="bg-blue-50 border-l-4 border-primary p-4 rounded">
+            <p className="text-gray-700 text-base lg:text-sm sm:text-xs">
+              Welcome to <strong>NaukariStore.com</strong> (<a href="https://www.naukaristore.com" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">https://www.naukaristore.com</a>). Please read these Terms and Conditions carefully before using our website. By accessing or using NaukariStore.com, you agree to be bound by these Terms and Conditions.
+            </p>
+          </div>
         </div>
 
         {/* Content Sections */}
         <div className="space-y-6 lg:space-y-4">
+          {/* About NaukariStore */}
+          <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
+            <div className="flex items-center gap-3 mb-4">
+              <Globe className="w-6 h-6 lg:w-5 lg:h-5 text-primary" />
+              <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
+                About NaukariStore.com
+              </h2>
+            </div>
+            <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
+              <p><strong>NaukariStore.com</strong> is an independent job information portal that provides:</p>
+              <ul className="list-disc list-inside ml-4 space-y-2">
+                <li>Latest government job notifications and vacancies</li>
+                <li>Sarkari Result updates and examination results</li>
+                <li>Admit card download information and links</li>
+                <li>Answer key releases and updates</li>
+                <li>Syllabus and exam pattern information</li>
+                <li>Important dates and application deadlines</li>
+              </ul>
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-3 mt-4 rounded">
+                <p className="font-semibold text-yellow-800">Important:</p>
+                <p className="text-yellow-700 mt-1">NaukariStore.com is NOT an official government website. We are an independent platform providing job-related information for educational and informational purposes only.</p>
+              </div>
+            </div>
+          </div>
+
           {/* Acceptance of Terms */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
             <div className="flex items-center gap-3 mb-4">
@@ -37,8 +64,9 @@ const TermsAndConditions = () => {
               </h2>
             </div>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement.</p>
+              <p>By accessing and using <strong>NaukariStore.com</strong>, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.</p>
               <p>If you do not agree to these Terms and Conditions, please do not use this website.</p>
+              <p>These terms apply to all visitors, users, and others who access or use NaukariStore.com.</p>
             </div>
           </div>
 
@@ -47,23 +75,35 @@ const TermsAndConditions = () => {
             <div className="flex items-center gap-3 mb-4">
               <Scale className="w-6 h-6 lg:w-5 lg:h-5 text-primary" />
               <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
-                Use of Website
+                Permitted Use of NaukariStore.com
               </h2>
             </div>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>You agree to use this website only for lawful purposes and in a way that does not infringe the rights of, restrict, or inhibit anyone else's use and enjoyment of the website.</p>
+              <p>You agree to use NaukariStore.com only for lawful purposes and in a way that does not infringe the rights of others.</p>
 
               <div className="mt-4">
-                <h3 className="font-semibold text-gray-800 mb-2">You agree NOT to:</h3>
-                <ul className="list-disc list-inside ml-4 space-y-2">
-                  <li>Use the website in any way that is unlawful or fraudulent</li>
-                  <li>Transmit any harmful or malicious code</li>
+                <h3 className="font-semibold text-green-700 mb-2">You MAY:</h3>
+                <ul className="list-disc list-inside ml-4 space-y-2 text-green-700">
+                  <li>Browse and access job information for personal use</li>
+                  <li>Share links to NaukariStore.com with friends and family</li>
+                  <li>Save and bookmark pages for your reference</li>
+                  <li>Use information to apply for government jobs through official channels</li>
+                  <li>Subscribe to notifications and alerts</li>
+                </ul>
+              </div>
+
+              <div className="mt-4">
+                <h3 className="font-semibold text-red-700 mb-2">You must NOT:</h3>
+                <ul className="list-disc list-inside ml-4 space-y-2 text-red-700">
+                  <li>Use NaukariStore.com in any way that is unlawful or fraudulent</li>
+                  <li>Transmit any harmful, malicious code, or viruses</li>
                   <li>Attempt to gain unauthorized access to any part of the website</li>
                   <li>Interfere with or disrupt the website or servers</li>
-                  <li>Reproduce, duplicate, copy, or resell any part of the website</li>
-                  <li>Use automated systems to access the website without permission</li>
-                  <li>Collect or harvest any information from the website</li>
-                  <li>Impersonate any person or entity</li>
+                  <li>Reproduce, duplicate, or copy content for commercial purposes without permission</li>
+                  <li>Use automated systems (bots, scrapers) to access the website without permission</li>
+                  <li>Collect or harvest user information from the website</li>
+                  <li>Impersonate NaukariStore.com or claim official affiliation</li>
+                  <li>Use our content to create competing websites</li>
                 </ul>
               </div>
             </div>
@@ -74,38 +114,70 @@ const TermsAndConditions = () => {
             <div className="flex items-center gap-3 mb-4">
               <AlertTriangle className="w-6 h-6 lg:w-5 lg:h-5 text-yellow-600" />
               <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
-                Information Accuracy
+                Information Accuracy & Verification
               </h2>
             </div>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>We strive to provide accurate and up-to-date information about government jobs, exam notifications, results, and admit cards. However:</p>
+              <p>NaukariStore.com strives to provide accurate and up-to-date information about government jobs, exam notifications, results, and admit cards. However:</p>
               <ul className="list-disc list-inside ml-4 space-y-2">
-                <li>We do not guarantee the accuracy, completeness, or timeliness of any information on the website</li>
+                <li>We do not guarantee the accuracy, completeness, or timeliness of any information</li>
                 <li>Information is gathered from various official sources and third-party websites</li>
-                <li>We are not responsible for any errors or omissions in the content</li>
-                <li>Users should always verify information from official government sources before taking any action</li>
-                <li>We are not affiliated with any government organization or recruitment body</li>
+                <li>We are not responsible for any errors, omissions, or outdated information</li>
+                <li>Job notifications, dates, and eligibility criteria may change without prior notice</li>
+                <li>We are NOT affiliated with any government organization or recruitment body</li>
+              </ul>
+              <div className="bg-red-50 border-l-4 border-red-500 p-3 mt-4 rounded">
+                <p className="font-semibold text-red-800">Mandatory Verification:</p>
+                <p className="text-red-700 mt-1">Users MUST verify all information from official government websites before taking any action, submitting applications, or making decisions based on information from NaukariStore.com.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* User Accounts */}
+          <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
+            <div className="flex items-center gap-3 mb-4">
+              <Users className="w-6 h-6 lg:w-5 lg:h-5 text-primary" />
+              <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
+                User Accounts & Registration
+              </h2>
+            </div>
+            <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
+              <p>If you create an account on NaukariStore.com, you are responsible for:</p>
+              <ul className="list-disc list-inside ml-4 space-y-2">
+                <li>Providing accurate, current, and complete registration information</li>
+                <li>Maintaining the security and confidentiality of your account credentials</li>
+                <li>All activities that occur under your account</li>
+                <li>Notifying us immediately of any unauthorized use of your account</li>
+                <li>Keeping your contact information updated</li>
+              </ul>
+              <p className="mt-3">NaukariStore.com reserves the right to:</p>
+              <ul className="list-disc list-inside ml-4 space-y-2">
+                <li>Suspend or terminate accounts that violate these terms</li>
+                <li>Remove or edit content at our sole discretion</li>
+                <li>Refuse service to anyone for any reason</li>
               </ul>
             </div>
           </div>
 
           {/* Intellectual Property */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
-            <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              Intellectual Property Rights
-            </h2>
+            <div className="flex items-center gap-3 mb-4">
+              <BookOpen className="w-6 h-6 lg:w-5 lg:h-5 text-primary" />
+              <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
+                Intellectual Property Rights
+              </h2>
+            </div>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>Unless otherwise stated, we own the intellectual property rights for all material on this website. All intellectual property rights are reserved.</p>
-              <p>You may view and/or print pages from the website for your own personal use subject to restrictions set in these terms and conditions.</p>
-
-              <div className="mt-4">
-                <h3 className="font-semibold text-gray-800 mb-2">You must not:</h3>
-                <ul className="list-disc list-inside ml-4 space-y-2">
-                  <li>Republish material from this website without proper attribution</li>
-                  <li>Sell, rent, or sub-license material from the website</li>
-                  <li>Reproduce, duplicate, or copy material for commercial purposes</li>
-                  <li>Redistribute content from this website (unless content is specifically made for redistribution)</li>
-                </ul>
+              <p>The NaukariStore.com name, logo, website design, and original content are the intellectual property of NaukariStore.com.</p>
+              <p>You may view and print pages for personal, non-commercial use subject to these restrictions:</p>
+              <ul className="list-disc list-inside ml-4 space-y-2">
+                <li>You must not republish material without proper attribution to NaukariStore.com</li>
+                <li>You must not sell, rent, or sub-license our material</li>
+                <li>You must not reproduce content for commercial purposes</li>
+                <li>You must not remove any copyright or proprietary notices</li>
+              </ul>
+              <div className="bg-gray-50 border-l-4 border-gray-400 p-3 mt-4 rounded">
+                <p className="text-gray-700">Government job notifications and official documents referenced on NaukariStore.com remain the property of their respective government organizations. NaukariStore.com claims no ownership over official government content.</p>
               </div>
             </div>
           </div>
@@ -113,30 +185,16 @@ const TermsAndConditions = () => {
           {/* Third-Party Links */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
             <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              Third-Party Links and Content
+              Third-Party Links & External Websites
             </h2>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>Our website may contain links to third-party websites or services that are not owned or controlled by us.</p>
-              <p>We have no control over, and assume no responsibility for, the content, privacy policies, or practices of any third-party websites or services.</p>
-              <p>You acknowledge and agree that we shall not be responsible or liable, directly or indirectly, for any damage or loss caused by or in connection with the use of any such content, goods, or services available on or through any such websites or services.</p>
-            </div>
-          </div>
-
-          {/* User Accounts */}
-          <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
-            <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              User Accounts
-            </h2>
-            <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>If you create an account on our website, you are responsible for:</p>
+              <p>NaukariStore.com contains links to official government websites and other external resources for your convenience.</p>
               <ul className="list-disc list-inside ml-4 space-y-2">
-                <li>Maintaining the confidentiality of your account and password</li>
-                <li>Restricting access to your computer or device</li>
-                <li>All activities that occur under your account</li>
-                <li>Providing accurate and complete information</li>
-                <li>Updating your information to keep it accurate and current</li>
+                <li>We have no control over external websites and assume no responsibility for their content</li>
+                <li>Links to external sites do not constitute endorsement by NaukariStore.com</li>
+                <li>Users access external links at their own risk</li>
+                <li>We recommend reviewing the terms and privacy policies of external websites</li>
               </ul>
-              <p className="mt-3">We reserve the right to terminate accounts, remove or edit content at our sole discretion.</p>
             </div>
           </div>
 
@@ -149,31 +207,40 @@ const TermsAndConditions = () => {
               </h2>
             </div>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>To the maximum extent permitted by law, we shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from:</p>
+              <p>To the maximum extent permitted by applicable law, NaukariStore.com and its owners shall NOT be liable for:</p>
               <ul className="list-disc list-inside ml-4 space-y-2">
-                <li>Your access to or use of (or inability to access or use) the website</li>
-                <li>Any conduct or content of any third party on the website</li>
-                <li>Any content obtained from the website</li>
-                <li>Unauthorized access, use, or alteration of your transmissions or content</li>
-                <li>Errors, mistakes, or inaccuracies in content</li>
-                <li>Loss of data or information</li>
-                <li>Missed job opportunities or exam dates due to reliance on our information</li>
+                <li>Any indirect, incidental, special, consequential, or punitive damages</li>
+                <li>Loss of profits, data, or business opportunities</li>
+                <li>Missed job applications or examination deadlines</li>
+                <li>Errors, inaccuracies, or omissions in content</li>
+                <li>Decisions made based on information from NaukariStore.com</li>
+                <li>Website downtime, technical issues, or server failures</li>
+                <li>Unauthorized access to user data or transmissions</li>
+                <li>Any third-party actions or content</li>
               </ul>
+              <div className="bg-red-50 border-l-4 border-red-500 p-3 mt-4 rounded">
+                <p className="font-semibold text-red-800">Use At Your Own Risk:</p>
+                <p className="text-red-700 mt-1">Your use of NaukariStore.com is entirely at your own risk. The website and all content are provided "AS IS" without warranties of any kind.</p>
+              </div>
             </div>
           </div>
 
           {/* Indemnification */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
-            <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              Indemnification
-            </h2>
+            <div className="flex items-center gap-3 mb-4">
+              <Gavel className="w-6 h-6 lg:w-5 lg:h-5 text-primary" />
+              <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800">
+                Indemnification
+              </h2>
+            </div>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>You agree to defend, indemnify, and hold harmless the website, its owners, employees, and affiliates from and against any and all claims, damages, obligations, losses, liabilities, costs, or debt, and expenses arising from:</p>
+              <p>You agree to defend, indemnify, and hold harmless NaukariStore.com, its owners, employees, and affiliates from any claims, damages, losses, liabilities, costs, or expenses arising from:</p>
               <ul className="list-disc list-inside ml-4 space-y-2">
-                <li>Your use of and access to the website</li>
-                <li>Your violation of any term of these Terms and Conditions</li>
-                <li>Your violation of any third-party right, including any intellectual property or privacy right</li>
-                <li>Any claim that your content caused damage to a third party</li>
+                <li>Your use of and access to NaukariStore.com</li>
+                <li>Your violation of these Terms and Conditions</li>
+                <li>Your violation of any third-party rights</li>
+                <li>Any content you submit or post on the website</li>
+                <li>Your negligent or wrongful conduct</li>
               </ul>
             </div>
           </div>
@@ -181,44 +248,40 @@ const TermsAndConditions = () => {
           {/* Governing Law */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
             <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              Governing Law
+              Governing Law & Jurisdiction
             </h2>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>These Terms and Conditions shall be governed by and construed in accordance with the laws of India, without regard to its conflict of law provisions.</p>
-              <p>Any disputes arising out of or relating to these Terms and Conditions shall be subject to the exclusive jurisdiction of the courts located in India.</p>
+              <p>These Terms and Conditions shall be governed by and construed in accordance with the laws of India.</p>
+              <p>Any disputes arising from the use of NaukariStore.com shall be subject to the exclusive jurisdiction of the courts located in India.</p>
+              <p>If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.</p>
             </div>
           </div>
 
           {/* Changes to Terms */}
           <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
             <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              Changes to Terms and Conditions
+              Changes to Terms & Conditions
             </h2>
             <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>We reserve the right to modify or replace these Terms and Conditions at any time at our sole discretion.</p>
-              <p>If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect.</p>
-              <p>By continuing to access or use our website after any revisions become effective, you agree to be bound by the revised terms.</p>
-            </div>
-          </div>
-
-          {/* Severability */}
-          <div className="bg-white rounded-xl shadow-lg p-6 lg:p-5 sm:p-4">
-            <h2 className="text-2xl lg:text-xl sm:text-lg font-bold text-gray-800 mb-3">
-              Severability
-            </h2>
-            <div className="text-gray-700 text-base lg:text-sm sm:text-xs space-y-3">
-              <p>If any provision of these Terms and Conditions is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary so that these Terms and Conditions will otherwise remain in full force and effect.</p>
+              <p>NaukariStore.com reserves the right to modify these Terms and Conditions at any time without prior notice.</p>
+              <p>Changes will be effective immediately upon posting on this page with an updated "Last Updated" date.</p>
+              <p>Your continued use of NaukariStore.com after changes constitutes acceptance of the modified terms.</p>
+              <p>We encourage you to review these Terms and Conditions periodically.</p>
             </div>
           </div>
 
           {/* Contact Information */}
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 lg:p-5 sm:p-4">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6 lg:p-5 sm:p-4">
             <h2 className="text-xl lg:text-lg sm:text-base font-bold text-gray-800 mb-3">
               Questions About Terms & Conditions?
             </h2>
-            <p className="text-gray-700 text-base lg:text-sm sm:text-xs mb-3">
-              If you have any questions about these Terms and Conditions, please contact us through our Contact page.
+            <p className="text-gray-700 text-base lg:text-sm sm:text-xs mb-2">
+              If you have any questions about these Terms and Conditions, please contact us:
             </p>
+            <div className="text-gray-700 text-base lg:text-sm sm:text-xs mb-4">
+              <p><strong>Website:</strong> <a href="https://www.naukaristore.com" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">https://www.naukaristore.com</a></p>
+              <p><strong>Email:</strong> <a href="mailto:info@naukaristore.com" className="text-primary hover:underline">info@naukaristore.com</a></p>
+            </div>
             <button
               onClick={() => navigate('/contact')}
               className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-semibold text-sm"

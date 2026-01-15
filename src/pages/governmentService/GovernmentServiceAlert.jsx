@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { fetchGovernmentServices } from "../../slice/governmentServiceSlice";
+import { fetchPublicServices } from "../../slice/governmentServiceSlice";
 import { Loader2, FileText, Circle } from 'lucide-react';
 
 const GovernmentServiceAlert = () => {
@@ -12,7 +12,7 @@ const GovernmentServiceAlert = () => {
 
   useEffect(() => {
     dispatch(
-      fetchGovernmentServices({
+      fetchPublicServices({
         page: 1,
         limit: 20,
         sortBy: "createdAt",
