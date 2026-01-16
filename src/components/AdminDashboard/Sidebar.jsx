@@ -64,12 +64,12 @@ const Sidebar = ({ isOpen, onClose, activeMenu, setActiveMenu, onLogout }) => {
     },
     {
       id: 'content',
-      label: 'Content Management',
+      label: 'Cyber Management',
       icon: BookOpen,
       subItems: [
-        { id: 'posts', label: 'Posts', path: '/admin/content/posts' },
-        { id: 'categories', label: 'Categories', path: '/admin/content/categories' },
-        { id: 'media', label: 'Media Library', path: '/admin/content/media' }
+        { id: 'CyberCafeAdminDashboard', label: 'CyberCafeAdminDashboard', path: '/admin/cyber-cafes' },
+        // { id: 'categories', label: 'Categories', path: '/admin/content/categories' },
+        // { id: 'media', label: 'Media Library', path: '/admin/content/media' }
       ]
     },
     {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Eye, EyeOff, Monitor, LogIn } from "lucide-react";
@@ -13,6 +13,29 @@ const CyberCafeLogin = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Check if already logged in - redirect to dashboard
+  useEffect(() => {
+    const token = localStorage.getItem("cyberCafeToken");
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const isExpired = payload.exp * 1000 < Date.now();
+        if (!isExpired) {
+          // Token is valid, redirect to dashboard
+          navigate("/cyber-cafe/dashboard", { replace: true });
+        } else {
+          // Token expired, clear it
+          localStorage.removeItem("cyberCafeToken");
+          localStorage.removeItem("cyberCafeUser");
+        }
+      } catch (e) {
+        // Invalid token, clear it
+        localStorage.removeItem("cyberCafeToken");
+        localStorage.removeItem("cyberCafeUser");
+      }
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

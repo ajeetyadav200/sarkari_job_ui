@@ -101,11 +101,17 @@ import CyberCafeLogin from "./pages/cyberCafe/CyberCafeLogin";
 import CyberCafeSignup from "./pages/cyberCafe/CyberCafeSignup";
 import CyberCafeDashboard from "./pages/cyberCafe/CyberCafeDashboard";
 
+// Admin Cyber Cafe Management
+import CyberCafeAdminDashboard from "./components/CyberCafeManagement/CyberCafeDashboard";
+import CyberCafeList from "./components/CyberCafeManagement/CyberCafeList";
+import CyberCafeDetail from "./components/CyberCafeManagement/CyberCafeDetail";
+
 // Image Tool
 import ImageTool from "./components/ImageTool/ImageTool";
 
 // Cyber Cafe Private Route
 import CyberCafePrivateRoute from "./components/private/CyberCafePrivateRoute";
+import HandleCyberPage from "./handleCyberCafe/HandlePage";
 
 
 function App() {
@@ -143,21 +149,34 @@ function App() {
        <Route path="/public/*" element={<Layout><PolicyRouter /></Layout>} />
 
       {/* 🌟 CYBER CAFE ROUTES */}
-      <Route path="/cyber-cafe" element={<CyberCafeLanding />} />
-      <Route path="/cyber-cafe/login" element={<CyberCafeLogin />} />
-      <Route path="/cyber-cafe/signup" element={<CyberCafeSignup />} />
-      <Route path="/cyber-cafe/dashboard" element={
-        <CyberCafePrivateRoute>
-          <CyberCafeDashboard />
-        </CyberCafePrivateRoute>
-      } />
+     <Route path="/cyber-cafe" element={<HandleCyberPage />}>
+  {/* Landing page */}
+  <Route index element={<CyberCafeLanding />} />
 
-      {/* 🌟 IMAGE TOOL - Protected for Cyber Cafe users */}
-      <Route path="/image-tool" element={
-        <CyberCafePrivateRoute>
-          <Layout><ImageTool /></Layout>
-        </CyberCafePrivateRoute>
-      } />
+  {/* Public routes */}
+  <Route path="login" element={<CyberCafeLogin />} />
+  <Route path="signup" element={<CyberCafeSignup />} />
+
+  {/* Protected routes */}
+  <Route
+    path="dashboard"
+    element={
+      <CyberCafePrivateRoute>
+        <CyberCafeDashboard />
+      </CyberCafePrivateRoute>
+    }
+  />
+
+  <Route
+    path="image-tool"
+    element={
+      <CyberCafePrivateRoute>
+        <ImageTool />
+      </CyberCafePrivateRoute>
+    }
+  />
+</Route>
+
 
       {/* 🌟 PUBLIC JOB PAGES */}
       <Route path="/jobs" element={<Layout><JobList /></Layout>} />
@@ -735,10 +754,43 @@ function App() {
     </PrivateRoute>
   }
 />
-   
 
+{/* Admin Cyber Cafe Routes */}
+<Route
+  path="/admin/cyber-cafes"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <CyberCafeAdminDashboard mode="all" showStats={true} />
+    </PrivateRoute>
+  }
+/>
 
+<Route
+  path="/admin/cyber-cafes/all"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <CyberCafeAdminDashboard mode="all" showStats={true} />
+    </PrivateRoute>
+  }
+/>
 
+<Route
+  path="/admin/cyber-cafes/list"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <CyberCafeList />
+    </PrivateRoute>
+  }
+/>
+
+<Route
+  path="/admin/cyber-cafes/:id"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <CyberCafeDetail />
+    </PrivateRoute>
+  }
+/>
 
       {/* Publisher Routes */}
       <Route

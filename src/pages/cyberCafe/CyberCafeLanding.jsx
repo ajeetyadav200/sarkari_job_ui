@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import {
   Monitor,
   Image,
-  FileText,
   ArrowRight,
   Check,
   Zap,
@@ -162,7 +161,7 @@ const CyberCafeLanding = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              to="/image-tool"
+              to="/cyber-cafe/image-tool"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-purple-700 font-semibold rounded-xl hover:bg-gray-100 transition-colors"
             >
               <Image className="w-5 h-5" />

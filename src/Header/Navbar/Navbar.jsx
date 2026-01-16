@@ -21,7 +21,7 @@ const Navbar = () => {
 
   const moreItems = [
     { name: "Cyber Cafe", path: "/cyber-cafe" },
-    { name: "Image Tool", path: "/image-tool" },
+    // { name: "Image Tool", path: "/image-tool" },
     { name: "Contact Us", path: "/public/contact" },
     { name: "Privacy Policy", path: "/public/privacy-policy" },
     { name: "Disclaimer", path: "/public/disclaimer" },

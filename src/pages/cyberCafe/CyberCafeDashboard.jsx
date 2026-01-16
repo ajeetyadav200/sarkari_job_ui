@@ -124,7 +124,7 @@ const CyberCafeDashboard = () => {
       name: "Image Compressor",
       description: "Compress images to specific sizes (10KB, 20KB, etc.) for government forms",
       icon: Image,
-      path: "/image-tool",
+      path: "/cyber-cafe/image-tool",
       color: "bg-orange-500",
     },
     {
@@ -148,7 +148,7 @@ const CyberCafeDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg">
+      {/* <header className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -177,7 +177,7 @@ const CyberCafeDashboard = () => {
             </div>
           </div>
         </div>
-      </header>
+      </header> */}
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

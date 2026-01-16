@@ -99,9 +99,12 @@ const Footer = () => {
               © 2025 <span className="text-[rgb(0,142,228)] font-semibold">Naukari Store</span>. All Rights Reserved.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="text-gray-400 hover:text-[rgb(0,142,228)] transition-colors">Privacy</a>
-              <a href="#" className="text-gray-400 hover:text-[rgb(0,142,228)] transition-colors">Terms</a>
-              <a href="#" className="text-gray-400 hover:text-[rgb(0,142,228)] transition-colors">Contact</a>
+              <Link to='/public/privacy-policy'>
+              <p className="text-gray-400 hover:text-[rgb(0,142,228)] transition-colors">Privacy</p></Link>
+              <Link to='/public/terms-and-conditions'>
+              <p className="text-gray-400 hover:text-[rgb(0,142,228)] transition-colors">Terms</p></Link>
+              <Link to='/public/contact'>
+              <p className="text-gray-400 hover:text-[rgb(0,142,228)] transition-colors">Contact</p></Link>
             </div>
           </div>
         </div>
