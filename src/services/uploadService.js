@@ -122,13 +122,22 @@ class UploadService {
 
   /**
    * Delete a file from Cloudinary
+   * Uses POST method which handles cloudinaryIds with slashes better
    * @param {string} cloudinaryId - The Cloudinary public ID
+   * @param {string} fileUrl - Optional: The file URL (helps detect resource type)
    * @returns {Promise<Object>} - Deletion result
    */
-  deleteFile = async (cloudinaryId) => {
-    const response = await fetch(`${this.baseURL}/api/upload/${encodeURIComponent(cloudinaryId)}`, {
-      method: 'DELETE',
-      headers: this.getAuthHeaders(),
+  deleteFile = async (cloudinaryId, fileUrl = null) => {
+    const response = await fetch(`${this.baseURL}/api/upload/delete`, {
+      method: 'POST',
+      headers: {
+        ...this.getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        cloudinaryId,
+        ...(fileUrl && { fileUrl }),
+      }),
     });
 
     const data = await response.json();

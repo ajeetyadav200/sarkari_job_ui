@@ -280,7 +280,18 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
     await uploadFileImmediately(fieldName, file);
   };
 
-  const removeFile = (fieldName) => {
+  const removeFile = async (fieldName) => {
+    // Delete from Cloudinary if file was already uploaded
+    const uploadedFile = uploadedFileData[fieldName];
+    if (uploadedFile?.cloudinaryId) {
+      try {
+        await uploadService.deleteFile(uploadedFile.cloudinaryId, uploadedFile.fileUrl);
+      } catch (error) {
+        console.error('Failed to delete file from cloud:', error);
+        // Continue with local removal even if cloud delete fails
+      }
+    }
+
     setFiles(prev => ({ ...prev, [fieldName]: null }));
     setUploadedFileData(prev => ({ ...prev, [fieldName]: null }));
     setFileNames(prev => ({ ...prev, [fieldName]: '' }));

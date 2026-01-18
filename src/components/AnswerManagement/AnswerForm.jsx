@@ -433,7 +433,18 @@ const AnswerForm = () => {
     }
   };
 
-  const removeFile = (fieldName) => {
+  const removeFile = async (fieldName) => {
+    // Delete from Cloudinary if file was already uploaded
+    const uploadedFile = uploadedFileData[fieldName];
+    if (uploadedFile?.cloudinaryId) {
+      try {
+        await uploadService.deleteFile(uploadedFile.cloudinaryId, uploadedFile.fileUrl);
+      } catch (error) {
+        console.error('Failed to delete file from cloud:', error);
+        // Continue with local removal even if cloud delete fails
+      }
+    }
+
     // Clear file object
     setFiles(prev => ({
       ...prev,
