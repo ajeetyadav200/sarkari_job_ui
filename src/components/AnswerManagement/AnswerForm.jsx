@@ -320,10 +320,11 @@ const AnswerForm = () => {
       }
 
       // Add uploaded file URLs
+      // Also explicitly set null for removed files (important for updates)
       Object.keys(uploadedFileData).forEach(fieldName => {
-        if (uploadedFileData[fieldName]) {
-          submitData[fieldName] = uploadedFileData[fieldName];
-        }
+        // Always include file fields - whether they have data or are null
+        // This ensures removed files get cleared in the database
+        submitData[fieldName] = uploadedFileData[fieldName];
       });
 
       // Step 3: Submit the form with JSON data

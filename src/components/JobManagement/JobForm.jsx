@@ -357,10 +357,11 @@ const JobForm = ({ onClose, onSuccess, editData, user }) => {
       const submitData = { ...formData };
 
       // Add uploaded file URLs to submit data
+      // Also explicitly set null for removed files (important for updates)
       Object.keys(uploadedFileData).forEach(fieldName => {
-        if (uploadedFileData[fieldName]) {
-          submitData[fieldName] = uploadedFileData[fieldName];
-        }
+        // Always include file fields - whether they have data or are null
+        // This ensures removed files get cleared in the database
+        submitData[fieldName] = uploadedFileData[fieldName];
       });
 
       if (editData) {

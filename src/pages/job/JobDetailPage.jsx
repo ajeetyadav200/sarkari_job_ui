@@ -43,6 +43,19 @@ const JobDetailPage = () => {
     }
   };
 
+  // Helper function to get viewable URL for files
+  const getViewableFileUrl = (fileUrl) => {
+    if (!fileUrl) return '#';
+
+    // For PDF files, use backend proxy to bypass Cloudinary restrictions
+    if (fileUrl.endsWith('.pdf')) {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      return `${apiUrl}/api/upload/proxy?url=${encodeURIComponent(fileUrl)}`;
+    }
+
+    return fileUrl;
+  };
+
   // Helper function to render category-wise posts
   const renderCategoryPosts = () => {
     if (!job.categoryPosts) return null;
@@ -553,6 +566,159 @@ const JobDetailPage = () => {
             </table>
           </div>
         </div>
+
+        {/* Important Documents/Files Section */}
+        {(job.officialNotification || job.examDateNotice || job.syllabusFile ||
+          job.admitCardFile || job.answerKeyFile || job.resultFile ||
+          job.applicationForm || job.otherFile) && (
+          <div className="border border-t-0 border-gray-400">
+            <div className="bg-primary text-white text-center py-3 px-4 lg:py-2 lg:px-3 sm:py-2 sm:px-2 font-bold text-lg lg:text-base sm:text-sm">
+              Important Documents
+            </div>
+            <div className="p-0">
+              <table className="w-full">
+                <tbody>
+                  {job.officialNotification?.fileUrl && (
+                    <tr className="border-b border-gray-400">
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                        Official Notification :
+                      </td>
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                        <a
+                          href={getViewableFileUrl(job.officialNotification.fileUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
+                        >
+                          Click Here <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                  )}
+                  {job.examDateNotice?.fileUrl && (
+                    <tr className="border-b border-gray-400">
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                        Exam Date Notice :
+                      </td>
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                        <a
+                          href={getViewableFileUrl(job.examDateNotice.fileUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
+                        >
+                          Click Here <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                  )}
+                  {job.syllabusFile?.fileUrl && (
+                    <tr className="border-b border-gray-400">
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                        Syllabus :
+                      </td>
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                        <a
+                          href={getViewableFileUrl(job.syllabusFile.fileUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
+                        >
+                          Click Here <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                  )}
+                  {job.admitCardFile?.fileUrl && (
+                    <tr className="border-b border-gray-400">
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                        Admit Card :
+                      </td>
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                        <a
+                          href={getViewableFileUrl(job.admitCardFile.fileUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
+                        >
+                          Click Here <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                  )}
+                  {job.answerKeyFile?.fileUrl && (
+                    <tr className="border-b border-gray-400">
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                        Answer Key :
+                      </td>
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                        <a
+                          href={getViewableFileUrl(job.answerKeyFile.fileUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
+                        >
+                          Click Here <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                  )}
+                  {job.resultFile?.fileUrl && (
+                    <tr className="border-b border-gray-400">
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                        Result :
+                      </td>
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                        <a
+                          href={getViewableFileUrl(job.resultFile.fileUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
+                        >
+                          Click Here <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                  )}
+                  {job.applicationForm?.fileUrl && (
+                    <tr className="border-b border-gray-400">
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                        Application Form :
+                      </td>
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                        <a
+                          href={getViewableFileUrl(job.applicationForm.fileUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
+                        >
+                          Click Here <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                  )}
+                  {job.otherFile?.fileUrl && (
+                    <tr className="border-b border-gray-400 last:border-b-0">
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 font-semibold text-center text-imp text-base lg:text-sm sm:text-xs">
+                        {job.otherFile.fileName || 'Other Document'} :
+                      </td>
+                      <td className="py-3 px-4 lg:py-2 lg:px-3 sm:py-1.5 sm:px-2 text-center">
+                        <a
+                          href={getViewableFileUrl(job.otherFile.fileUrl)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold hover:underline text-primary text-base lg:text-sm sm:text-xs flex items-center justify-center gap-1"
+                        >
+                          Click Here <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
         {/* Selection Process */}
         {job.selectionProcess && job.selectionProcess.length > 0 && (

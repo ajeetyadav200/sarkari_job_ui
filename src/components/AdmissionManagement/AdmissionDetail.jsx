@@ -120,7 +120,7 @@ const AdmissionDetail = () => {
 
   const handleStatusChange = (newStatus) => {
     let rejectionReason = '';
-
+ 
     // If changing to rejected, prompt for rejection reason
     if (newStatus === 'rejected') {
       rejectionReason = window.prompt('Please enter the rejection reason:');

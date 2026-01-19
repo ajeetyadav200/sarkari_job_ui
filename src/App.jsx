@@ -113,6 +113,9 @@ import ImageTool from "./components/ImageTool/ImageTool";
 import CyberCafePrivateRoute from "./components/private/CyberCafePrivateRoute";
 import HandleCyberPage from "./handleCyberCafe/HandlePage";
 
+// Permission Management
+import PermissionDashboard from "./components/PermissionManagement/PermissionDashboard";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -788,6 +791,16 @@ function App() {
   element={
     <PrivateRoute requiredRole="admin">
       <CyberCafeDetail />
+    </PrivateRoute>
+  }
+/>
+
+{/* Admin Permission Management Routes */}
+<Route
+  path="/admin/permissions"
+  element={
+    <PrivateRoute requiredRole="admin">
+      <PermissionDashboard />
     </PrivateRoute>
   }
 />

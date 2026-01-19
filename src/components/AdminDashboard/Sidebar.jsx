@@ -84,7 +84,7 @@ const Sidebar = ({ isOpen, onClose, activeMenu, setActiveMenu, onLogout }) => {
       icon: Shield,
       subItems: [
         { id: 'all-users', label: 'All Users', path: '/admin/users/all' },
-        { id: 'roles', label: 'Roles & Permissions', path: '/admin/users/roles' },
+        { id: 'permissions', label: 'Permissions', path: '/admin/permissions' },
         { id: 'activity-log', label: 'Activity Log', path: '/admin/users/activity' }
       ]
     },

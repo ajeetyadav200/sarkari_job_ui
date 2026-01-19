@@ -250,6 +250,35 @@ class ApiService {
       method: 'POST',
     }),
   };
+
+  // Permission APIs
+  permissions = {
+    // Get all users with permissions
+    getAll: (params = {}) => {
+      const queryString = new URLSearchParams(params).toString();
+      return this.request(`/api/permissions${queryString ? `?${queryString}` : ''}`);
+    },
+    // Get my permissions
+    getMyPermissions: () => this.request('/api/permissions/me'),
+    // Get available modules and actions
+    getModulesAndActions: () => this.request('/api/permissions/modules'),
+    // Get specific user's permission
+    getUserPermission: (userId) => this.request(`/api/permissions/${userId}`),
+    // Update user's permission
+    updatePermission: (userId, data) => this.request(`/api/permissions/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+    // Reset user's permission to default
+    resetPermission: (userId) => this.request(`/api/permissions/${userId}/reset`, {
+      method: 'POST',
+    }),
+    // Bulk update permissions
+    bulkUpdate: (data) => this.request('/api/permissions/bulk', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  };
 }
 
 export default new ApiService();
